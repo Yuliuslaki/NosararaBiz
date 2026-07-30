@@ -15,6 +15,7 @@ type OwnerHomeScreenProps = {
   onOpenTransactionHistory: () => void;
   onOpenCashBook: () => void;
   onOpenOfficers?: () => void;
+  onOpenReports: () => void;
   onLogout: () => void;
 };
 
@@ -101,6 +102,7 @@ export function OwnerHomeScreen({
   onOpenTransactionHistory,
   onOpenCashBook,
   onOpenOfficers,
+  onOpenReports,
   onLogout,
 }: OwnerHomeScreenProps) {
   const [summary, setSummary] =
@@ -273,7 +275,8 @@ export function OwnerHomeScreen({
 
         <DashboardMenuItem
           title="Laporan"
-          description="Melihat ringkasan penjualan, stok, dan keuangan usaha."
+          description="Kelola laporan harian WhatsApp serta laporan PDF dan Excel."
+          onPress={onOpenReports}
         />
 
         <Pressable

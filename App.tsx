@@ -17,6 +17,7 @@ import { CashBookScreen } from "./src/screens/owner/CashBookScreen";
 import { OfficerListScreen } from "./src/screens/owner/OfficerListScreen";
 import { OwnerHomeScreen } from "./src/screens/owner/OwnerHomeScreen";
 import { ProductListScreen } from "./src/screens/owner/ProductListScreen";
+import { ReportScreen } from "./src/screens/owner/ReportScreen";
 import { StockHistoryScreen } from "./src/screens/owner/StockHistoryScreen";
 import { TransactionHistoryScreen } from "./src/screens/owner/TransactionHistoryScreen";
 import { SaleScreen } from "./src/screens/sales/SaleScreen";
@@ -41,7 +42,8 @@ type OwnerScreen =
   | "cash-book"
   | "add-expense"
   | "officers"
-  | "add-officer";
+  | "add-officer"
+  | "reports";
 
 function AppContent() {
   const [setupState, setSetupState] = useState<InitialSetupState>(() =>
@@ -55,7 +57,6 @@ function AppContent() {
 
   function handleSetupCompleted(): void {
     setSetupState(getInitialSetupState());
-
     setAuthenticatedUser(null);
     setOwnerScreen("home");
   }
@@ -104,6 +105,10 @@ function AppContent() {
 
   function handleOpenAddOfficer(): void {
     setOwnerScreen("add-officer");
+  }
+
+  function handleOpenReports(): void {
+    setOwnerScreen("reports");
   }
 
   function handleBackToOwnerHome(): void {
@@ -295,6 +300,16 @@ function AppContent() {
       );
     }
 
+    if (ownerScreen === "reports") {
+      return (
+        <>
+          <StatusBar style="dark" />
+
+          <ReportScreen onBack={handleBackToOwnerHome} />
+        </>
+      );
+    }
+
     return (
       <>
         <StatusBar style="dark" />
@@ -306,6 +321,7 @@ function AppContent() {
           onOpenTransactionHistory={handleOpenTransactionHistory}
           onOpenCashBook={handleOpenCashBook}
           onOpenOfficers={handleOpenOfficers}
+          onOpenReports={handleOpenReports}
           onLogout={handleLogout}
         />
       </>
