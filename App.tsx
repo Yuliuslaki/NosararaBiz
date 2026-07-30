@@ -11,8 +11,10 @@ import { DatabaseMigrationGate } from "./src/components/DatabaseMigrationGate";
 import { InitialSetupScreen } from "./src/screens/auth/InitialSetupScreen";
 import { LoginScreen } from "./src/screens/auth/LoginScreen";
 import { AddExpenseScreen } from "./src/screens/owner/AddExpenseScreen";
+import { AddOfficerScreen } from "./src/screens/owner/AddOfficerScreen";
 import { AddProductScreen } from "./src/screens/owner/AddProductScreen";
 import { CashBookScreen } from "./src/screens/owner/CashBookScreen";
+import { OfficerListScreen } from "./src/screens/owner/OfficerListScreen";
 import { OwnerHomeScreen } from "./src/screens/owner/OwnerHomeScreen";
 import { ProductListScreen } from "./src/screens/owner/ProductListScreen";
 import { StockHistoryScreen } from "./src/screens/owner/StockHistoryScreen";
@@ -37,7 +39,9 @@ type OwnerScreen =
   | "stock-history"
   | "transaction-history"
   | "cash-book"
-  | "add-expense";
+  | "add-expense"
+  | "officers"
+  | "add-officer";
 
 function AppContent() {
   const [setupState, setSetupState] = useState<InitialSetupState>(() =>
@@ -94,6 +98,14 @@ function AppContent() {
     setOwnerScreen("add-expense");
   }
 
+  function handleOpenOfficers(): void {
+    setOwnerScreen("officers");
+  }
+
+  function handleOpenAddOfficer(): void {
+    setOwnerScreen("add-officer");
+  }
+
   function handleBackToOwnerHome(): void {
     setOwnerScreen("home");
   }
@@ -106,12 +118,20 @@ function AppContent() {
     setOwnerScreen("cash-book");
   }
 
+  function handleBackToOfficers(): void {
+    setOwnerScreen("officers");
+  }
+
   function handleProductCreated(): void {
     setOwnerScreen("products");
   }
 
   function handleExpenseCreated(): void {
     setOwnerScreen("cash-book");
+  }
+
+  function handleOfficerCreated(): void {
+    setOwnerScreen("officers");
   }
 
   if (setupState.isInconsistent) {
@@ -247,6 +267,34 @@ function AppContent() {
       );
     }
 
+    if (ownerScreen === "officers") {
+      return (
+        <>
+          <StatusBar style="dark" />
+
+          <OfficerListScreen
+            user={authenticatedUser}
+            onBack={handleBackToOwnerHome}
+            onAddOfficer={handleOpenAddOfficer}
+          />
+        </>
+      );
+    }
+
+    if (ownerScreen === "add-officer") {
+      return (
+        <>
+          <StatusBar style="dark" />
+
+          <AddOfficerScreen
+            user={authenticatedUser}
+            onBack={handleBackToOfficers}
+            onOfficerCreated={handleOfficerCreated}
+          />
+        </>
+      );
+    }
+
     return (
       <>
         <StatusBar style="dark" />
@@ -257,6 +305,7 @@ function AppContent() {
           onOpenProducts={handleOpenProducts}
           onOpenTransactionHistory={handleOpenTransactionHistory}
           onOpenCashBook={handleOpenCashBook}
+          onOpenOfficers={handleOpenOfficers}
           onLogout={handleLogout}
         />
       </>

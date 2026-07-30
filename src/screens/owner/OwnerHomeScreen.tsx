@@ -14,6 +14,7 @@ type OwnerHomeScreenProps = {
   onOpenProducts: () => void;
   onOpenTransactionHistory: () => void;
   onOpenCashBook: () => void;
+  onOpenOfficers?: () => void;
   onLogout: () => void;
 };
 
@@ -99,6 +100,7 @@ export function OwnerHomeScreen({
   onOpenProducts,
   onOpenTransactionHistory,
   onOpenCashBook,
+  onOpenOfficers,
   onLogout,
 }: OwnerHomeScreenProps) {
   const [summary, setSummary] =
@@ -264,8 +266,9 @@ export function OwnerHomeScreen({
         />
 
         <DashboardMenuItem
-          title="Kelola Kasir"
-          description="Membuat, mengubah, menonaktifkan, dan menghapus akun Kasir."
+          title="Kelola Officer"
+          description="Membuat, mengubah, mengaktifkan, menonaktifkan, dan menghapus akun Officer."
+          onPress={onOpenOfficers}
         />
 
         <DashboardMenuItem

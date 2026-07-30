@@ -5,10 +5,10 @@ import * as Crypto from "expo-crypto";
 
 import { getOrCreateDeviceSecret, requireDeviceSecret } from "./deviceSecret";
 
-export const MIN_PIN_LENGTH = 4;
+export const MIN_PIN_LENGTH = 6;
 export const MAX_PIN_LENGTH = 6;
 
-const PIN_PATTERN = /^\d{4,6}$/;
+const PIN_PATTERN = /^\d{6}$/;
 
 const PIN_HASH_ALGORITHM = "hmac-sha256";
 const PIN_HASH_CONTEXT = "nosararabiz-pin-v1";
@@ -84,7 +84,7 @@ export function isValidPin(pin: string): boolean {
 
 export function validatePin(pin: string): void {
   if (!isValidPin(pin)) {
-    throw new Error("PIN harus terdiri dari 4 sampai 6 angka.");
+    throw new Error("PIN harus terdiri dari tepat 6 angka.");
   }
 }
 

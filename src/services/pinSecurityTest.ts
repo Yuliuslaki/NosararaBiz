@@ -14,8 +14,8 @@ export type PinSecurityTestResult = {
 };
 
 export async function runPinSecurityTest(): Promise<PinSecurityTestResult> {
-  const correctPin = "4826";
-  const wrongPin = "4827";
+  const correctPin = "482601";
+  const wrongPin = "482602";
 
   const createStartedAt = Date.now();
 
