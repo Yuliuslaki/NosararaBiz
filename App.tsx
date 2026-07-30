@@ -32,6 +32,8 @@ SplashScreen.preventAutoHideAsync().catch(() => {
   // Splash screen mungkin sudah ditangani sistem.
 });
 
+type AuthScreen = "login" | "setup-preview";
+
 type OwnerScreen =
   | "home"
   | "sales"
@@ -53,21 +55,34 @@ function AppContent() {
   const [authenticatedUser, setAuthenticatedUser] =
     useState<AuthenticatedUser | null>(null);
 
+  const [authScreen, setAuthScreen] = useState<AuthScreen>("login");
+
   const [ownerScreen, setOwnerScreen] = useState<OwnerScreen>("home");
 
   function handleSetupCompleted(): void {
     setSetupState(getInitialSetupState());
     setAuthenticatedUser(null);
+    setAuthScreen("login");
     setOwnerScreen("home");
+  }
+
+  function handleOpenSetupPreview(): void {
+    setAuthScreen("setup-preview");
+  }
+
+  function handleBackToLogin(): void {
+    setAuthScreen("login");
   }
 
   function handleLoginSuccess(user: AuthenticatedUser): void {
     setAuthenticatedUser(user);
+    setAuthScreen("login");
     setOwnerScreen("home");
   }
 
   function handleLogout(): void {
     setAuthenticatedUser(null);
+    setAuthScreen("login");
     setOwnerScreen("home");
   }
 
@@ -176,11 +191,28 @@ function AppContent() {
   }
 
   if (authenticatedUser === null) {
+    if (authScreen === "setup-preview") {
+      return (
+        <>
+          <StatusBar style="dark" />
+
+          <InitialSetupScreen
+            previewMode
+            onSetupCompleted={handleSetupCompleted}
+            onBackToLogin={handleBackToLogin}
+          />
+        </>
+      );
+    }
+
     return (
       <>
         <StatusBar style="dark" />
 
-        <LoginScreen onLoginSuccess={handleLoginSuccess} />
+        <LoginScreen
+          onLoginSuccess={handleLoginSuccess}
+          onOpenRegistrationPreview={handleOpenSetupPreview}
+        />
       </>
     );
   }

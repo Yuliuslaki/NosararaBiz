@@ -1,6 +1,7 @@
 import { useState } from "react";
 import {
   ActivityIndicator,
+  Keyboard,
   KeyboardAvoidingView,
   Platform,
   Pressable,
@@ -14,10 +15,22 @@ import { completeInitialSetup } from "../../services/setupService";
 
 type InitialSetupScreenProps = {
   onSetupCompleted: () => void;
+  previewMode?: boolean;
+  onBackToLogin?: () => void;
 };
+
+function keepPinDigitsOnly(value: string): string {
+  return value.replace(/\D/g, "").slice(0, 6);
+}
+
+function normalizeUsernameInput(value: string): string {
+  return value.toLowerCase().replace(/\s+/g, "").slice(0, 30);
+}
 
 export function InitialSetupScreen({
   onSetupCompleted,
+  previewMode = false,
+  onBackToLogin,
 }: InitialSetupScreenProps) {
   const [businessName, setBusinessName] = useState("");
   const [ownerWaNumber, setOwnerWaNumber] = useState("");
@@ -33,18 +46,47 @@ export function InitialSetupScreen({
     businessName.trim().length >= 2 &&
     ownerFullName.trim().length >= 2 &&
     ownerUsername.trim().length >= 3 &&
-    ownerPin.length >= 4 &&
-    ownerPinConfirmation.length >= 4;
+    ownerPin.length === 6 &&
+    ownerPinConfirmation.length === 6;
 
-  const submitIsDisabled = isSubmitting || !requiredFieldsAreFilled;
+  const submitIsDisabled =
+    previewMode || isSubmitting || !requiredFieldsAreFilled;
+
+  function handleBusinessNameChange(value: string): void {
+    setBusinessName(value);
+    setErrorMessage(null);
+  }
+
+  function handleOwnerWaNumberChange(value: string): void {
+    setOwnerWaNumber(value);
+    setErrorMessage(null);
+  }
+
+  function handleOwnerFullNameChange(value: string): void {
+    setOwnerFullName(value);
+    setErrorMessage(null);
+  }
+
+  function handleOwnerUsernameChange(value: string): void {
+    setOwnerUsername(normalizeUsernameInput(value));
+    setErrorMessage(null);
+  }
 
   function handlePinChange(
     value: string,
     setter: (nextValue: string) => void,
   ): void {
-    const numericValue = value.replace(/\D/g, "").slice(0, 6);
+    setter(keepPinDigitsOnly(value));
+    setErrorMessage(null);
+  }
 
-    setter(numericValue);
+  function handleBackToLogin(): void {
+    if (isSubmitting) {
+      return;
+    }
+
+    Keyboard.dismiss();
+    onBackToLogin?.();
   }
 
   async function handleSubmit(): Promise<void> {
@@ -52,6 +94,7 @@ export function InitialSetupScreen({
       return;
     }
 
+    Keyboard.dismiss();
     setIsSubmitting(true);
     setErrorMessage(null);
 
@@ -85,23 +128,55 @@ export function InitialSetupScreen({
       <ScrollView
         className="flex-1"
         keyboardShouldPersistTaps="handled"
+        keyboardDismissMode={Platform.OS === "ios" ? "interactive" : "on-drag"}
         contentContainerStyle={{
           paddingHorizontal: 20,
           paddingTop: 40,
-          paddingBottom: 48,
+          paddingBottom: 64,
         }}
       >
         <View className="w-full max-w-md self-center">
+          {previewMode ? (
+            <Pressable
+              onPress={handleBackToLogin}
+              disabled={isSubmitting}
+              accessibilityRole="button"
+              accessibilityLabel="Kembali ke halaman login"
+              className={`mb-5 min-h-12 self-start justify-center rounded-2xl border-2 border-brand-orange bg-brand-white px-4 py-2 ${
+                isSubmitting ? "opacity-50" : ""
+              }`}
+            >
+              <Text className="font-atkinson-bold text-[16px] text-brand-black">
+                ← Kembali ke Login
+              </Text>
+            </Pressable>
+          ) : null}
+
           <Text className="font-atkinson-bold text-[32px] leading-[38px] text-brand-brown">
-            Siapkan Nosarara Biz
+            {previewMode ? "Pratinjau Pendaftaran" : "Siapkan Nosarara Biz"}
           </Text>
 
           <Text className="mt-3 font-atkinson text-[17px] leading-7 text-brand-black">
-            Masukkan informasi usaha dan buat akun Owner pertama.
+            {previewMode
+              ? "Lihat tampilan pendaftaran usaha dan pembuatan akun Owner pertama."
+              : "Masukkan informasi usaha dan buat akun Owner pertama."}
           </Text>
 
-          <View className="mt-7 rounded-3xl bg-brand-white p-6">
-            <Text className="font-atkinson-bold text-[22px] text-brand-brown">
+          {previewMode ? (
+            <View className="mt-5 rounded-2xl border-2 border-brand-orange bg-brand-white p-4">
+              <Text className="font-atkinson-bold text-[17px] text-brand-brown">
+                Mode Pratinjau
+              </Text>
+
+              <Text className="mt-2 font-atkinson text-[14px] leading-6 text-brand-black">
+                Data yang dimasukkan pada halaman ini tidak akan disimpan dan
+                tidak akan mengubah akun Owner yang sudah terdaftar.
+              </Text>
+            </View>
+          ) : null}
+
+          <View className="mt-7 rounded-3xl bg-brand-white p-5">
+            <Text className="font-atkinson-bold text-[21px] text-brand-brown">
               Informasi Usaha
             </Text>
 
@@ -111,15 +186,21 @@ export function InitialSetupScreen({
 
             <TextInput
               value={businessName}
-              onChangeText={setBusinessName}
+              onChangeText={handleBusinessNameChange}
               editable={!isSubmitting}
               maxLength={100}
               placeholder="Contoh: Saudara Unggas Palu"
               placeholderTextColor="#777777"
               autoCapitalize="words"
+              autoCorrect={false}
               returnKeyType="next"
+              selectionColor="#EC6426"
               className="mt-2 min-h-14 rounded-2xl border-2 border-brand-yellow px-4 py-3 font-atkinson text-[17px] text-brand-black"
             />
+
+            <Text className="mt-2 font-atkinson text-[14px] leading-5 text-brand-black">
+              Masukkan nama usaha yang akan digunakan pada aplikasi dan laporan.
+            </Text>
 
             <Text className="mt-5 font-atkinson-bold text-[16px] text-brand-brown">
               Nomor WhatsApp Owner
@@ -127,13 +208,14 @@ export function InitialSetupScreen({
 
             <TextInput
               value={ownerWaNumber}
-              onChangeText={setOwnerWaNumber}
+              onChangeText={handleOwnerWaNumberChange}
               editable={!isSubmitting}
               maxLength={20}
               placeholder="Contoh: 081234567890"
               placeholderTextColor="#777777"
               keyboardType="phone-pad"
               returnKeyType="next"
+              selectionColor="#EC6426"
               className="mt-2 min-h-14 rounded-2xl border-2 border-brand-yellow px-4 py-3 font-atkinson text-[17px] text-brand-black"
             />
 
@@ -142,26 +224,33 @@ export function InitialSetupScreen({
             </Text>
           </View>
 
-          <View className="mt-5 rounded-3xl bg-brand-white p-6">
-            <Text className="font-atkinson-bold text-[22px] text-brand-brown">
+          <View className="mt-4 rounded-3xl bg-brand-white p-5">
+            <Text className="font-atkinson-bold text-[21px] text-brand-brown">
               Akun Owner
             </Text>
 
             <Text className="mt-5 font-atkinson-bold text-[16px] text-brand-brown">
-              Nama lengkap Owner
+              Nama lengkap
             </Text>
 
             <TextInput
               value={ownerFullName}
-              onChangeText={setOwnerFullName}
+              onChangeText={handleOwnerFullNameChange}
               editable={!isSubmitting}
               maxLength={100}
               placeholder="Masukkan nama lengkap"
               placeholderTextColor="#777777"
               autoCapitalize="words"
+              autoCorrect={false}
               returnKeyType="next"
+              selectionColor="#EC6426"
               className="mt-2 min-h-14 rounded-2xl border-2 border-brand-yellow px-4 py-3 font-atkinson text-[17px] text-brand-black"
             />
+
+            <Text className="mt-2 font-atkinson text-[14px] leading-5 text-brand-black">
+              Gunakan nama asli agar setiap transaksi dan tindakan penting dapat
+              diketahui Owner yang melakukannya.
+            </Text>
 
             <Text className="mt-5 font-atkinson-bold text-[16px] text-brand-brown">
               Username
@@ -169,9 +258,7 @@ export function InitialSetupScreen({
 
             <TextInput
               value={ownerUsername}
-              onChangeText={(value) => {
-                setOwnerUsername(value.toLowerCase().replace(/\s+/g, ""));
-              }}
+              onChangeText={handleOwnerUsernameChange}
               editable={!isSubmitting}
               maxLength={30}
               placeholder="Contoh: owner"
@@ -179,15 +266,23 @@ export function InitialSetupScreen({
               autoCapitalize="none"
               autoCorrect={false}
               returnKeyType="next"
+              selectionColor="#EC6426"
               className="mt-2 min-h-14 rounded-2xl border-2 border-brand-yellow px-4 py-3 font-atkinson text-[17px] text-brand-black"
             />
 
             <Text className="mt-2 font-atkinson text-[14px] leading-5 text-brand-black">
-              Gunakan huruf kecil, angka, titik, garis bawah, atau tanda hubung.
+              Username terdiri dari 3 sampai 30 karakter. Gunakan huruf kecil,
+              angka, titik, garis bawah, atau tanda hubung.
+            </Text>
+          </View>
+
+          <View className="mt-4 rounded-3xl bg-brand-white p-5">
+            <Text className="font-atkinson-bold text-[21px] text-brand-brown">
+              PIN Owner
             </Text>
 
             <Text className="mt-5 font-atkinson-bold text-[16px] text-brand-brown">
-              PIN Owner
+              PIN
             </Text>
 
             <TextInput
@@ -197,15 +292,21 @@ export function InitialSetupScreen({
               }}
               editable={!isSubmitting}
               maxLength={6}
-              placeholder="4 sampai 6 angka"
+              placeholder="Masukkan PIN"
               placeholderTextColor="#777777"
               keyboardType="number-pad"
               secureTextEntry
-              className="mt-2 min-h-14 rounded-2xl border-2 border-brand-yellow px-4 py-3 font-atkinson text-[20px] tracking-[6px] text-brand-black"
+              selectionColor="#EC6426"
+              returnKeyType="next"
+              className="mt-2 min-h-14 rounded-2xl border-2 border-brand-yellow px-4 py-3 font-atkinson text-[17px] text-brand-black"
             />
 
+            <Text className="mt-2 font-atkinson text-[14px] leading-5 text-brand-black">
+              PIN harus terdiri dari tepat 6 angka.
+            </Text>
+
             <Text className="mt-5 font-atkinson-bold text-[16px] text-brand-brown">
-              Ulangi PIN Owner
+              Konfirmasi PIN
             </Text>
 
             <TextInput
@@ -219,32 +320,72 @@ export function InitialSetupScreen({
               placeholderTextColor="#777777"
               keyboardType="number-pad"
               secureTextEntry
-              className="mt-2 min-h-14 rounded-2xl border-2 border-brand-yellow px-4 py-3 font-atkinson text-[20px] tracking-[6px] text-brand-black"
+              selectionColor="#EC6426"
+              returnKeyType="done"
+              onSubmitEditing={() => {
+                if (!previewMode) {
+                  void handleSubmit();
+                }
+              }}
+              className="mt-2 min-h-14 rounded-2xl border-2 border-brand-yellow px-4 py-3 font-atkinson text-[17px] text-brand-black"
             />
 
-            <Text className="mt-3 font-atkinson text-[14px] leading-5 text-brand-black">
-              PIN digunakan untuk login dan menyetujui tindakan penting. PIN
-              tidak disimpan sebagai teks biasa.
+            <Text className="mt-2 font-atkinson text-[14px] leading-5 text-brand-black">
+              Masukkan PIN yang sama untuk memastikan tidak terjadi kesalahan.
             </Text>
 
-            {errorMessage ? (
-              <View className="mt-5 rounded-2xl border-2 border-brand-orange bg-brand-cream p-4">
-                <Text className="font-atkinson-bold text-[16px] text-brand-brown">
-                  Pengaturan belum dapat disimpan
-                </Text>
+            <View className="mt-4 rounded-2xl bg-brand-cream p-4">
+              <Text className="font-atkinson text-[14px] leading-6 text-brand-black">
+                PIN digunakan oleh Owner untuk masuk ke aplikasi dan menyetujui
+                tindakan penting. PIN tidak disimpan sebagai teks biasa.
+              </Text>
+            </View>
+          </View>
 
-                <Text className="mt-2 font-atkinson text-[15px] leading-6 text-brand-black">
-                  {errorMessage}
+          {!previewMode && errorMessage ? (
+            <View className="mt-4 rounded-2xl border-2 border-brand-orange bg-brand-white p-4">
+              <Text className="font-atkinson-bold text-[16px] text-brand-brown">
+                Pengaturan belum dapat disimpan
+              </Text>
+
+              <Text className="mt-2 font-atkinson text-[15px] leading-6 text-brand-black">
+                {errorMessage}
+              </Text>
+            </View>
+          ) : null}
+
+          {previewMode ? (
+            <>
+              <View className="mt-4 rounded-2xl bg-brand-white p-4">
+                <Text className="text-center font-atkinson-bold text-[15px] leading-6 text-brand-brown">
+                  Penyimpanan dinonaktifkan karena aplikasi sudah memiliki akun
+                  Owner.
                 </Text>
               </View>
-            ) : null}
 
+              <Pressable
+                onPress={handleBackToLogin}
+                disabled={isSubmitting}
+                accessibilityRole="button"
+                accessibilityLabel="Kembali ke halaman login"
+                className={`mt-5 min-h-14 items-center justify-center rounded-2xl bg-brand-orange px-5 py-4 ${
+                  isSubmitting ? "opacity-50" : ""
+                }`}
+              >
+                <Text className="text-center font-atkinson-bold text-[18px] text-brand-white">
+                  Kembali ke Login
+                </Text>
+              </Pressable>
+            </>
+          ) : (
             <Pressable
               onPress={() => {
                 void handleSubmit();
               }}
               disabled={submitIsDisabled}
-              className={`mt-7 min-h-14 items-center justify-center rounded-2xl bg-brand-orange px-5 py-4 ${
+              accessibilityRole="button"
+              accessibilityLabel="Simpan pengaturan awal"
+              className={`mt-5 min-h-14 items-center justify-center rounded-2xl bg-brand-orange px-5 py-4 ${
                 submitIsDisabled ? "opacity-50" : ""
               }`}
             >
@@ -262,7 +403,7 @@ export function InitialSetupScreen({
                 </Text>
               )}
             </Pressable>
-          </View>
+          )}
         </View>
       </ScrollView>
     </KeyboardAvoidingView>

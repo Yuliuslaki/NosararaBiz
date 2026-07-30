@@ -19,6 +19,7 @@ import {
 
 type LoginScreenProps = {
   onLoginSuccess: (user: AuthenticatedUser) => void;
+  onOpenRegistrationPreview: () => void;
 };
 
 type LoginAlertState = {
@@ -38,7 +39,10 @@ function formatRemainingLockTime(milliseconds: number): string {
   return `${minutes}:${seconds.toString().padStart(2, "0")}`;
 }
 
-export function LoginScreen({ onLoginSuccess }: LoginScreenProps) {
+export function LoginScreen({
+  onLoginSuccess,
+  onOpenRegistrationPreview,
+}: LoginScreenProps) {
   const [username, setUsername] = useState("");
   const [pin, setPin] = useState("");
 
@@ -114,6 +118,16 @@ export function LoginScreen({ onLoginSuccess }: LoginScreenProps) {
     const numericPin = value.replace(/\D/g, "").slice(0, 6);
 
     setPin(numericPin);
+  }
+
+  function handleOpenRegistration(): void {
+    if (isSubmitting) {
+      return;
+    }
+
+    Keyboard.dismiss();
+    setLoginAlert(null);
+    onOpenRegistrationPreview();
   }
 
   async function handleLogin(): Promise<void> {
@@ -308,6 +322,22 @@ export function LoginScreen({ onLoginSuccess }: LoginScreenProps) {
               <Text className="mt-5 text-center font-atkinson text-[14px] leading-5 text-brand-black">
                 Setelah lima kali PIN salah, akun dikunci selama lima menit.
               </Text>
+
+              <View className="mt-6 border-t border-brand-yellow pt-5">
+                <Pressable
+                  onPress={handleOpenRegistration}
+                  disabled={isSubmitting}
+                  accessibilityRole="button"
+                  accessibilityLabel="Lihat halaman pendaftaran"
+                  className={`mt-3 min-h-12 items-center justify-center rounded-2xl border border-brand-orange px-5 py-3 ${
+                    isSubmitting ? "opacity-50" : ""
+                  }`}
+                >
+                  <Text className="text-center font-atkinson-bold text-[16px] text-[#6B625D]">
+                    Lihat Halaman Pendaftaran
+                  </Text>
+                </Pressable>
+              </View>
             </View>
           </View>
         </ScrollView>
