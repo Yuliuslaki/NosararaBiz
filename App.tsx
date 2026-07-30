@@ -269,7 +269,7 @@ function AppContent() {
 
       <View className="w-full max-w-md rounded-3xl bg-brand-white p-7">
         <Text className="text-center font-atkinson-bold text-[28px] text-brand-brown">
-          Dashboard Kasir
+          Dashboard Officer
         </Text>
 
         <Text className="mt-4 text-center font-atkinson text-[17px] leading-7 text-brand-black">
@@ -277,7 +277,7 @@ function AppContent() {
         </Text>
 
         <Text className="mt-3 text-center font-atkinson text-[15px] leading-6 text-brand-black">
-          Dashboard Kasir akan dibuat setelah fitur Owner dasar selesai.
+          Dashboard Officer akan dibuat setelah fitur Owner dasar selesai.
         </Text>
 
         <Pressable

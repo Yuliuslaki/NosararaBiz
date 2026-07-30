@@ -1,0 +1,1166 @@
+{
+  "version": "6",
+  "dialect": "sqlite",
+  "id": "66d24bf1-b69b-4cf2-84a5-502eea4d9495",
+  "prevId": "09b11e1e-6b8d-4d8e-9b40-db117030c5ef",
+  "tables": {
+    "app_config": {
+      "name": "app_config",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "integer",
+          "primaryKey": true,
+          "notNull": true,
+          "autoincrement": false,
+          "default": 1
+        },
+        "business_name": {
+          "name": "business_name",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "owner_wa_number": {
+          "name": "owner_wa_number",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "egg_rack_size": {
+          "name": "egg_rack_size",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false,
+          "default": 30
+        },
+        "setup_completed": {
+          "name": "setup_completed",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false,
+          "default": false
+        },
+        "session_timeout_minutes": {
+          "name": "session_timeout_minutes",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false,
+          "default": 5
+        },
+        "created_at": {
+          "name": "created_at",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false,
+          "default": "(unixepoch() * 1000)"
+        },
+        "updated_at": {
+          "name": "updated_at",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false,
+          "default": "(unixepoch() * 1000)"
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {},
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "checkConstraints": {
+        "app_config_single_row_check": {
+          "name": "app_config_single_row_check",
+          "value": "\"app_config\".\"id\" = 1"
+        },
+        "app_config_egg_rack_size_check": {
+          "name": "app_config_egg_rack_size_check",
+          "value": "\"app_config\".\"egg_rack_size\" > 0"
+        },
+        "app_config_session_timeout_check": {
+          "name": "app_config_session_timeout_check",
+          "value": "\"app_config\".\"session_timeout_minutes\" > 0"
+        }
+      }
+    },
+    "cash_books": {
+      "name": "cash_books",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "text",
+          "primaryKey": true,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "type": {
+          "name": "type",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "amount": {
+          "name": "amount",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "category": {
+          "name": "category",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "description": {
+          "name": "description",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "related_transaction_id": {
+          "name": "related_transaction_id",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "created_by_user_id": {
+          "name": "created_by_user_id",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "created_by_name": {
+          "name": "created_by_name",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "created_by_role": {
+          "name": "created_by_role",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "entry_date": {
+          "name": "entry_date",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false,
+          "default": "(unixepoch() * 1000)"
+        },
+        "created_at": {
+          "name": "created_at",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false,
+          "default": "(unixepoch() * 1000)"
+        },
+        "updated_at": {
+          "name": "updated_at",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false,
+          "default": "(unixepoch() * 1000)"
+        }
+      },
+      "indexes": {
+        "cash_books_transaction_category_unique": {
+          "name": "cash_books_transaction_category_unique",
+          "columns": [
+            "related_transaction_id",
+            "category"
+          ],
+          "isUnique": true
+        },
+        "cash_books_entry_date_index": {
+          "name": "cash_books_entry_date_index",
+          "columns": [
+            "entry_date"
+          ],
+          "isUnique": false
+        },
+        "cash_books_type_index": {
+          "name": "cash_books_type_index",
+          "columns": [
+            "type"
+          ],
+          "isUnique": false
+        },
+        "cash_books_category_index": {
+          "name": "cash_books_category_index",
+          "columns": [
+            "category"
+          ],
+          "isUnique": false
+        },
+        "cash_books_transaction_index": {
+          "name": "cash_books_transaction_index",
+          "columns": [
+            "related_transaction_id"
+          ],
+          "isUnique": false
+        },
+        "cash_books_user_index": {
+          "name": "cash_books_user_index",
+          "columns": [
+            "created_by_user_id"
+          ],
+          "isUnique": false
+        }
+      },
+      "foreignKeys": {
+        "cash_books_related_transaction_id_transactions_id_fk": {
+          "name": "cash_books_related_transaction_id_transactions_id_fk",
+          "tableFrom": "cash_books",
+          "tableTo": "transactions",
+          "columnsFrom": [
+            "related_transaction_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "restrict",
+          "onUpdate": "no action"
+        },
+        "cash_books_created_by_user_id_users_id_fk": {
+          "name": "cash_books_created_by_user_id_users_id_fk",
+          "tableFrom": "cash_books",
+          "tableTo": "users",
+          "columnsFrom": [
+            "created_by_user_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "set null",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "checkConstraints": {
+        "cash_books_type_check": {
+          "name": "cash_books_type_check",
+          "value": "\"cash_books\".\"type\" IN ('income', 'expense')"
+        },
+        "cash_books_amount_check": {
+          "name": "cash_books_amount_check",
+          "value": "\"cash_books\".\"amount\" > 0"
+        },
+        "cash_books_category_check": {
+          "name": "cash_books_category_check",
+          "value": "\"cash_books\".\"category\" IN (\n        'sale',\n        'sale_refund',\n        'feed',\n        'transportation',\n        'operations',\n        'electricity',\n        'medicine',\n        'other'\n      )"
+        },
+        "cash_books_created_by_role_check": {
+          "name": "cash_books_created_by_role_check",
+          "value": "\"cash_books\".\"created_by_role\" IN (\n        'owner',\n        'officer',\n        'system'\n      )"
+        },
+        "cash_books_category_type_check": {
+          "name": "cash_books_category_type_check",
+          "value": "\n        (\n          \"cash_books\".\"category\" = 'sale'\n          AND \"cash_books\".\"type\" = 'income'\n          AND \"cash_books\".\"related_transaction_id\" IS NOT NULL\n        )\n        OR\n        (\n          \"cash_books\".\"category\" = 'sale_refund'\n          AND \"cash_books\".\"type\" = 'expense'\n          AND \"cash_books\".\"related_transaction_id\" IS NOT NULL\n        )\n        OR\n        (\n          \"cash_books\".\"category\" IN (\n            'feed',\n            'transportation',\n            'operations',\n            'electricity',\n            'medicine',\n            'other'\n          )\n          AND \"cash_books\".\"type\" = 'expense'\n          AND \"cash_books\".\"related_transaction_id\" IS NULL\n        )\n      "
+        }
+      }
+    },
+    "products": {
+      "name": "products",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "text",
+          "primaryKey": true,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "name": {
+          "name": "name",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "category": {
+          "name": "category",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "base_unit": {
+          "name": "base_unit",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "price_per_base_unit": {
+          "name": "price_per_base_unit",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "price_per_rack": {
+          "name": "price_per_rack",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "current_stock": {
+          "name": "current_stock",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false,
+          "default": 0
+        },
+        "min_stock_threshold": {
+          "name": "min_stock_threshold",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false,
+          "default": 0
+        },
+        "rack_size": {
+          "name": "rack_size",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "is_active": {
+          "name": "is_active",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false,
+          "default": true
+        },
+        "deleted_at": {
+          "name": "deleted_at",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "created_at": {
+          "name": "created_at",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false,
+          "default": "(unixepoch() * 1000)"
+        },
+        "updated_at": {
+          "name": "updated_at",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false,
+          "default": "(unixepoch() * 1000)"
+        }
+      },
+      "indexes": {
+        "products_category_index": {
+          "name": "products_category_index",
+          "columns": [
+            "category"
+          ],
+          "isUnique": false
+        },
+        "products_active_index": {
+          "name": "products_active_index",
+          "columns": [
+            "is_active"
+          ],
+          "isUnique": false
+        }
+      },
+      "foreignKeys": {},
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "checkConstraints": {
+        "products_category_check": {
+          "name": "products_category_check",
+          "value": "\"products\".\"category\" IN (\n        'eggs',\n        'fertilizer',\n        'culled_chicken',\n        'other'\n      )"
+        },
+        "products_base_unit_check": {
+          "name": "products_base_unit_check",
+          "value": "\"products\".\"base_unit\" IN ('rack', 'piece', 'sack', 'head')"
+        },
+        "products_price_per_base_unit_check": {
+          "name": "products_price_per_base_unit_check",
+          "value": "\"products\".\"price_per_base_unit\" >= 0"
+        },
+        "products_price_per_rack_check": {
+          "name": "products_price_per_rack_check",
+          "value": "\"products\".\"price_per_rack\" IS NULL OR \"products\".\"price_per_rack\" >= 0"
+        },
+        "products_current_stock_check": {
+          "name": "products_current_stock_check",
+          "value": "\"products\".\"current_stock\" >= 0"
+        },
+        "products_min_stock_threshold_check": {
+          "name": "products_min_stock_threshold_check",
+          "value": "\"products\".\"min_stock_threshold\" >= 0"
+        },
+        "products_category_base_unit_check": {
+          "name": "products_category_base_unit_check",
+          "value": "\n        (\"products\".\"category\" = 'eggs' AND \"products\".\"base_unit\" = 'piece')\n        OR\n        (\"products\".\"category\" = 'fertilizer' AND \"products\".\"base_unit\" = 'sack')\n        OR\n        (\"products\".\"category\" = 'culled_chicken' AND \"products\".\"base_unit\" = 'head')\n        OR\n        (\"products\".\"category\" = 'other')\n      "
+        },
+        "products_egg_configuration_check": {
+          "name": "products_egg_configuration_check",
+          "value": "\n        (\n          \"products\".\"category\" = 'eggs'\n          AND \"products\".\"rack_size\" IS NOT NULL\n          AND \"products\".\"rack_size\" > 0\n          AND \"products\".\"price_per_rack\" IS NOT NULL\n        )\n        OR\n        (\n          \"products\".\"category\" <> 'eggs'\n          AND \"products\".\"rack_size\" IS NULL\n          AND \"products\".\"price_per_rack\" IS NULL\n        )\n      "
+        }
+      }
+    },
+    "stock_history": {
+      "name": "stock_history",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "text",
+          "primaryKey": true,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "product_id": {
+          "name": "product_id",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "change_type": {
+          "name": "change_type",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "quantity_change": {
+          "name": "quantity_change",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "resulting_stock": {
+          "name": "resulting_stock",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "note": {
+          "name": "note",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "reference_type": {
+          "name": "reference_type",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "reference_id": {
+          "name": "reference_id",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "performed_by_user_id": {
+          "name": "performed_by_user_id",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "performed_by_name": {
+          "name": "performed_by_name",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "performed_by_role": {
+          "name": "performed_by_role",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "created_at": {
+          "name": "created_at",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false,
+          "default": "(unixepoch() * 1000)"
+        }
+      },
+      "indexes": {
+        "stock_history_product_index": {
+          "name": "stock_history_product_index",
+          "columns": [
+            "product_id"
+          ],
+          "isUnique": false
+        },
+        "stock_history_created_at_index": {
+          "name": "stock_history_created_at_index",
+          "columns": [
+            "created_at"
+          ],
+          "isUnique": false
+        },
+        "stock_history_change_type_index": {
+          "name": "stock_history_change_type_index",
+          "columns": [
+            "change_type"
+          ],
+          "isUnique": false
+        },
+        "stock_history_user_index": {
+          "name": "stock_history_user_index",
+          "columns": [
+            "performed_by_user_id"
+          ],
+          "isUnique": false
+        }
+      },
+      "foreignKeys": {
+        "stock_history_product_id_products_id_fk": {
+          "name": "stock_history_product_id_products_id_fk",
+          "tableFrom": "stock_history",
+          "tableTo": "products",
+          "columnsFrom": [
+            "product_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "restrict",
+          "onUpdate": "no action"
+        },
+        "stock_history_performed_by_user_id_users_id_fk": {
+          "name": "stock_history_performed_by_user_id_users_id_fk",
+          "tableFrom": "stock_history",
+          "tableTo": "users",
+          "columnsFrom": [
+            "performed_by_user_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "set null",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "checkConstraints": {
+        "stock_history_change_type_check": {
+          "name": "stock_history_change_type_check",
+          "value": "\"stock_history\".\"change_type\" IN (\n        'initial_stock',\n        'stock_addition',\n        'sale',\n        'sale_cancellation',\n        'manual_correction'\n      )"
+        },
+        "stock_history_quantity_change_check": {
+          "name": "stock_history_quantity_change_check",
+          "value": "\"stock_history\".\"quantity_change\" <> 0"
+        },
+        "stock_history_resulting_stock_check": {
+          "name": "stock_history_resulting_stock_check",
+          "value": "\"stock_history\".\"resulting_stock\" >= 0"
+        },
+        "stock_history_reference_type_check": {
+          "name": "stock_history_reference_type_check",
+          "value": "\"stock_history\".\"reference_type\" IN (\n        'product',\n        'transaction',\n        'manual'\n      )"
+        },
+        "stock_history_performed_by_role_check": {
+          "name": "stock_history_performed_by_role_check",
+          "value": "\"stock_history\".\"performed_by_role\" IN (\n        'owner',\n        'officer',\n        'system'\n      )"
+        }
+      }
+    },
+    "transaction_items": {
+      "name": "transaction_items",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "text",
+          "primaryKey": true,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "transaction_id": {
+          "name": "transaction_id",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "product_id": {
+          "name": "product_id",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "product_name": {
+          "name": "product_name",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "product_category": {
+          "name": "product_category",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "sale_unit": {
+          "name": "sale_unit",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "quantity": {
+          "name": "quantity",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "quantity_in_base_unit": {
+          "name": "quantity_in_base_unit",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "unit_price": {
+          "name": "unit_price",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "subtotal": {
+          "name": "subtotal",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "rack_size_snapshot": {
+          "name": "rack_size_snapshot",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "created_at": {
+          "name": "created_at",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false,
+          "default": "(unixepoch() * 1000)"
+        }
+      },
+      "indexes": {
+        "transaction_items_transaction_index": {
+          "name": "transaction_items_transaction_index",
+          "columns": [
+            "transaction_id"
+          ],
+          "isUnique": false
+        },
+        "transaction_items_product_index": {
+          "name": "transaction_items_product_index",
+          "columns": [
+            "product_id"
+          ],
+          "isUnique": false
+        }
+      },
+      "foreignKeys": {
+        "transaction_items_transaction_id_transactions_id_fk": {
+          "name": "transaction_items_transaction_id_transactions_id_fk",
+          "tableFrom": "transaction_items",
+          "tableTo": "transactions",
+          "columnsFrom": [
+            "transaction_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "cascade",
+          "onUpdate": "no action"
+        },
+        "transaction_items_product_id_products_id_fk": {
+          "name": "transaction_items_product_id_products_id_fk",
+          "tableFrom": "transaction_items",
+          "tableTo": "products",
+          "columnsFrom": [
+            "product_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "restrict",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "checkConstraints": {
+        "transaction_items_category_check": {
+          "name": "transaction_items_category_check",
+          "value": "\"transaction_items\".\"product_category\" IN (\n        'eggs',\n        'fertilizer',\n        'culled_chicken',\n        'other'\n      )"
+        },
+        "transaction_items_sale_unit_check": {
+          "name": "transaction_items_sale_unit_check",
+          "value": "\"transaction_items\".\"sale_unit\" IN ('rack', 'piece', 'sack', 'head')"
+        },
+        "transaction_items_quantity_check": {
+          "name": "transaction_items_quantity_check",
+          "value": "\"transaction_items\".\"quantity\" > 0"
+        },
+        "transaction_items_base_quantity_check": {
+          "name": "transaction_items_base_quantity_check",
+          "value": "\"transaction_items\".\"quantity_in_base_unit\" > 0"
+        },
+        "transaction_items_unit_price_check": {
+          "name": "transaction_items_unit_price_check",
+          "value": "\"transaction_items\".\"unit_price\" >= 0"
+        },
+        "transaction_items_subtotal_check": {
+          "name": "transaction_items_subtotal_check",
+          "value": "\n        \"transaction_items\".\"subtotal\" >= 0\n        AND \"transaction_items\".\"subtotal\" = \"transaction_items\".\"quantity\" * \"transaction_items\".\"unit_price\"\n      "
+        },
+        "transaction_items_category_unit_check": {
+          "name": "transaction_items_category_unit_check",
+          "value": "\n        (\n          \"transaction_items\".\"product_category\" = 'eggs'\n          AND \"transaction_items\".\"sale_unit\" IN ('rack', 'piece')\n        )\n        OR\n        (\n          \"transaction_items\".\"product_category\" = 'fertilizer'\n          AND \"transaction_items\".\"sale_unit\" = 'sack'\n        )\n        OR\n        (\n          \"transaction_items\".\"product_category\" = 'culled_chicken'\n          AND \"transaction_items\".\"sale_unit\" = 'head'\n        )\n        OR\n        (\"transaction_items\".\"product_category\" = 'other')\n      "
+        },
+        "transaction_items_unit_conversion_check": {
+          "name": "transaction_items_unit_conversion_check",
+          "value": "\n        (\n          \"transaction_items\".\"sale_unit\" = 'rack'\n          AND \"transaction_items\".\"rack_size_snapshot\" IS NOT NULL\n          AND \"transaction_items\".\"rack_size_snapshot\" > 0\n          AND \"transaction_items\".\"quantity_in_base_unit\"\n            = \"transaction_items\".\"quantity\" * \"transaction_items\".\"rack_size_snapshot\"\n        )\n        OR\n        (\n          \"transaction_items\".\"sale_unit\" <> 'rack'\n          AND \"transaction_items\".\"rack_size_snapshot\" IS NULL\n          AND \"transaction_items\".\"quantity_in_base_unit\" = \"transaction_items\".\"quantity\"\n        )\n      "
+        }
+      }
+    },
+    "transactions": {
+      "name": "transactions",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "text",
+          "primaryKey": true,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "transaction_number": {
+          "name": "transaction_number",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "transaction_date": {
+          "name": "transaction_date",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false,
+          "default": "(unixepoch() * 1000)"
+        },
+        "payment_method": {
+          "name": "payment_method",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "total_amount": {
+          "name": "total_amount",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "amount_paid": {
+          "name": "amount_paid",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "change_amount": {
+          "name": "change_amount",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false,
+          "default": 0
+        },
+        "status": {
+          "name": "status",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false,
+          "default": "'paid'"
+        },
+        "created_by_user_id": {
+          "name": "created_by_user_id",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "created_by_name": {
+          "name": "created_by_name",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "created_by_role": {
+          "name": "created_by_role",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "cancelled_by_user_id": {
+          "name": "cancelled_by_user_id",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "cancelled_by_name": {
+          "name": "cancelled_by_name",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "cancelled_by_role": {
+          "name": "cancelled_by_role",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "cancelled_at": {
+          "name": "cancelled_at",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "cancellation_reason": {
+          "name": "cancellation_reason",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "cancellation_note": {
+          "name": "cancellation_note",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "created_at": {
+          "name": "created_at",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false,
+          "default": "(unixepoch() * 1000)"
+        },
+        "updated_at": {
+          "name": "updated_at",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false,
+          "default": "(unixepoch() * 1000)"
+        }
+      },
+      "indexes": {
+        "transactions_number_unique": {
+          "name": "transactions_number_unique",
+          "columns": [
+            "transaction_number"
+          ],
+          "isUnique": true
+        },
+        "transactions_date_index": {
+          "name": "transactions_date_index",
+          "columns": [
+            "transaction_date"
+          ],
+          "isUnique": false
+        },
+        "transactions_status_index": {
+          "name": "transactions_status_index",
+          "columns": [
+            "status"
+          ],
+          "isUnique": false
+        },
+        "transactions_payment_method_index": {
+          "name": "transactions_payment_method_index",
+          "columns": [
+            "payment_method"
+          ],
+          "isUnique": false
+        },
+        "transactions_created_by_user_index": {
+          "name": "transactions_created_by_user_index",
+          "columns": [
+            "created_by_user_id"
+          ],
+          "isUnique": false
+        }
+      },
+      "foreignKeys": {
+        "transactions_created_by_user_id_users_id_fk": {
+          "name": "transactions_created_by_user_id_users_id_fk",
+          "tableFrom": "transactions",
+          "tableTo": "users",
+          "columnsFrom": [
+            "created_by_user_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "restrict",
+          "onUpdate": "no action"
+        },
+        "transactions_cancelled_by_user_id_users_id_fk": {
+          "name": "transactions_cancelled_by_user_id_users_id_fk",
+          "tableFrom": "transactions",
+          "tableTo": "users",
+          "columnsFrom": [
+            "cancelled_by_user_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "set null",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "checkConstraints": {
+        "transactions_payment_method_check": {
+          "name": "transactions_payment_method_check",
+          "value": "\"transactions\".\"payment_method\" IN ('cash', 'qris')"
+        },
+        "transactions_status_check": {
+          "name": "transactions_status_check",
+          "value": "\"transactions\".\"status\" IN ('paid', 'cancelled')"
+        },
+        "transactions_created_by_role_check": {
+          "name": "transactions_created_by_role_check",
+          "value": "\"transactions\".\"created_by_role\" IN ('owner', 'officer')"
+        },
+        "transactions_cancelled_by_role_check": {
+          "name": "transactions_cancelled_by_role_check",
+          "value": "\n        \"transactions\".\"cancelled_by_role\" IS NULL\n        OR \"transactions\".\"cancelled_by_role\" IN ('owner', 'officer')\n      "
+        },
+        "transactions_total_amount_check": {
+          "name": "transactions_total_amount_check",
+          "value": "\"transactions\".\"total_amount\" > 0"
+        },
+        "transactions_amount_paid_check": {
+          "name": "transactions_amount_paid_check",
+          "value": "\"transactions\".\"amount_paid\" >= 0"
+        },
+        "transactions_change_amount_check": {
+          "name": "transactions_change_amount_check",
+          "value": "\"transactions\".\"change_amount\" >= 0"
+        },
+        "transactions_payment_amounts_check": {
+          "name": "transactions_payment_amounts_check",
+          "value": "\n        (\n          \"transactions\".\"payment_method\" = 'cash'\n          AND \"transactions\".\"amount_paid\" >= \"transactions\".\"total_amount\"\n          AND \"transactions\".\"change_amount\"\n            = \"transactions\".\"amount_paid\" - \"transactions\".\"total_amount\"\n        )\n        OR\n        (\n          \"transactions\".\"payment_method\" = 'qris'\n          AND \"transactions\".\"amount_paid\" = \"transactions\".\"total_amount\"\n          AND \"transactions\".\"change_amount\" = 0\n        )\n      "
+        },
+        "transactions_cancellation_reason_check": {
+          "name": "transactions_cancellation_reason_check",
+          "value": "\n        \"transactions\".\"cancellation_reason\" IS NULL\n        OR \"transactions\".\"cancellation_reason\" IN (\n          'wrong_quantity',\n          'wrong_product',\n          'wrong_payment_method',\n          'customer_cancelled',\n          'other'\n        )\n      "
+        },
+        "transactions_cancellation_state_check": {
+          "name": "transactions_cancellation_state_check",
+          "value": "\n        (\n          \"transactions\".\"status\" = 'paid'\n          AND \"transactions\".\"cancelled_by_user_id\" IS NULL\n          AND \"transactions\".\"cancelled_by_name\" IS NULL\n          AND \"transactions\".\"cancelled_by_role\" IS NULL\n          AND \"transactions\".\"cancelled_at\" IS NULL\n          AND \"transactions\".\"cancellation_reason\" IS NULL\n          AND \"transactions\".\"cancellation_note\" IS NULL\n        )\n        OR\n        (\n          \"transactions\".\"status\" = 'cancelled'\n          AND \"transactions\".\"cancelled_by_name\" IS NOT NULL\n          AND \"transactions\".\"cancelled_by_role\" IS NOT NULL\n          AND \"transactions\".\"cancelled_at\" IS NOT NULL\n          AND \"transactions\".\"cancellation_reason\" IS NOT NULL\n        )\n      "
+        },
+        "transactions_other_cancellation_note_check": {
+          "name": "transactions_other_cancellation_note_check",
+          "value": "\n        \"transactions\".\"status\" <> 'cancelled'\n        OR \"transactions\".\"cancellation_reason\" <> 'other'\n        OR (\n          \"transactions\".\"cancellation_note\" IS NOT NULL\n          AND length(trim(\"transactions\".\"cancellation_note\")) > 0\n        )\n      "
+        }
+      }
+    },
+    "users": {
+      "name": "users",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "text",
+          "primaryKey": true,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "full_name": {
+          "name": "full_name",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "username": {
+          "name": "username",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "role": {
+          "name": "role",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "pin_hash": {
+          "name": "pin_hash",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "pin_salt": {
+          "name": "pin_salt",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "is_active": {
+          "name": "is_active",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false,
+          "default": true
+        },
+        "failed_login_attempts": {
+          "name": "failed_login_attempts",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false,
+          "default": 0
+        },
+        "locked_until": {
+          "name": "locked_until",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "last_login_at": {
+          "name": "last_login_at",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "deleted_at": {
+          "name": "deleted_at",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "created_at": {
+          "name": "created_at",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false,
+          "default": "(unixepoch() * 1000)"
+        },
+        "updated_at": {
+          "name": "updated_at",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false,
+          "default": "(unixepoch() * 1000)"
+        }
+      },
+      "indexes": {
+        "users_username_unique": {
+          "name": "users_username_unique",
+          "columns": [
+            "username"
+          ],
+          "isUnique": true
+        }
+      },
+      "foreignKeys": {},
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "checkConstraints": {
+        "users_role_check": {
+          "name": "users_role_check",
+          "value": "\"users\".\"role\" IN ('owner', 'officer')"
+        },
+        "users_failed_login_attempts_check": {
+          "name": "users_failed_login_attempts_check",
+          "value": "\"users\".\"failed_login_attempts\" >= 0"
+        }
+      }
+    }
+  },
+  "views": {},
+  "enums": {},
+  "_meta": {
+    "schemas": {},
+    "tables": {},
+    "columns": {}
+  },
+  "internal": {
+    "indexes": {}
+  }
+}

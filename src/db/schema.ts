@@ -63,7 +63,7 @@ export const users = sqliteTable(
     username: text("username").notNull(),
 
     role: text("role", {
-      enum: ["owner", "cashier"],
+      enum: ["owner", "officer"],
     }).notNull(),
 
     pinHash: text("pin_hash").notNull(),
@@ -105,7 +105,7 @@ export const users = sqliteTable(
   (table) => [
     uniqueIndex("users_username_unique").on(table.username),
 
-    check("users_role_check", sql`${table.role} IN ('owner', 'cashier')`),
+    check("users_role_check", sql`${table.role} IN ('owner', 'officer')`),
 
     check(
       "users_failed_login_attempts_check",
@@ -269,7 +269,7 @@ export const transactions = sqliteTable(
     createdByName: text("created_by_name").notNull(),
 
     createdByRole: text("created_by_role", {
-      enum: ["owner", "cashier"],
+      enum: ["owner", "officer"],
     }).notNull(),
 
     cancelledByUserId: text("cancelled_by_user_id").references(() => users.id, {
@@ -279,7 +279,7 @@ export const transactions = sqliteTable(
     cancelledByName: text("cancelled_by_name"),
 
     cancelledByRole: text("cancelled_by_role", {
-      enum: ["owner", "cashier"],
+      enum: ["owner", "officer"],
     }),
 
     cancelledAt: integer("cancelled_at", {
@@ -333,14 +333,14 @@ export const transactions = sqliteTable(
 
     check(
       "transactions_created_by_role_check",
-      sql`${table.createdByRole} IN ('owner', 'cashier')`,
+      sql`${table.createdByRole} IN ('owner', 'officer')`,
     ),
 
     check(
       "transactions_cancelled_by_role_check",
       sql`
         ${table.cancelledByRole} IS NULL
-        OR ${table.cancelledByRole} IN ('owner', 'cashier')
+        OR ${table.cancelledByRole} IN ('owner', 'officer')
       `,
     ),
 
@@ -582,7 +582,7 @@ export const cashBooks = sqliteTable(
     createdByName: text("created_by_name").notNull(),
 
     createdByRole: text("created_by_role", {
-      enum: ["owner", "cashier", "system"],
+      enum: ["owner", "officer", "system"],
     }).notNull(),
 
     entryDate: integer("entry_date", {
@@ -641,7 +641,7 @@ export const cashBooks = sqliteTable(
       "cash_books_created_by_role_check",
       sql`${table.createdByRole} IN (
         'owner',
-        'cashier',
+        'officer',
         'system'
       )`,
     ),
@@ -718,7 +718,7 @@ export const stockHistory = sqliteTable(
     performedByName: text("performed_by_name").notNull(),
 
     performedByRole: text("performed_by_role", {
-      enum: ["owner", "cashier", "system"],
+      enum: ["owner", "officer", "system"],
     }).notNull(),
 
     createdAt: integer("created_at", {
@@ -770,7 +770,7 @@ export const stockHistory = sqliteTable(
       "stock_history_performed_by_role_check",
       sql`${table.performedByRole} IN (
         'owner',
-        'cashier',
+        'officer',
         'system'
       )`,
     ),
