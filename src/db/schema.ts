@@ -29,6 +29,12 @@ export const appConfig = sqliteTable(
       .notNull()
       .default(5),
 
+    loginFailedAttempts: integer("login_failed_attempts").notNull().default(0),
+
+    loginLockedUntil: integer("login_locked_until", {
+      mode: "timestamp_ms",
+    }),
+
     createdAt: integer("created_at", {
       mode: "timestamp_ms",
     })
@@ -49,6 +55,11 @@ export const appConfig = sqliteTable(
     check(
       "app_config_session_timeout_check",
       sql`${table.sessionTimeoutMinutes} > 0`,
+    ),
+
+    check(
+      "app_config_login_failed_attempts_check",
+      sql`${table.loginFailedAttempts} >= 0`,
     ),
   ],
 );
@@ -777,6 +788,253 @@ export const stockHistory = sqliteTable(
   ],
 );
 
+export const reportSettings = sqliteTable(
+  "report_settings",
+  {
+    id: integer("id").primaryKey().default(1),
+
+    dailyWhatsappEnabled: integer("daily_whatsapp_enabled", {
+      mode: "boolean",
+    })
+      .notNull()
+      .default(false),
+
+    dailyWhatsappTime: text("daily_whatsapp_time").notNull().default("00:00"),
+
+    sendWhenOnline: integer("send_when_online", {
+      mode: "boolean",
+    })
+      .notNull()
+      .default(true),
+
+    createdAt: integer("created_at", {
+      mode: "timestamp_ms",
+    })
+      .notNull()
+      .default(sql`(unixepoch() * 1000)`),
+
+    updatedAt: integer("updated_at", {
+      mode: "timestamp_ms",
+    })
+      .notNull()
+      .default(sql`(unixepoch() * 1000)`),
+  },
+  (table) => [
+    check("report_settings_single_row_check", sql`${table.id} = 1`),
+
+    check(
+      "report_settings_daily_time_check",
+      sql`${table.dailyWhatsappTime} = '00:00'`,
+    ),
+  ],
+);
+
+export const reportDeliveryHistory = sqliteTable(
+  "report_delivery_history",
+  {
+    id: text("id").primaryKey(),
+
+    reportType: text("report_type", {
+      enum: ["daily_message", "pdf", "excel"],
+    }).notNull(),
+
+    deliveryMode: text("delivery_mode", {
+      enum: ["automatic", "manual"],
+    }).notNull(),
+
+    periodStart: integer("period_start", {
+      mode: "timestamp_ms",
+    }).notNull(),
+
+    periodEnd: integer("period_end", {
+      mode: "timestamp_ms",
+    }).notNull(),
+
+    destinationWaNumber: text("destination_wa_number"),
+
+    fileName: text("file_name"),
+
+    fileUri: text("file_uri"),
+
+    status: text("status", {
+      enum: ["pending", "generated", "waiting_connection", "sent", "failed"],
+    })
+      .notNull()
+      .default("pending"),
+
+    attemptCount: integer("attempt_count").notNull().default(0),
+
+    lastAttemptAt: integer("last_attempt_at", {
+      mode: "timestamp_ms",
+    }),
+
+    sentAt: integer("sent_at", {
+      mode: "timestamp_ms",
+    }),
+
+    errorMessage: text("error_message"),
+
+    createdByUserId: text("created_by_user_id").references(() => users.id, {
+      onDelete: "set null",
+    }),
+
+    createdByName: text("created_by_name").notNull(),
+
+    createdByRole: text("created_by_role", {
+      enum: ["owner", "system"],
+    }).notNull(),
+
+    createdAt: integer("created_at", {
+      mode: "timestamp_ms",
+    })
+      .notNull()
+      .default(sql`(unixepoch() * 1000)`),
+
+    updatedAt: integer("updated_at", {
+      mode: "timestamp_ms",
+    })
+      .notNull()
+      .default(sql`(unixepoch() * 1000)`),
+  },
+  (table) => [
+    index("report_delivery_history_type_index").on(table.reportType),
+
+    index("report_delivery_history_status_index").on(table.status),
+
+    index("report_delivery_history_period_start_index").on(table.periodStart),
+
+    index("report_delivery_history_created_at_index").on(table.createdAt),
+
+    index("report_delivery_history_created_by_user_index").on(
+      table.createdByUserId,
+    ),
+
+    check(
+      "report_delivery_history_type_check",
+      sql`${table.reportType} IN ('daily_message', 'pdf', 'excel')`,
+    ),
+
+    check(
+      "report_delivery_history_mode_check",
+      sql`${table.deliveryMode} IN ('automatic', 'manual')`,
+    ),
+
+    check(
+      "report_delivery_history_status_check",
+      sql`${table.status} IN (
+        'pending',
+        'generated',
+        'waiting_connection',
+        'sent',
+        'failed'
+      )`,
+    ),
+
+    check(
+      "report_delivery_history_attempt_count_check",
+      sql`${table.attemptCount} >= 0`,
+    ),
+
+    check(
+      "report_delivery_history_period_check",
+      sql`${table.periodEnd} >= ${table.periodStart}`,
+    ),
+
+    check(
+      "report_delivery_history_created_by_role_check",
+      sql`${table.createdByRole} IN ('owner', 'system')`,
+    ),
+
+    check(
+      "report_delivery_history_type_mode_check",
+      sql`
+        (
+          ${table.reportType} = 'daily_message'
+          AND ${table.deliveryMode} = 'automatic'
+        )
+        OR
+        (
+          ${table.reportType} IN ('pdf', 'excel')
+          AND ${table.deliveryMode} = 'manual'
+        )
+      `,
+    ),
+
+    check(
+      "report_delivery_history_daily_message_check",
+      sql`
+        ${table.reportType} <> 'daily_message'
+        OR (
+          ${table.destinationWaNumber} IS NOT NULL
+          AND length(trim(${table.destinationWaNumber})) > 0
+          AND ${table.fileName} IS NULL
+          AND ${table.fileUri} IS NULL
+          AND ${table.status} IN (
+            'pending',
+            'waiting_connection',
+            'sent',
+            'failed'
+          )
+        )
+      `,
+    ),
+
+    check(
+      "report_delivery_history_document_check",
+      sql`
+        ${table.reportType} = 'daily_message'
+        OR (
+          ${table.status} IN ('pending', 'generated', 'sent', 'failed')
+          AND (
+            (
+              ${table.fileName} IS NULL
+              AND ${table.fileUri} IS NULL
+            )
+            OR
+            (
+              ${table.fileName} IS NOT NULL
+              AND length(trim(${table.fileName})) > 0
+              AND ${table.fileUri} IS NOT NULL
+              AND length(trim(${table.fileUri})) > 0
+            )
+          )
+        )
+      `,
+    ),
+
+    check(
+      "report_delivery_history_sent_state_check",
+      sql`
+        (
+          ${table.status} = 'sent'
+          AND ${table.sentAt} IS NOT NULL
+        )
+        OR
+        (
+          ${table.status} <> 'sent'
+          AND ${table.sentAt} IS NULL
+        )
+      `,
+    ),
+
+    check(
+      "report_delivery_history_error_state_check",
+      sql`
+        (
+          ${table.status} = 'failed'
+          AND ${table.errorMessage} IS NOT NULL
+          AND length(trim(${table.errorMessage})) > 0
+        )
+        OR
+        (
+          ${table.status} <> 'failed'
+          AND ${table.errorMessage} IS NULL
+        )
+      `,
+    ),
+  ],
+);
+
 export type AppConfig = typeof appConfig.$inferSelect;
 export type NewAppConfig = typeof appConfig.$inferInsert;
 
@@ -797,3 +1055,10 @@ export type NewCashBook = typeof cashBooks.$inferInsert;
 
 export type StockHistory = typeof stockHistory.$inferSelect;
 export type NewStockHistory = typeof stockHistory.$inferInsert;
+
+export type ReportSettings = typeof reportSettings.$inferSelect;
+export type NewReportSettings = typeof reportSettings.$inferInsert;
+
+export type ReportDeliveryHistory = typeof reportDeliveryHistory.$inferSelect;
+export type NewReportDeliveryHistory =
+  typeof reportDeliveryHistory.$inferInsert;

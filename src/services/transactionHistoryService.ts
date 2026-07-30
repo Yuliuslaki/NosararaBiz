@@ -5,7 +5,7 @@ export type TransactionPaymentMethod = "cash" | "qris";
 
 export type TransactionStatus = "paid" | "cancelled";
 
-export type TransactionUserRole = "owner" | "cashier";
+export type TransactionUserRole = "owner" | "officer";
 
 export type TransactionCancellationReason =
   | "wrong_quantity"
@@ -597,7 +597,6 @@ export function getTodayTransactionSummary(
       `,
     {
       $startDate: startDate.getTime(),
-
       $endDate: endDate.getTime(),
     },
   );

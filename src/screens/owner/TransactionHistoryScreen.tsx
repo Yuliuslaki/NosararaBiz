@@ -11,6 +11,7 @@ import {
   type TransactionDetail,
   type TransactionDetailItem,
   type TransactionHistoryItem,
+  type TransactionUserRole,
 } from "../../services/transactionHistoryService";
 import { PRODUCT_UNIT_LABELS } from "../../types/product";
 import { formatCurrency } from "../../utils/formatters";
@@ -68,8 +69,17 @@ function formatDateTime(timestamp: number): string {
   }).format(date);
 }
 
-function formatUserRole(role: "owner" | "cashier"): string {
-  return role === "owner" ? "Owner" : "Kasir";
+function formatUserRole(role: TransactionUserRole): string {
+  switch (role) {
+    case "owner":
+      return "Owner";
+
+    case "officer":
+      return "Officer";
+
+    default:
+      return role;
+  }
 }
 
 function formatItemQuantity(item: TransactionDetailItem): string {
