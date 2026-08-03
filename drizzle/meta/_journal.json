@@ -57,6 +57,13 @@
       "when": 1785421378636,
       "tag": "0007_add_report_tables",
       "breakpoints": true
+    },
+    {
+      "idx": 8,
+      "version": "6",
+      "when": 1785775740000,
+      "tag": "0008_add_sale_vat",
+      "breakpoints": true
     }
   ]
 }
