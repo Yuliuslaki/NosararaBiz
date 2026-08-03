@@ -259,6 +259,14 @@ export const transactions = sqliteTable(
       enum: ["cash", "qris"],
     }).notNull(),
 
+    subtotalAmount: integer("subtotal_amount").notNull().default(0),
+
+    taxableAmount: integer("taxable_amount").notNull().default(0),
+
+    vatRate: integer("vat_rate").notNull().default(0),
+
+    vatAmount: integer("vat_amount").notNull().default(0),
+
     totalAmount: integer("total_amount").notNull(),
 
     amountPaid: integer("amount_paid").notNull(),
@@ -355,7 +363,31 @@ export const transactions = sqliteTable(
       `,
     ),
 
-    check("transactions_total_amount_check", sql`${table.totalAmount} > 0`),
+    check(
+      "transactions_subtotal_amount_check",
+      sql`${table.subtotalAmount} >= 0`,
+    ),
+
+    check(
+      "transactions_taxable_amount_check",
+      sql`
+        ${table.taxableAmount} >= 0
+        AND ${table.taxableAmount} <= ${table.subtotalAmount}
+      `,
+    ),
+
+    check("transactions_vat_rate_check", sql`${table.vatRate} IN (0, 11)`),
+
+    check("transactions_vat_amount_check", sql`${table.vatAmount} >= 0`),
+
+    check(
+      "transactions_total_amount_check",
+      sql`
+        ${table.totalAmount} > 0
+        AND ${table.totalAmount}
+          = ${table.subtotalAmount} + ${table.vatAmount}
+      `,
+    ),
 
     check("transactions_amount_paid_check", sql`${table.amountPaid} >= 0`),
 
@@ -465,6 +497,16 @@ export const transactionItems = sqliteTable(
 
     subtotal: integer("subtotal").notNull(),
 
+    vatTreatment: text("vat_treatment", {
+      enum: ["taxable", "exempt"],
+    })
+      .notNull()
+      .default("exempt"),
+
+    vatRate: integer("vat_rate").notNull().default(0),
+
+    vatAmount: integer("vat_amount").notNull().default(0),
+
     rackSizeSnapshot: integer("rack_size_snapshot"),
 
     createdAt: integer("created_at", {
@@ -507,6 +549,32 @@ export const transactionItems = sqliteTable(
       sql`
         ${table.subtotal} >= 0
         AND ${table.subtotal} = ${table.quantity} * ${table.unitPrice}
+      `,
+    ),
+
+    check(
+      "transaction_items_vat_treatment_check",
+      sql`${table.vatTreatment} IN ('taxable', 'exempt')`,
+    ),
+
+    check("transaction_items_vat_rate_check", sql`${table.vatRate} IN (0, 11)`),
+
+    check("transaction_items_vat_amount_check", sql`${table.vatAmount} >= 0`),
+
+    check(
+      "transaction_items_vat_state_check",
+      sql`
+        (
+          ${table.vatTreatment} = 'exempt'
+          AND ${table.vatRate} = 0
+          AND ${table.vatAmount} = 0
+        )
+        OR
+        (
+          ${table.vatTreatment} = 'taxable'
+          AND ${table.productCategory} = 'fertilizer'
+          AND ${table.vatRate} = 11
+        )
       `,
     ),
 

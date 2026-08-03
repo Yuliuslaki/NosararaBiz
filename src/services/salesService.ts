@@ -6,6 +6,23 @@ import type { AuthenticatedUser } from "./authService";
 
 export type SalePaymentMethod = "cash" | "qris";
 
+export type SaleVatTreatment = "taxable" | "exempt";
+
+export const SALE_VAT_RATE_PERCENT = 11;
+
+export type SaleAmountItem = {
+  productCategory: ProductCategory;
+  subtotal: number;
+};
+
+export type SaleAmountBreakdown = {
+  subtotalAmount: number;
+  taxableAmount: number;
+  vatRate: number;
+  vatAmount: number;
+  totalAmount: number;
+};
+
 export type SaleItemInput = {
   productId: string;
   saleUnit: ProductUnit;
@@ -29,6 +46,9 @@ export type CreatedSaleItem = {
   quantityInBaseUnit: number;
   unitPrice: number;
   subtotal: number;
+  vatTreatment: SaleVatTreatment;
+  vatRate: number;
+  vatAmount: number;
   rackSizeSnapshot: number | null;
 };
 
@@ -37,6 +57,10 @@ export type CreatedSaleTransaction = {
   transactionNumber: string;
   transactionDate: number;
   paymentMethod: SalePaymentMethod;
+  subtotalAmount: number;
+  taxableAmount: number;
+  vatRate: number;
+  vatAmount: number;
   totalAmount: number;
   amountPaid: number;
   changeAmount: number;
@@ -87,6 +111,90 @@ function assertSafeCalculation(value: number, label: string): void {
   if (!Number.isSafeInteger(value) || value < 0) {
     throw new Error(`${label} terlalu besar atau tidak valid.`);
   }
+}
+
+export function isProductSubjectToVat(
+  productCategory: ProductCategory,
+): boolean {
+  return productCategory === "fertilizer";
+}
+
+export function calculateSaleAmounts(
+  items: readonly SaleAmountItem[],
+): SaleAmountBreakdown {
+  let subtotalAmount = 0;
+  let taxableAmount = 0;
+
+  for (const item of items) {
+    assertSafeCalculation(item.subtotal, "Subtotal produk");
+
+    const nextSubtotalAmount = subtotalAmount + item.subtotal;
+
+    assertSafeCalculation(nextSubtotalAmount, "Subtotal transaksi");
+
+    subtotalAmount = nextSubtotalAmount;
+
+    if (isProductSubjectToVat(item.productCategory)) {
+      const nextTaxableAmount = taxableAmount + item.subtotal;
+
+      assertSafeCalculation(nextTaxableAmount, "Dasar pengenaan PPN");
+
+      taxableAmount = nextTaxableAmount;
+    }
+  }
+
+  const vatRate = taxableAmount > 0 ? SALE_VAT_RATE_PERCENT : 0;
+
+  const vatAmount =
+    taxableAmount > 0
+      ? Math.round((taxableAmount * SALE_VAT_RATE_PERCENT) / 100)
+      : 0;
+
+  assertSafeCalculation(vatAmount, "Nominal PPN");
+
+  const totalAmount = subtotalAmount + vatAmount;
+
+  assertSafeCalculation(totalAmount, "Total transaksi");
+
+  return {
+    subtotalAmount,
+    taxableAmount,
+    vatRate,
+    vatAmount,
+    totalAmount,
+  };
+}
+
+function applyItemVatSnapshots(
+  items: CreatedSaleItem[],
+  taxableAmount: number,
+  transactionVatAmount: number,
+): void {
+  const taxableItems = items.filter((item) => item.vatTreatment === "taxable");
+
+  if (
+    taxableItems.length === 0 ||
+    taxableAmount <= 0 ||
+    transactionVatAmount <= 0
+  ) {
+    return;
+  }
+
+  let allocatedVatAmount = 0;
+
+  taxableItems.forEach((item, index) => {
+    const isLastTaxableItem = index === taxableItems.length - 1;
+
+    const itemVatAmount = isLastTaxableItem
+      ? transactionVatAmount - allocatedVatAmount
+      : Math.floor((transactionVatAmount * item.subtotal) / taxableAmount);
+
+    assertSafeCalculation(itemVatAmount, `PPN ${item.productName}`);
+
+    item.vatAmount = itemVatAmount;
+
+    allocatedVatAmount += itemVatAmount;
+  });
 }
 
 function normalizeItems(items: SaleItemInput[]): NormalizedSaleItem[] {
@@ -355,8 +463,6 @@ export function createSaleTransaction(
 
   const preparedItems: CreatedSaleItem[] = [];
 
-  let totalAmount = 0;
-
   for (let index = 0; index < normalizedItems.length; index += 1) {
     const item = normalizedItems[index];
 
@@ -379,12 +485,6 @@ export function createSaleTransaction(
 
     assertSafeCalculation(subtotal, `Subtotal ${product.name}`);
 
-    const nextTotalAmount = totalAmount + subtotal;
-
-    assertSafeCalculation(nextTotalAmount, "Total transaksi");
-
-    totalAmount = nextTotalAmount;
-
     const currentRequiredStock = requiredStockByProduct.get(product.id) ?? 0;
 
     const nextRequiredStock = currentRequiredStock + quantityInBaseUnit;
@@ -403,13 +503,25 @@ export function createSaleTransaction(
       quantityInBaseUnit,
       unitPrice,
       subtotal,
+      vatTreatment: isProductSubjectToVat(product.category)
+        ? "taxable"
+        : "exempt",
+      vatRate: isProductSubjectToVat(product.category)
+        ? SALE_VAT_RATE_PERCENT
+        : 0,
+      vatAmount: 0,
       rackSizeSnapshot,
     });
   }
 
-  if (totalAmount <= 0) {
-    throw new Error("Total transaksi harus lebih dari nol.");
+  const { subtotalAmount, taxableAmount, vatRate, vatAmount, totalAmount } =
+    calculateSaleAmounts(preparedItems);
+
+  if (subtotalAmount <= 0) {
+    throw new Error("Subtotal transaksi harus lebih dari nol.");
   }
+
+  applyItemVatSnapshots(preparedItems, taxableAmount, vatAmount);
 
   const changeAmount = validatePayment(
     input.paymentMethod,
@@ -451,6 +563,10 @@ export function createSaleTransaction(
             transaction_number,
             transaction_date,
             payment_method,
+            subtotal_amount,
+            taxable_amount,
+            vat_rate,
+            vat_amount,
             total_amount,
             amount_paid,
             change_amount,
@@ -466,6 +582,10 @@ export function createSaleTransaction(
             $transactionNumber,
             $transactionDate,
             $paymentMethod,
+            $subtotalAmount,
+            $taxableAmount,
+            $vatRate,
+            $vatAmount,
             $totalAmount,
             $amountPaid,
             $changeAmount,
@@ -485,6 +605,14 @@ export function createSaleTransaction(
         $transactionDate: transactionDate,
 
         $paymentMethod: input.paymentMethod,
+
+        $subtotalAmount: subtotalAmount,
+
+        $taxableAmount: taxableAmount,
+
+        $vatRate: vatRate,
+
+        $vatAmount: vatAmount,
 
         $totalAmount: totalAmount,
 
@@ -518,6 +646,9 @@ export function createSaleTransaction(
               quantity_in_base_unit,
               unit_price,
               subtotal,
+              vat_treatment,
+              vat_rate,
+              vat_amount,
               rack_size_snapshot,
               created_at
             )
@@ -532,6 +663,9 @@ export function createSaleTransaction(
               $quantityInBaseUnit,
               $unitPrice,
               $subtotal,
+              $vatTreatment,
+              $vatRate,
+              $vatAmount,
               $rackSizeSnapshot,
               $createdAt
             );
@@ -556,6 +690,12 @@ export function createSaleTransaction(
           $unitPrice: item.unitPrice,
 
           $subtotal: item.subtotal,
+
+          $vatTreatment: item.vatTreatment,
+
+          $vatRate: item.vatRate,
+
+          $vatAmount: item.vatAmount,
 
           $rackSizeSnapshot: item.rackSizeSnapshot,
 
@@ -698,6 +838,10 @@ export function createSaleTransaction(
       transactionNumber,
       transactionDate,
       paymentMethod: input.paymentMethod,
+      subtotalAmount,
+      taxableAmount,
+      vatRate,
+      vatAmount,
       totalAmount,
       amountPaid: input.amountPaid,
       changeAmount,

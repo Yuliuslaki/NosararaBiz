@@ -11,6 +11,7 @@ import m0004 from "./0004_add_cash_books.sql";
 import m0005 from "./0005_update_role_to_officer.sql";
 import m0006 from "./0006_add-device-login-security.sql";
 import m0007 from "./0007_add_report_tables.sql";
+import m0008 from "./0008_add_sale_vat.sql";
 
 export default {
   journal,
@@ -23,5 +24,6 @@ export default {
     m0005,
     m0006,
     m0007,
+    m0008,
   },
 };

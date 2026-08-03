@@ -27,6 +27,7 @@ import {
   type QrisPrototypeSession,
 } from "../../services/qrisPrototypeService";
 import {
+  calculateSaleAmounts,
   createSaleTransaction,
   type CreatedSaleTransaction,
   type SalePaymentMethod,
@@ -434,11 +435,17 @@ export function SaleScreen({ user, onBack }: SaleScreenProps) {
     [products],
   );
 
-  const totalAmount = useMemo(
-    () =>
-      cartItems.reduce((total, item) => total + getCartItemSubtotal(item), 0),
-    [cartItems],
-  );
+  const { subtotalAmount, taxableAmount, vatRate, vatAmount, totalAmount } =
+    useMemo(
+      () =>
+        calculateSaleAmounts(
+          cartItems.map((item) => ({
+            productCategory: item.productCategory,
+            subtotal: getCartItemSubtotal(item),
+          })),
+        ),
+      [cartItems],
+    );
 
   const parsedAmountPaid = amountPaid.length === 0 ? 0 : Number(amountPaid);
 
@@ -673,6 +680,13 @@ export function SaleScreen({ user, onBack }: SaleScreenProps) {
     const paymentLabel =
       createdTransaction.paymentMethod === "cash" ? "Tunai" : "QRIS";
 
+    const vatMessage =
+      createdTransaction.vatAmount > 0
+        ? `\nPPN ${createdTransaction.vatRate}%: ${formatCurrency(
+            createdTransaction.vatAmount,
+          )}`
+        : "\nPPN: Rp0";
+
     const changeMessage =
       createdTransaction.changeAmount > 0
         ? `\nKembalian: ${formatCurrency(createdTransaction.changeAmount)}`
@@ -681,7 +695,9 @@ export function SaleScreen({ user, onBack }: SaleScreenProps) {
     showAlert({
       tone: "success",
       title: "Transaksi berhasil",
-      message: `${createdTransaction.transactionNumber}\nMetode: ${paymentLabel}\nTotal: ${formatCurrency(
+      message: `${createdTransaction.transactionNumber}\nMetode: ${paymentLabel}\nSubtotal: ${formatCurrency(
+        createdTransaction.subtotalAmount,
+      )}${vatMessage}\nTotal: ${formatCurrency(
         createdTransaction.totalAmount,
       )}${changeMessage}`,
       confirmText: "Selesai",
@@ -968,14 +984,64 @@ export function SaleScreen({ user, onBack }: SaleScreenProps) {
               </View>
             )}
 
-            <View className="mt-3 flex-row items-center justify-between rounded-xl border border-brand-black bg-brand-cream p-4">
-              <Text className="font-atkinson-bold text-[17px] text-brand-black">
-                Total
-              </Text>
+            <View className="mt-3 rounded-xl border border-brand-black bg-brand-cream p-4">
+              <View className="flex-row items-center justify-between">
+                <Text className="font-atkinson text-[14px] text-brand-black">
+                  Subtotal Produk
+                </Text>
 
-              <Text className="font-atkinson-bold text-[21px] text-brand-black">
-                {formatCurrency(totalAmount)}
-              </Text>
+                <Text className="font-atkinson-bold text-[16px] text-brand-black">
+                  {formatCurrency(subtotalAmount)}
+                </Text>
+              </View>
+
+              {taxableAmount > 0 ? (
+                <>
+                  <View className="mt-3 flex-row items-center justify-between">
+                    <Text className="mr-3 flex-1 font-atkinson text-[14px] text-brand-black">
+                      Produk Kena PPN
+                    </Text>
+
+                    <Text className="font-atkinson-bold text-[16px] text-brand-black">
+                      {formatCurrency(taxableAmount)}
+                    </Text>
+                  </View>
+
+                  <View className="mt-3 flex-row items-center justify-between">
+                    <Text className="font-atkinson text-[14px] text-brand-black">
+                      PPN {vatRate}%
+                    </Text>
+
+                    <Text className="font-atkinson-bold text-[16px] text-brand-black">
+                      {formatCurrency(vatAmount)}
+                    </Text>
+                  </View>
+
+                  <Text className="mt-3 font-atkinson text-[12px] leading-5 text-brand-black">
+                    PPN 11% hanya dikenakan pada produk Pupuk Kandang.
+                  </Text>
+                </>
+              ) : (
+                <View className="mt-3 flex-row items-center justify-between">
+                  <Text className="font-atkinson text-[14px] text-brand-black">
+                    PPN
+                  </Text>
+
+                  <Text className="font-atkinson-bold text-[16px] text-brand-black">
+                    {formatCurrency(0)}
+                  </Text>
+                </View>
+              )}
+
+              <View className="mt-4 flex-row items-center justify-between border-t border-brand-black pt-4">
+                <Text className="font-atkinson-bold text-[17px] text-brand-black">
+                  Total Pembayaran
+                </Text>
+
+                <Text className="font-atkinson-bold text-[21px] text-brand-black">
+                  {formatCurrency(totalAmount)}
+                </Text>
+              </View>
             </View>
           </View>
 
@@ -1075,7 +1141,7 @@ export function SaleScreen({ user, onBack }: SaleScreenProps) {
             ) : (
               <View className="mt-4 rounded-xl border border-brand-black bg-brand-cream p-4">
                 <Text className="font-atkinson text-[14px] leading-6 text-brand-black">
-                  Pembayaran QRIS harus sama dengan total transaksi.
+                  Pembayaran QRIS harus sama dengan total transaksi setelah PPN.
                 </Text>
 
                 <Text className="mt-2 font-atkinson-bold text-[18px] text-brand-black">
@@ -1127,6 +1193,7 @@ export function SaleScreen({ user, onBack }: SaleScreenProps) {
             )}
           </Pressable>
         </View>
+        w
       </ScrollView>
     </KeyboardAvoidingView>
   );
