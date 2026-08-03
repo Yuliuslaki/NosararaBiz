@@ -40,10 +40,10 @@ const EMPTY_SUMMARY: TodayTransactionSummary = {
 
 function SummaryCard({ label, value }: SummaryCardProps) {
   return (
-    <View className="h-[104px] flex-1 justify-between rounded-2xl bg-brand-cream px-4 py-3">
+    <View className="min-h-[108px] flex-1 justify-between rounded-xl border border-brand-black bg-brand-white p-4">
       <Text
         numberOfLines={2}
-        className="min-h-[34px] font-atkinson text-[13px] leading-5 text-brand-black"
+        className="font-atkinson text-[15px] leading-5 text-brand-black"
       >
         {label}
       </Text>
@@ -51,8 +51,8 @@ function SummaryCard({ label, value }: SummaryCardProps) {
       <Text
         numberOfLines={1}
         adjustsFontSizeToFit
-        minimumFontScale={0.72}
-        className="font-atkinson-bold text-[20px] leading-7 text-brand-brown"
+        minimumFontScale={0.7}
+        className="mt-3 font-atkinson-bold text-[21px] leading-7 text-brand-black"
       >
         {value}
       </Text>
@@ -76,21 +76,25 @@ function DashboardMenuItem({
       accessibilityState={{
         disabled: !isAvailable,
       }}
-      className={`mb-4 rounded-2xl border-2 bg-brand-white px-5 py-4 ${
-        isAvailable ? "border-brand-orange" : "border-brand-yellow"
+      className={`mb-3 min-h-[96px] rounded-xl border border-brand-black bg-brand-white px-5 py-4 ${
+        isAvailable ? "" : "opacity-50"
       }`}
     >
-      <Text className="font-atkinson-bold text-[18px] text-brand-brown">
-        {title}
-      </Text>
+      <View className="flex-row items-center justify-between">
+        <View className="mr-4 flex-1">
+          <Text className="font-atkinson-bold text-[19px] leading-6 text-brand-black">
+            {title}
+          </Text>
 
-      <Text className="mt-2 font-atkinson text-[15px] leading-6 text-brand-black">
-        {description}
-      </Text>
+          <Text className="mt-1 font-atkinson text-[15px] leading-5 text-brand-black">
+            {description}
+          </Text>
+        </View>
 
-      <Text className="mt-3 font-atkinson-bold text-[14px] text-brand-orange">
-        {isAvailable ? "Buka menu" : "Akan dibuat pada tahap berikutnya"}
-      </Text>
+        <Text className="font-atkinson-bold text-[26px] text-brand-black">
+          ›
+        </Text>
+      </View>
     </Pressable>
   );
 }
@@ -122,7 +126,6 @@ export function OwnerHomeScreen({
 
       try {
         setSummary(getTodayTransactionSummary());
-
         setSummaryError(null);
       } catch (error) {
         setSummary(EMPTY_SUMMARY);
@@ -183,22 +186,22 @@ export function OwnerHomeScreen({
       }}
     >
       <View className="w-full max-w-md self-center">
-        <View className="rounded-3xl bg-brand-orange px-6 py-6">
-          <Text className="font-atkinson text-[16px] text-brand-white">
+        <View className="border-b border-brand-black pb-5">
+          <Text className="font-atkinson text-[16px] text-brand-black">
             Selamat datang,
           </Text>
 
-          <Text className="mt-1 font-atkinson-bold text-[28px] leading-9 text-brand-white">
+          <Text className="mt-1 font-atkinson-bold text-[30px] leading-9 text-brand-black">
             {user.fullName}
           </Text>
 
-          <Text className="mt-2 font-atkinson text-[15px] text-brand-white">
-            Dashboard Owner
+          <Text className="mt-2 font-atkinson text-[16px] leading-6 text-brand-black">
+            Ringkasan dan pengelolaan usaha
           </Text>
         </View>
 
-        <View className="mt-5 rounded-3xl bg-brand-white p-4">
-          <Text className="font-atkinson-bold text-[18px] text-brand-brown">
+        <View className="mt-6">
+          <Text className="font-atkinson-bold text-[22px] text-brand-black">
             Ringkasan Hari Ini
           </Text>
 
@@ -209,7 +212,7 @@ export function OwnerHomeScreen({
             />
 
             <SummaryCard
-              label="Transaksi berhasil"
+              label="Jumlah transaksi"
               value={String(summary.totalTransactions)}
             />
           </View>
@@ -227,55 +230,55 @@ export function OwnerHomeScreen({
           </View>
 
           {summaryError ? (
-            <View className="mt-3 rounded-2xl border border-brand-orange bg-brand-white p-3">
-              <Text className="font-atkinson-bold text-[13px] text-brand-brown">
+            <View className="mt-4 rounded-xl border border-brand-black bg-brand-white p-4">
+              <Text className="font-atkinson-bold text-[15px] text-brand-black">
                 Ringkasan belum dapat dimuat
               </Text>
 
-              <Text className="mt-1 font-atkinson text-[13px] leading-5 text-brand-black">
+              <Text className="mt-2 font-atkinson text-[14px] leading-5 text-brand-black">
                 {summaryError}
               </Text>
             </View>
           ) : null}
         </View>
 
-        <Text className="mb-4 mt-7 font-atkinson-bold text-[22px] text-brand-brown">
-          Menu Utama
+        <Text className="mb-4 mt-8 font-atkinson-bold text-[22px] text-brand-black">
+          Pilih Menu
         </Text>
 
         <DashboardMenuItem
-          title="Transaksi Penjualan"
-          description="Membuat transaksi penjualan telur dan produk lainnya."
+          title="Penjualan"
+          description="Catat transaksi penjualan baru."
           onPress={onOpenSales}
         />
 
         <DashboardMenuItem
           title="Produk dan Stok"
-          description="Mengelola produk, harga, stok awal, dan penambahan stok."
+          description="Kelola produk, harga, dan jumlah stok."
           onPress={onOpenProducts}
         />
 
         <DashboardMenuItem
           title="Riwayat Transaksi"
-          description="Melihat seluruh transaksi penjualan yang berhasil."
+          description="Lihat transaksi yang sudah tersimpan."
           onPress={onOpenTransactionHistory}
         />
 
         <DashboardMenuItem
           title="Buku Kas"
-          description="Melihat pemasukan serta mencatat pengeluaran usaha."
+          description="Lihat pemasukan dan catat pengeluaran."
           onPress={onOpenCashBook}
         />
 
         <DashboardMenuItem
-          title="Kelola Officer"
-          description="Membuat, mengubah, mengaktifkan, menonaktifkan, dan menghapus akun Officer."
+          title="Kelola Petugas"
+          description="Kelola akun petugas usaha."
           onPress={onOpenOfficers}
         />
 
         <DashboardMenuItem
           title="Laporan"
-          description="Kelola laporan harian WhatsApp serta laporan PDF dan Excel."
+          description="Lihat dan buat laporan usaha."
           onPress={onOpenReports}
         />
 
@@ -283,9 +286,9 @@ export function OwnerHomeScreen({
           onPress={onLogout}
           accessibilityRole="button"
           accessibilityLabel="Keluar dari akun"
-          className="mt-3 min-h-14 items-center justify-center rounded-2xl border-2 border-brand-orange bg-brand-white px-5 py-4"
+          className="mt-5 min-h-14 items-center justify-center rounded-xl bg-brand-black px-5 py-4"
         >
-          <Text className="font-atkinson-bold text-[18px] text-brand-orange">
+          <Text className="font-atkinson-bold text-[18px] text-brand-white">
             Keluar dari Akun
           </Text>
         </Pressable>

@@ -90,7 +90,7 @@ function formatItemQuantity(item: TransactionDetailItem): string {
 
 function SummaryCard({ label, value }: SummaryCardProps) {
   return (
-    <View className="h-[104px] flex-1 justify-between rounded-2xl bg-brand-cream px-4 py-3">
+    <View className="h-[108px] flex-1 justify-between rounded-xl border border-brand-black bg-brand-cream px-4 py-3">
       <Text
         numberOfLines={2}
         className="min-h-[34px] font-atkinson text-[13px] leading-5 text-brand-black"
@@ -102,7 +102,7 @@ function SummaryCard({ label, value }: SummaryCardProps) {
         numberOfLines={1}
         adjustsFontSizeToFit
         minimumFontScale={0.72}
-        className="font-atkinson-bold text-[20px] leading-7 text-brand-brown"
+        className="font-atkinson-bold text-[20px] leading-7 text-brand-black"
       >
         {value}
       </Text>
@@ -112,12 +112,12 @@ function SummaryCard({ label, value }: SummaryCardProps) {
 
 function TransactionCard({ transaction, onOpenDetail }: TransactionCardProps) {
   return (
-    <View className="mb-4 rounded-3xl border-2 border-brand-yellow bg-brand-white p-4">
+    <View className="mb-4 rounded-xl border border-brand-black bg-brand-white p-4">
       <View className="flex-row items-start justify-between">
         <View className="mr-3 flex-1">
           <Text
             selectable
-            className="font-atkinson-bold text-[15px] leading-5 text-brand-brown"
+            className="font-atkinson-bold text-[15px] leading-5 text-brand-black"
           >
             {transaction.transactionNumber}
           </Text>
@@ -127,19 +127,19 @@ function TransactionCard({ transaction, onOpenDetail }: TransactionCardProps) {
           </Text>
         </View>
 
-        <View className="rounded-full bg-brand-cream px-3 py-1.5">
-          <Text className="font-atkinson-bold text-[12px] text-brand-orange">
+        <View className="rounded-full border border-brand-black bg-brand-cream px-3 py-1.5">
+          <Text className="font-atkinson-bold text-[12px] text-brand-black">
             Berhasil
           </Text>
         </View>
       </View>
 
-      <View className="mt-4 rounded-2xl bg-brand-cream p-4">
+      <View className="mt-4 rounded-xl border border-brand-black bg-brand-cream p-4">
         <Text className="font-atkinson text-[13px] text-brand-black">
           Total transaksi
         </Text>
 
-        <Text className="mt-1 font-atkinson-bold text-[21px] leading-7 text-brand-orange">
+        <Text className="mt-1 font-atkinson-bold text-[21px] leading-7 text-brand-black">
           {formatCurrency(transaction.totalAmount)}
         </Text>
       </View>
@@ -150,7 +150,7 @@ function TransactionCard({ transaction, onOpenDetail }: TransactionCardProps) {
             Pembayaran
           </Text>
 
-          <Text className="mt-1 font-atkinson-bold text-[14px] leading-5 text-brand-brown">
+          <Text className="mt-1 font-atkinson-bold text-[14px] leading-5 text-brand-black">
             {transaction.paymentMethodLabel}
           </Text>
         </View>
@@ -160,7 +160,7 @@ function TransactionCard({ transaction, onOpenDetail }: TransactionCardProps) {
             Jenis produk
           </Text>
 
-          <Text className="mt-1 font-atkinson-bold text-[14px] leading-5 text-brand-brown">
+          <Text className="mt-1 font-atkinson-bold text-[14px] leading-5 text-brand-black">
             {transaction.itemCount}
           </Text>
         </View>
@@ -171,7 +171,7 @@ function TransactionCard({ transaction, onOpenDetail }: TransactionCardProps) {
           Dibuat oleh
         </Text>
 
-        <Text className="mt-1 font-atkinson-bold text-[14px] leading-5 text-brand-brown">
+        <Text className="mt-1 font-atkinson-bold text-[14px] leading-5 text-brand-black">
           {transaction.createdByName} ·{" "}
           {formatUserRole(transaction.createdByRole)}
         </Text>
@@ -183,9 +183,9 @@ function TransactionCard({ transaction, onOpenDetail }: TransactionCardProps) {
         }}
         accessibilityRole="button"
         accessibilityLabel={`Lihat detail ${transaction.transactionNumber}`}
-        className="mt-4 min-h-12 items-center justify-center rounded-2xl border-2 border-brand-orange bg-brand-white px-4 py-3"
+        className="mt-4 min-h-12 items-center justify-center rounded-xl bg-brand-black px-4 py-3"
       >
-        <Text className="font-atkinson-bold text-[16px] text-brand-orange">
+        <Text className="font-atkinson-bold text-[16px] text-brand-white">
           Lihat Detail
         </Text>
       </Pressable>
@@ -195,8 +195,8 @@ function TransactionCard({ transaction, onOpenDetail }: TransactionCardProps) {
 
 function TransactionItemCard({ item }: { item: TransactionDetailItem }) {
   return (
-    <View className="mb-3 rounded-2xl border-2 border-brand-yellow bg-brand-white p-4">
-      <Text className="font-atkinson-bold text-[17px] leading-6 text-brand-brown">
+    <View className="mb-3 rounded-xl border border-brand-black bg-brand-white p-4">
+      <Text className="font-atkinson-bold text-[17px] leading-6 text-brand-black">
         {item.productName}
       </Text>
 
@@ -205,7 +205,7 @@ function TransactionItemCard({ item }: { item: TransactionDetailItem }) {
           Jumlah
         </Text>
 
-        <Text className="font-atkinson-bold text-[14px] leading-5 text-brand-brown">
+        <Text className="font-atkinson-bold text-[14px] leading-5 text-brand-black">
           {formatItemQuantity(item)}
         </Text>
       </View>
@@ -215,19 +215,19 @@ function TransactionItemCard({ item }: { item: TransactionDetailItem }) {
           Harga satuan
         </Text>
 
-        <Text className="font-atkinson-bold text-[14px] leading-5 text-brand-brown">
+        <Text className="font-atkinson-bold text-[14px] leading-5 text-brand-black">
           {formatCurrency(item.unitPrice)}
         </Text>
       </View>
 
-      <View className="my-3 h-px bg-brand-yellow" />
+      <View className="my-3 h-px bg-brand-black" />
 
       <View className="flex-row justify-between">
-        <Text className="font-atkinson-bold text-[14px] leading-5 text-brand-brown">
+        <Text className="font-atkinson-bold text-[14px] leading-5 text-brand-black">
           Subtotal
         </Text>
 
-        <Text className="font-atkinson-bold text-[16px] leading-5 text-brand-orange">
+        <Text className="font-atkinson-bold text-[16px] leading-5 text-brand-black">
           {formatCurrency(item.subtotal)}
         </Text>
       </View>
@@ -260,8 +260,8 @@ function TransactionDetailModal({
           />
 
           {errorMessage ? (
-            <View className="mt-5 rounded-2xl border-2 border-brand-orange bg-brand-white p-4">
-              <Text className="font-atkinson-bold text-[16px] text-brand-brown">
+            <View className="mt-5 rounded-xl border border-brand-black bg-brand-white p-4">
+              <Text className="font-atkinson-bold text-[16px] text-brand-black">
                 Detail tidak dapat dimuat
               </Text>
 
@@ -273,9 +273,9 @@ function TransactionDetailModal({
                 onPress={onClose}
                 accessibilityRole="button"
                 accessibilityLabel="Tutup pesan kesalahan"
-                className="mt-4 min-h-12 items-center justify-center rounded-2xl border-2 border-brand-orange bg-brand-white px-4 py-3"
+                className="mt-4 min-h-12 items-center justify-center rounded-xl bg-brand-black px-4 py-3"
               >
-                <Text className="font-atkinson-bold text-[16px] text-brand-orange">
+                <Text className="font-atkinson-bold text-[16px] text-brand-white">
                   Tutup
                 </Text>
               </Pressable>
@@ -284,43 +284,43 @@ function TransactionDetailModal({
 
           {detail ? (
             <>
-              <View className="mt-5 rounded-3xl bg-brand-white p-5">
+              <View className="mt-5 rounded-xl border border-brand-black bg-brand-white p-5">
                 <View className="flex-row items-start justify-between">
                   <View className="mr-3 flex-1">
                     <Text className="font-atkinson text-[13px] leading-5 text-brand-black">
                       Waktu transaksi
                     </Text>
 
-                    <Text className="mt-1 font-atkinson-bold text-[15px] leading-6 text-brand-brown">
+                    <Text className="mt-1 font-atkinson-bold text-[15px] leading-6 text-brand-black">
                       {formatDateTime(detail.transactionDate)}
                     </Text>
                   </View>
 
-                  <View className="rounded-full bg-brand-cream px-3 py-1.5">
-                    <Text className="font-atkinson-bold text-[12px] text-brand-orange">
+                  <View className="rounded-full border border-brand-black bg-brand-cream px-3 py-1.5">
+                    <Text className="font-atkinson-bold text-[12px] text-brand-black">
                       Berhasil
                     </Text>
                   </View>
                 </View>
 
-                <View className="mt-4 rounded-2xl bg-brand-cream p-4">
+                <View className="mt-4 rounded-xl border border-brand-black bg-brand-cream p-4">
                   <Text className="font-atkinson text-[13px] text-brand-black">
                     Total transaksi
                   </Text>
 
-                  <Text className="mt-1 font-atkinson-bold text-[22px] text-brand-orange">
+                  <Text className="mt-1 font-atkinson-bold text-[22px] text-brand-black">
                     {formatCurrency(detail.totalAmount)}
                   </Text>
                 </View>
               </View>
 
-              <View className="mt-4 rounded-3xl bg-brand-white p-4">
-                <Text className="font-atkinson-bold text-[19px] text-brand-brown">
+              <View className="mt-4 rounded-xl border border-brand-black bg-brand-white p-4">
+                <Text className="font-atkinson-bold text-[19px] text-brand-black">
                   Produk Terjual
                 </Text>
 
                 {detail.items.length === 0 ? (
-                  <View className="mt-4 rounded-2xl bg-brand-cream p-4">
+                  <View className="mt-4 rounded-xl border border-brand-black bg-brand-cream p-4">
                     <Text className="text-center font-atkinson text-[14px] leading-6 text-brand-black">
                       Detail produk tidak tersedia.
                     </Text>
@@ -334,8 +334,8 @@ function TransactionDetailModal({
                 )}
               </View>
 
-              <View className="mt-4 rounded-3xl bg-brand-white p-5">
-                <Text className="font-atkinson-bold text-[19px] text-brand-brown">
+              <View className="mt-4 rounded-xl border border-brand-black bg-brand-white p-5">
+                <Text className="font-atkinson-bold text-[19px] text-brand-black">
                   Pembayaran
                 </Text>
 
@@ -344,7 +344,7 @@ function TransactionDetailModal({
                     Metode
                   </Text>
 
-                  <Text className="font-atkinson-bold text-[14px] text-brand-brown">
+                  <Text className="font-atkinson-bold text-[14px] text-brand-black">
                     {detail.paymentMethodLabel}
                   </Text>
                 </View>
@@ -354,7 +354,7 @@ function TransactionDetailModal({
                     Total belanja
                   </Text>
 
-                  <Text className="font-atkinson-bold text-[14px] text-brand-brown">
+                  <Text className="font-atkinson-bold text-[14px] text-brand-black">
                     {formatCurrency(detail.totalAmount)}
                   </Text>
                 </View>
@@ -364,7 +364,7 @@ function TransactionDetailModal({
                     Uang diterima
                   </Text>
 
-                  <Text className="font-atkinson-bold text-[14px] text-brand-brown">
+                  <Text className="font-atkinson-bold text-[14px] text-brand-black">
                     {formatCurrency(detail.amountPaid)}
                   </Text>
                 </View>
@@ -374,14 +374,14 @@ function TransactionDetailModal({
                     Kembalian
                   </Text>
 
-                  <Text className="font-atkinson-bold text-[14px] text-brand-brown">
+                  <Text className="font-atkinson-bold text-[14px] text-brand-black">
                     {formatCurrency(detail.changeAmount)}
                   </Text>
                 </View>
               </View>
 
-              <View className="mt-4 rounded-3xl bg-brand-white p-5">
-                <Text className="font-atkinson-bold text-[19px] text-brand-brown">
+              <View className="mt-4 rounded-xl border border-brand-black bg-brand-white p-5">
+                <Text className="font-atkinson-bold text-[19px] text-brand-black">
                   Petugas
                 </Text>
 
@@ -389,14 +389,14 @@ function TransactionDetailModal({
                   Transaksi dibuat oleh
                 </Text>
 
-                <Text className="mt-1 font-atkinson-bold text-[15px] text-brand-brown">
+                <Text className="mt-1 font-atkinson-bold text-[15px] text-brand-black">
                   {detail.createdByName} ·{" "}
                   {formatUserRole(detail.createdByRole)}
                 </Text>
               </View>
 
-              <View className="mt-4 rounded-2xl border-2 border-brand-yellow bg-brand-white p-4">
-                <Text className="font-atkinson-bold text-[14px] text-brand-brown">
+              <View className="mt-4 rounded-xl border border-brand-black bg-brand-cream p-4">
+                <Text className="font-atkinson-bold text-[14px] text-brand-black">
                   Catatan
                 </Text>
 
@@ -410,9 +410,9 @@ function TransactionDetailModal({
                 onPress={onClose}
                 accessibilityRole="button"
                 accessibilityLabel="Tutup detail transaksi"
-                className="mt-5 min-h-12 items-center justify-center rounded-2xl border-2 border-brand-orange bg-brand-white px-4 py-3"
+                className="mt-5 min-h-12 items-center justify-center rounded-xl bg-brand-black px-4 py-3"
               >
-                <Text className="font-atkinson-bold text-[16px] text-brand-orange">
+                <Text className="font-atkinson-bold text-[16px] text-brand-white">
                   Tutup
                 </Text>
               </Pressable>
@@ -510,8 +510,8 @@ export function TransactionHistoryScreen({
             onBack={onBack}
           />
 
-          <View className="mt-5 rounded-3xl bg-brand-white p-4">
-            <Text className="font-atkinson-bold text-[18px] text-brand-brown">
+          <View className="mt-5 rounded-xl border border-brand-black bg-brand-white p-4">
+            <Text className="font-atkinson-bold text-[18px] text-brand-black">
               Ringkasan Hari Ini
             </Text>
 
@@ -541,8 +541,8 @@ export function TransactionHistoryScreen({
           </View>
 
           {errorMessage ? (
-            <View className="mt-4 rounded-2xl border-2 border-brand-orange bg-brand-white p-4">
-              <Text className="font-atkinson-bold text-[15px] text-brand-brown">
+            <View className="mt-4 rounded-xl border border-brand-black bg-brand-white p-4">
+              <Text className="font-atkinson-bold text-[15px] text-brand-black">
                 Riwayat belum dapat dimuat
               </Text>
 
@@ -553,8 +553,8 @@ export function TransactionHistoryScreen({
           ) : null}
 
           {transactions.length === 0 && errorMessage === null ? (
-            <View className="mt-4 rounded-3xl border-2 border-brand-yellow bg-brand-white p-5">
-              <Text className="text-center font-atkinson-bold text-[20px] text-brand-brown">
+            <View className="mt-4 rounded-xl border border-brand-black bg-brand-white p-5">
+              <Text className="text-center font-atkinson-bold text-[20px] text-brand-black">
                 Belum ada transaksi
               </Text>
 
@@ -565,7 +565,7 @@ export function TransactionHistoryScreen({
             </View>
           ) : (
             <View className="mt-6">
-              <Text className="mb-3 font-atkinson-bold text-[20px] text-brand-brown">
+              <Text className="mb-3 font-atkinson-bold text-[20px] text-brand-black">
                 Daftar Transaksi Berhasil
               </Text>
 

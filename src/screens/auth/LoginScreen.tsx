@@ -215,21 +215,23 @@ export function LoginScreen({
           contentContainerStyle={{
             flexGrow: 1,
             justifyContent: "center",
-            paddingHorizontal: 24,
-            paddingVertical: 40,
+            paddingHorizontal: 22,
+            paddingVertical: 36,
           }}
         >
           <View className="w-full max-w-md self-center">
-            <View className="rounded-3xl bg-brand-white p-7">
-              <Text className="text-center font-atkinson-bold text-[32px] leading-[38px] text-brand-brown">
+            <View className="border-b border-brand-black pb-5">
+              <Text className="font-atkinson-bold text-[34px] leading-[40px] text-brand-black">
                 Nosarara Biz
               </Text>
 
-              <Text className="mt-3 text-center font-atkinson text-[17px] leading-7 text-brand-black">
-                Masuk menggunakan akun Owner atau Officer
+              <Text className="mt-2 font-atkinson text-[17px] leading-6 text-brand-black">
+                Masuk untuk mengelola usaha Anda.
               </Text>
+            </View>
 
-              <Text className="mt-7 font-atkinson-bold text-[17px] text-brand-brown">
+            <View className="mt-6 rounded-xl border border-brand-black bg-brand-white p-5">
+              <Text className="font-atkinson-bold text-[18px] text-brand-black">
                 Username
               </Text>
 
@@ -239,19 +241,20 @@ export function LoginScreen({
                 editable={!isSubmitting && lockedUntil === null}
                 maxLength={30}
                 placeholder="Masukkan username"
-                placeholderTextColor="#777777"
+                placeholderTextColor="#666666"
                 autoCapitalize="none"
                 autoCorrect={false}
                 returnKeyType="next"
-                selectionColor="#EC6426"
-                className="mt-2 min-h-14 rounded-2xl border-2 border-brand-yellow px-4 py-3 font-atkinson text-[18px] text-brand-black"
+                selectionColor="#F4E7D3"
+                accessibilityLabel="Username"
+                className="mt-2 min-h-14 rounded-xl border border-brand-black bg-brand-white px-4 py-3 font-atkinson text-[18px] text-brand-black"
               />
 
               <Text className="mt-2 font-atkinson text-[14px] leading-5 text-brand-black">
-                Masukkan username yang terdaftar pada aplikasi.
+                Gunakan username yang telah terdaftar.
               </Text>
 
-              <Text className="mt-5 font-atkinson-bold text-[17px] text-brand-brown">
+              <Text className="mt-6 font-atkinson-bold text-[18px] text-brand-black">
                 PIN
               </Text>
 
@@ -260,17 +263,17 @@ export function LoginScreen({
                 onChangeText={handlePinChange}
                 editable={!isSubmitting && lockedUntil === null}
                 maxLength={6}
-                placeholder="Masukkan PIN akun"
-                placeholderTextColor="#777777"
+                placeholder="Masukkan 6 angka PIN"
+                placeholderTextColor="#666666"
                 keyboardType="number-pad"
                 secureTextEntry
-                selectionColor="#EC6426"
-                textAlign="left"
+                selectionColor="#F4E7D3"
                 returnKeyType="done"
+                accessibilityLabel="PIN enam angka"
                 onSubmitEditing={() => {
                   void handleLogin();
                 }}
-                className="mt-2 min-h-14 rounded-2xl border-2 border-brand-yellow px-4 py-3 font-atkinson text-[18px] text-brand-black"
+                className="mt-2 min-h-14 rounded-xl border border-brand-black bg-brand-white px-4 py-3 font-atkinson text-[18px] text-brand-black"
               />
 
               <Text className="mt-2 font-atkinson text-[14px] leading-5 text-brand-black">
@@ -278,16 +281,16 @@ export function LoginScreen({
               </Text>
 
               {lockedUntil !== null ? (
-                <View className="mt-5 rounded-2xl border-2 border-brand-orange bg-brand-cream p-4">
-                  <Text className="text-center font-atkinson-bold text-[17px] text-brand-brown">
+                <View className="mt-5 rounded-xl border border-brand-black bg-brand-cream p-4">
+                  <Text className="text-center font-atkinson-bold text-[17px] text-brand-black">
                     Akun dikunci sementara
                   </Text>
 
                   <Text className="mt-2 text-center font-atkinson text-[14px] text-brand-black">
-                    Sisa waktu tunggu
+                    Coba kembali setelah
                   </Text>
 
-                  <Text className="mt-1 text-center font-atkinson-bold text-[28px] text-brand-orange">
+                  <Text className="mt-1 text-center font-atkinson-bold text-[30px] text-brand-black">
                     {formatRemainingLockTime(remainingLockTime)}
                   </Text>
                 </View>
@@ -300,8 +303,11 @@ export function LoginScreen({
                 disabled={submitIsDisabled}
                 accessibilityRole="button"
                 accessibilityLabel="Masuk ke aplikasi"
-                className={`mt-7 min-h-14 items-center justify-center rounded-2xl bg-brand-orange px-5 py-4 ${
-                  submitIsDisabled ? "opacity-50" : ""
+                accessibilityState={{
+                  disabled: submitIsDisabled,
+                }}
+                className={`mt-7 min-h-14 items-center justify-center rounded-xl bg-brand-black px-5 py-4 ${
+                  submitIsDisabled ? "opacity-40" : ""
                 }`}
               >
                 {isSubmitting ? (
@@ -319,25 +325,32 @@ export function LoginScreen({
                 )}
               </Pressable>
 
-              <Text className="mt-5 text-center font-atkinson text-[14px] leading-5 text-brand-black">
-                Setelah lima kali PIN salah, akun dikunci selama lima menit.
+              <Text className="mt-4 text-center font-atkinson text-[14px] leading-5 text-brand-black">
+                Akun akan dikunci selama lima menit setelah lima kali PIN salah.
+              </Text>
+            </View>
+
+            <View className="mt-5">
+              <Text className="text-center font-atkinson text-[15px] leading-6 text-brand-black">
+                Belum memiliki akun Owner?
               </Text>
 
-              <View className="mt-6 border-t border-brand-yellow pt-5">
-                <Pressable
-                  onPress={handleOpenRegistration}
-                  disabled={isSubmitting}
-                  accessibilityRole="button"
-                  accessibilityLabel="Lihat halaman pendaftaran"
-                  className={`mt-3 min-h-12 items-center justify-center rounded-2xl border border-brand-orange px-5 py-3 ${
-                    isSubmitting ? "opacity-50" : ""
-                  }`}
-                >
-                  <Text className="text-center font-atkinson-bold text-[16px] text-[#6B625D]">
-                    Lihat Halaman Pendaftaran
-                  </Text>
-                </Pressable>
-              </View>
+              <Pressable
+                onPress={handleOpenRegistration}
+                disabled={isSubmitting}
+                accessibilityRole="button"
+                accessibilityLabel="Lihat halaman pendaftaran"
+                accessibilityState={{
+                  disabled: isSubmitting,
+                }}
+                className={`mt-3 min-h-14 items-center justify-center rounded-xl border border-brand-black bg-brand-white px-5 py-4 ${
+                  isSubmitting ? "opacity-40" : ""
+                }`}
+              >
+                <Text className="text-center font-atkinson-bold text-[17px] text-brand-black">
+                  Lihat Halaman Pendaftaran
+                </Text>
+              </Pressable>
             </View>
           </View>
         </ScrollView>
@@ -359,34 +372,34 @@ export function LoginScreen({
           />
 
           {loginAlert ? (
-            <View className="w-full max-w-sm rounded-3xl border-2 border-brand-orange bg-brand-white p-6">
-              <Text className="text-center font-atkinson-bold text-[22px] leading-7 text-brand-brown">
+            <View className="w-full max-w-sm rounded-xl border border-brand-black bg-brand-white p-6">
+              <Text className="text-center font-atkinson-bold text-[23px] leading-7 text-brand-black">
                 {loginAlert.title}
               </Text>
 
-              <Text className="mt-3 text-center font-atkinson text-[15px] leading-6 text-brand-black">
+              <Text className="mt-3 text-center font-atkinson text-[16px] leading-6 text-brand-black">
                 {loginAlert.message}
               </Text>
 
               {loginAlert.remainingAttempts !== undefined ? (
-                <View className="mt-4 rounded-2xl bg-brand-cream p-4">
+                <View className="mt-4 rounded-xl border border-brand-black bg-brand-cream p-4">
                   <Text className="text-center font-atkinson text-[14px] text-brand-black">
                     Sisa percobaan sebelum akun dikunci
                   </Text>
 
-                  <Text className="mt-1 text-center font-atkinson-bold text-[24px] text-brand-orange">
+                  <Text className="mt-1 text-center font-atkinson-bold text-[26px] text-brand-black">
                     {loginAlert.remainingAttempts} kali
                   </Text>
                 </View>
               ) : null}
 
               {loginAlert.lockedUntil !== undefined ? (
-                <View className="mt-4 rounded-2xl bg-brand-cream p-4">
+                <View className="mt-4 rounded-xl border border-brand-black bg-brand-cream p-4">
                   <Text className="text-center font-atkinson text-[14px] text-brand-black">
                     Sisa waktu tunggu
                   </Text>
 
-                  <Text className="mt-1 text-center font-atkinson-bold text-[28px] text-brand-orange">
+                  <Text className="mt-1 text-center font-atkinson-bold text-[30px] text-brand-black">
                     {formatRemainingLockTime(alertRemainingLockTime)}
                   </Text>
                 </View>
@@ -396,7 +409,7 @@ export function LoginScreen({
                 onPress={closeLoginAlert}
                 accessibilityRole="button"
                 accessibilityLabel={loginAlert.confirmText}
-                className="mt-6 min-h-12 items-center justify-center rounded-2xl bg-brand-orange px-5 py-3"
+                className="mt-6 min-h-14 items-center justify-center rounded-xl bg-brand-black px-5 py-4"
               >
                 <Text className="font-atkinson-bold text-[17px] text-brand-white">
                   {loginAlert.confirmText}

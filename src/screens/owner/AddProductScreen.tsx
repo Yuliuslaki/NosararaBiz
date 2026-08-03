@@ -2,6 +2,7 @@ import { type ReactNode, useRef, useState } from "react";
 import {
   ActivityIndicator,
   KeyboardAvoidingView,
+  type LayoutChangeEvent,
   Platform,
   Pressable,
   ScrollView,
@@ -51,6 +52,8 @@ type CategorySelectProps = {
   onToggle: () => void;
   onSelect: (category: ProductCategory) => void;
 };
+
+type FormSectionKey = "category" | "price" | "initialStock" | "minimumStock";
 
 const SELECTABLE_CATEGORIES = [
   PRODUCT_CATEGORIES.EGGS,
@@ -151,22 +154,47 @@ function NumericInput({
       onBlur={handleBlur}
       editable={editable}
       placeholder={placeholder}
-      placeholderTextColor="#9A9A9A"
+      placeholderTextColor="#666666"
       keyboardType="number-pad"
-      selectionColor="#EC6426"
+      selectionColor="#F4E7D3"
+      cursorColor="#111111"
       style={{
-        color: isDefaultValue ? "rgba(0, 0, 0, 0.32)" : "#000000",
+        color: isDefaultValue ? "rgba(17, 17, 17, 0.45)" : "#111111",
       }}
-      className="mt-2 min-h-12 rounded-2xl border-2 border-brand-yellow px-4 py-3 font-atkinson text-[16px]"
+      className={`mt-2 min-h-14 rounded-xl border border-brand-black bg-brand-white px-4 py-3 font-atkinson text-[17px] ${
+        editable ? "" : "opacity-50"
+      }`}
     />
   );
 }
 
 function FieldLabel({ children }: { children: ReactNode }) {
   return (
-    <Text className="mt-5 font-atkinson-bold text-[15px] leading-5 text-brand-brown">
+    <Text className="mt-5 font-atkinson-bold text-[17px] leading-5 text-brand-black">
       {children}
     </Text>
+  );
+}
+
+function NavigationArrow() {
+  return (
+    <View
+      className="ml-4 h-10 w-8 items-center justify-center"
+      accessibilityElementsHidden
+      importantForAccessibility="no-hide-descendants"
+    >
+      <Text
+        className="font-atkinson-bold text-[34px] text-brand-black"
+        style={{
+          lineHeight: 36,
+          includeFontPadding: false,
+          textAlign: "center",
+          textAlignVertical: "center",
+        }}
+      >
+        ›
+      </Text>
+    </View>
   );
 }
 
@@ -178,37 +206,37 @@ function CategorySelect({
   onSelect,
 }: CategorySelectProps) {
   return (
-    <View className="mt-3">
+    <View className="mt-4">
       <Pressable
         onPress={onToggle}
         disabled={disabled}
         accessibilityRole="button"
+        accessibilityLabel="Pilih kategori produk"
         accessibilityState={{
           expanded: isOpen,
           disabled,
         }}
-        className="min-h-[62px] flex-row items-center rounded-2xl border-2 border-brand-orange bg-brand-cream px-4 py-3"
+        className={`min-h-[64px] flex-row items-center rounded-xl border border-brand-black bg-brand-cream px-4 py-3 ${
+          disabled ? "opacity-50" : ""
+        }`}
       >
         <View className="flex-1">
-          <Text className="font-atkinson-bold text-[16px] leading-5 text-brand-brown">
+          <Text className="font-atkinson-bold text-[17px] leading-5 text-brand-black">
             {PRODUCT_CATEGORY_LABELS[value]}
           </Text>
 
-          <Text className="mt-1 font-atkinson text-[13px] leading-5 text-brand-black">
+          <Text className="mt-1 font-atkinson text-[14px] leading-5 text-brand-black">
             {CATEGORY_DESCRIPTIONS[value]}
           </Text>
         </View>
 
-        <Text className="ml-3 font-atkinson-bold text-[19px] text-brand-orange">
-          {isOpen ? "⌃" : "⌄"}
-        </Text>
+        <NavigationArrow />
       </Pressable>
 
       {isOpen ? (
-        <View className="mt-2 overflow-hidden rounded-2xl border-2 border-brand-yellow bg-brand-white">
+        <View className="mt-2 overflow-hidden rounded-xl border border-brand-black bg-brand-white">
           {SELECTABLE_CATEGORIES.map((categoryOption, index) => {
             const isSelected = categoryOption === value;
-
             const isLastOption = index === SELECTABLE_CATEGORIES.length - 1;
 
             return (
@@ -218,29 +246,23 @@ function CategorySelect({
                   onSelect(categoryOption);
                 }}
                 disabled={disabled}
-                className={`flex-row items-center px-4 py-4 ${
-                  !isLastOption ? "border-b border-brand-yellow" : ""
+                accessibilityRole="button"
+                accessibilityLabel={`Pilih ${PRODUCT_CATEGORY_LABELS[categoryOption]}`}
+                accessibilityState={{
+                  selected: isSelected,
+                  disabled,
+                }}
+                className={`min-h-[68px] justify-center px-4 py-4 ${
+                  !isLastOption ? "border-b border-brand-black" : ""
                 } ${isSelected ? "bg-brand-cream" : "bg-brand-white"}`}
               >
-                <View className="flex-1">
-                  <Text
-                    className={`font-atkinson-bold text-[15px] leading-5 ${
-                      isSelected ? "text-brand-orange" : "text-brand-brown"
-                    }`}
-                  >
-                    {PRODUCT_CATEGORY_LABELS[categoryOption]}
-                  </Text>
+                <Text className="font-atkinson-bold text-[16px] leading-5 text-brand-black">
+                  {PRODUCT_CATEGORY_LABELS[categoryOption]}
+                </Text>
 
-                  <Text className="mt-1 font-atkinson text-[13px] leading-5 text-brand-black">
-                    {CATEGORY_DESCRIPTIONS[categoryOption]}
-                  </Text>
-                </View>
-
-                {isSelected ? (
-                  <Text className="ml-3 font-atkinson-bold text-[18px] text-brand-orange">
-                    ✓
-                  </Text>
-                ) : null}
+                <Text className="mt-1 font-atkinson text-[14px] leading-5 text-brand-black">
+                  {CATEGORY_DESCRIPTIONS[categoryOption]}
+                </Text>
               </Pressable>
             );
           })}
@@ -259,6 +281,13 @@ export function AddProductScreen({
 
   const scrollViewRef = useRef<ScrollView>(null);
 
+  const sectionPositionsRef = useRef<Record<FormSectionKey, number>>({
+    category: 0,
+    price: 0,
+    initialStock: 0,
+    minimumStock: 0,
+  });
+
   const [category, setCategory] = useState<ProductCategory>(
     PRODUCT_CATEGORIES.EGGS,
   );
@@ -266,25 +295,19 @@ export function AddProductScreen({
   const [isCategorySelectOpen, setIsCategorySelectOpen] = useState(false);
 
   const [pricePerBaseUnit, setPricePerBaseUnit] = useState("");
-
   const [pricePerRack, setPricePerRack] = useState("");
-
   const [rackSize, setRackSize] = useState(String(DEFAULT_EGG_RACK_SIZE));
 
   const [initialRacks, setInitialRacks] = useState("0");
-
   const [initialPieces, setInitialPieces] = useState("0");
 
   const [minimumRacks, setMinimumRacks] = useState("0");
-
   const [minimumPieces, setMinimumPieces] = useState("0");
 
   const [initialStock, setInitialStock] = useState("0");
-
   const [minimumStock, setMinimumStock] = useState("0");
 
   const [isSubmitting, setIsSubmitting] = useState(false);
-
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
 
   useAndroidBackButton(() => {
@@ -305,12 +328,41 @@ export function AddProductScreen({
 
   const submitIsDisabled = isSubmitting || !requiredFieldsAreFilled;
 
-  function scrollToLowerForm(): void {
+  function saveSectionPosition(
+    section: FormSectionKey,
+    event: LayoutChangeEvent,
+  ): void {
+    sectionPositionsRef.current[section] = event.nativeEvent.layout.y;
+  }
+
+  function scrollToSection(section: FormSectionKey): void {
+    const delay = Platform.OS === "android" ? 300 : 180;
+
     setTimeout(() => {
-      scrollViewRef.current?.scrollToEnd({
+      const sectionY = sectionPositionsRef.current[section];
+
+      scrollViewRef.current?.scrollTo({
+        y: Math.max(sectionY - 16, 0),
         animated: true,
       });
-    }, 250);
+    }, delay);
+  }
+
+  function scrollToLowerForm(): void {
+    setTimeout(
+      () => {
+        scrollViewRef.current?.scrollToEnd({
+          animated: true,
+        });
+      },
+      Platform.OS === "android" ? 300 : 180,
+    );
+  }
+
+  function handleCategoryToggle(): void {
+    scrollToSection("category");
+
+    setIsCategorySelectOpen((currentValue) => !currentValue);
   }
 
   function handleCategoryChange(nextCategory: ProductCategory): void {
@@ -323,6 +375,7 @@ export function AddProductScreen({
 
     setInitialRacks("0");
     setInitialPieces("0");
+
     setMinimumRacks("0");
     setMinimumPieces("0");
 
@@ -393,9 +446,7 @@ export function AddProductScreen({
         name: productName,
         category,
         baseUnit: PRODUCT_UNITS.PIECE,
-
         pricePerBaseUnit: parsedPricePerBaseUnit,
-
         pricePerRack: parseRequiredInteger(pricePerRack, "Harga per rak"),
 
         initialStock: convertEggStockToPieces(
@@ -411,7 +462,6 @@ export function AddProductScreen({
         ),
 
         rackSize: parsedRackSize,
-
         performedBy: user,
       };
     }
@@ -420,9 +470,7 @@ export function AddProductScreen({
       name: productName,
       category,
       baseUnit,
-
       pricePerBaseUnit: parsedPricePerBaseUnit,
-
       pricePerRack: null,
 
       initialStock: parseIntegerWithDefault(initialStock, "Stok awal", 0),
@@ -454,7 +502,7 @@ export function AddProductScreen({
 
       showAlert({
         tone: "success",
-        title: "Produk berhasil disimpan",
+        title: "Produk Berhasil Disimpan",
         message: `${input.name} telah ditambahkan ke daftar produk dan stok.`,
         confirmText: "Lihat Daftar Produk",
         dismissible: false,
@@ -482,43 +530,53 @@ export function AddProductScreen({
         className="flex-1"
         keyboardShouldPersistTaps="handled"
         keyboardDismissMode={Platform.OS === "ios" ? "interactive" : "on-drag"}
+        automaticallyAdjustKeyboardInsets={Platform.OS === "ios"}
         contentContainerStyle={{
           paddingHorizontal: 18,
           paddingTop: 32,
-          paddingBottom: 80,
+          paddingBottom: 220,
         }}
       >
         <View className="w-full max-w-md self-center">
           <ScreenHeader
             title="Tambah Produk"
-            description="Pilih kategori, harga, dan stok awal."
+            description="Pilih kategori, masukkan harga, dan tentukan stok awal."
             onBack={onBack}
             disabled={isSubmitting}
           />
 
-          <View className="mt-5 rounded-3xl bg-brand-white p-5">
-            <Text className="font-atkinson-bold text-[18px] text-brand-brown">
-              Kategori Produk
+          <View
+            onLayout={(event) => {
+              saveSectionPosition("category", event);
+            }}
+            className="mt-5 rounded-xl border border-brand-black bg-brand-white p-5"
+          >
+            <Text className="font-atkinson-bold text-[21px] text-brand-black">
+              1. Kategori Produk
             </Text>
 
-            <Text className="mt-2 font-atkinson text-[13px] leading-5 text-brand-black">
-              Nama produk akan disimpan otomatis sesuai kategori yang dipilih.
+            <Text className="mt-2 font-atkinson text-[15px] leading-6 text-brand-black">
+              Nama produk akan dibuat otomatis berdasarkan kategori yang
+              dipilih.
             </Text>
 
             <CategorySelect
               value={category}
               isOpen={isCategorySelectOpen}
               disabled={isSubmitting}
-              onToggle={() => {
-                setIsCategorySelectOpen((currentValue) => !currentValue);
-              }}
+              onToggle={handleCategoryToggle}
               onSelect={handleCategoryChange}
             />
           </View>
 
-          <View className="mt-4 rounded-3xl bg-brand-white p-5">
-            <Text className="font-atkinson-bold text-[18px] text-brand-brown">
-              Harga
+          <View
+            onLayout={(event) => {
+              saveSectionPosition("price", event);
+            }}
+            className="mt-4 rounded-xl border border-brand-black bg-brand-white p-5"
+          >
+            <Text className="font-atkinson-bold text-[21px] text-brand-black">
+              2. Harga Jual
             </Text>
 
             <FieldLabel>
@@ -530,6 +588,9 @@ export function AddProductScreen({
               onChangeText={setPricePerBaseUnit}
               placeholder="Contoh: 2000"
               editable={!isSubmitting}
+              onFocus={() => {
+                scrollToSection("price");
+              }}
             />
 
             {isEggProduct ? (
@@ -541,6 +602,9 @@ export function AddProductScreen({
                   onChangeText={setPricePerRack}
                   placeholder="Contoh: 55000"
                   editable={!isSubmitting}
+                  onFocus={() => {
+                    scrollToSection("price");
+                  }}
                 />
 
                 <FieldLabel>Jumlah butir per rak</FieldLabel>
@@ -551,14 +615,33 @@ export function AddProductScreen({
                   placeholder={String(DEFAULT_EGG_RACK_SIZE)}
                   editable={!isSubmitting}
                   defaultValueOnEmpty={String(DEFAULT_EGG_RACK_SIZE)}
+                  onFocus={() => {
+                    scrollToSection("price");
+                  }}
                 />
+
+                <View className="mt-4 rounded-xl border border-brand-black bg-brand-cream p-4">
+                  <Text className="font-atkinson text-[14px] leading-5 text-brand-black">
+                    Satu rak secara otomatis berisi {rackSize || "0"} butir
+                    telur.
+                  </Text>
+                </View>
               </>
             ) : null}
           </View>
 
-          <View className="mt-4 rounded-3xl bg-brand-white p-5">
-            <Text className="font-atkinson-bold text-[18px] text-brand-brown">
-              Stok Awal
+          <View
+            onLayout={(event) => {
+              saveSectionPosition("initialStock", event);
+            }}
+            className="mt-4 rounded-xl border border-brand-black bg-brand-white p-5"
+          >
+            <Text className="font-atkinson-bold text-[21px] text-brand-black">
+              3. Stok Awal
+            </Text>
+
+            <Text className="mt-2 font-atkinson text-[15px] leading-6 text-brand-black">
+              Masukkan jumlah persediaan yang tersedia saat produk dibuat.
             </Text>
 
             {isEggProduct ? (
@@ -572,6 +655,9 @@ export function AddProductScreen({
                     placeholder="0"
                     editable={!isSubmitting}
                     defaultValueOnEmpty="0"
+                    onFocus={() => {
+                      scrollToSection("initialStock");
+                    }}
                   />
                 </View>
 
@@ -584,6 +670,9 @@ export function AddProductScreen({
                     placeholder="0"
                     editable={!isSubmitting}
                     defaultValueOnEmpty="0"
+                    onFocus={() => {
+                      scrollToSection("initialStock");
+                    }}
                   />
                 </View>
               </View>
@@ -597,19 +686,27 @@ export function AddProductScreen({
                   placeholder="0"
                   editable={!isSubmitting}
                   defaultValueOnEmpty="0"
+                  onFocus={() => {
+                    scrollToSection("initialStock");
+                  }}
                 />
               </>
             )}
           </View>
 
-          <View className="mt-4 rounded-3xl bg-brand-white p-5">
-            <Text className="font-atkinson-bold text-[18px] text-brand-brown">
-              Batas Minimum Stok
+          <View
+            onLayout={(event) => {
+              saveSectionPosition("minimumStock", event);
+            }}
+            className="mt-4 rounded-xl border border-brand-black bg-brand-white p-5"
+          >
+            <Text className="font-atkinson-bold text-[21px] text-brand-black">
+              4. Batas Minimum Stok
             </Text>
 
-            <Text className="mt-2 font-atkinson text-[13px] leading-5 text-brand-black">
-              Produk akan ditandai sebagai stok rendah ketika persediaan
-              mencapai batas ini.
+            <Text className="mt-2 font-atkinson text-[15px] leading-6 text-brand-black">
+              Produk akan diberi tanda stok rendah ketika persediaan mencapai
+              batas ini.
             </Text>
 
             {isEggProduct ? (
@@ -623,7 +720,9 @@ export function AddProductScreen({
                     placeholder="0"
                     editable={!isSubmitting}
                     defaultValueOnEmpty="0"
-                    onFocus={scrollToLowerForm}
+                    onFocus={() => {
+                      scrollToSection("minimumStock");
+                    }}
                   />
                 </View>
 
@@ -636,7 +735,9 @@ export function AddProductScreen({
                     placeholder="0"
                     editable={!isSubmitting}
                     defaultValueOnEmpty="0"
-                    onFocus={scrollToLowerForm}
+                    onFocus={() => {
+                      scrollToSection("minimumStock");
+                    }}
                   />
                 </View>
               </View>
@@ -650,19 +751,21 @@ export function AddProductScreen({
                   placeholder="0"
                   editable={!isSubmitting}
                   defaultValueOnEmpty="0"
-                  onFocus={scrollToLowerForm}
+                  onFocus={() => {
+                    scrollToSection("minimumStock");
+                  }}
                 />
               </>
             )}
           </View>
 
           {errorMessage ? (
-            <View className="mt-4 rounded-2xl border-2 border-brand-orange bg-brand-white p-4">
-              <Text className="font-atkinson-bold text-[15px] text-brand-brown">
-                Produk belum dapat disimpan
+            <View className="mt-4 rounded-xl border border-brand-black bg-brand-cream p-4">
+              <Text className="font-atkinson-bold text-[17px] text-brand-black">
+                Produk Belum Dapat Disimpan
               </Text>
 
-              <Text className="mt-2 font-atkinson text-[14px] leading-6 text-brand-black">
+              <Text className="mt-2 font-atkinson text-[15px] leading-6 text-brand-black">
                 {errorMessage}
               </Text>
             </View>
@@ -671,20 +774,25 @@ export function AddProductScreen({
           <Pressable
             onPress={handleSubmit}
             disabled={submitIsDisabled}
-            className={`mt-5 min-h-12 items-center justify-center rounded-2xl bg-brand-orange px-5 py-3 ${
-              submitIsDisabled ? "opacity-50" : ""
+            accessibilityRole="button"
+            accessibilityLabel="Simpan produk"
+            accessibilityState={{
+              disabled: submitIsDisabled,
+            }}
+            className={`mt-5 min-h-14 items-center justify-center rounded-xl bg-brand-black px-5 py-4 ${
+              submitIsDisabled ? "opacity-40" : ""
             }`}
           >
             {isSubmitting ? (
               <View className="flex-row items-center">
                 <ActivityIndicator color="#FFFFFF" />
 
-                <Text className="ml-3 font-atkinson-bold text-[17px] text-brand-white">
+                <Text className="ml-3 font-atkinson-bold text-[18px] text-brand-white">
                   Menyimpan...
                 </Text>
               </View>
             ) : (
-              <Text className="font-atkinson-bold text-[17px] text-brand-white">
+              <Text className="font-atkinson-bold text-[18px] text-brand-white">
                 Simpan Produk
               </Text>
             )}

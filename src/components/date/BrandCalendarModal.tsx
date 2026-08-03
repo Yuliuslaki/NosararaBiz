@@ -330,11 +330,11 @@ function NavigationButton({
       accessibilityState={{
         disabled,
       }}
-      className={`h-11 w-11 items-center justify-center rounded-xl ${
+      className={`h-11 w-11 items-center justify-center rounded-xl border border-brand-black bg-brand-white ${
         disabled ? "opacity-25" : ""
       }`}
     >
-      <Text className="font-atkinson-bold text-[30px] leading-8 text-brand-orange">
+      <Text className="font-atkinson-bold text-[30px] leading-8 text-brand-black">
         {direction === "previous" ? "‹" : "›"}
       </Text>
     </Pressable>
@@ -614,8 +614,8 @@ export function BrandCalendarModal({
       onRequestClose={handleModalBack}
     >
       <View className="flex-1 items-center justify-center bg-black/50 px-5 py-7">
-        <View className="w-full max-w-md overflow-hidden rounded-3xl bg-brand-white">
-          <View className="items-center bg-brand-orange px-5 pb-5 pt-4">
+        <View className="w-full max-w-md overflow-hidden rounded-xl border border-brand-black bg-brand-white">
+          <View className="items-center border-b border-brand-black bg-brand-black px-5 pb-5 pt-4">
             <Text className="w-full text-center font-atkinson-bold text-[15px] text-brand-white">
               {getModeTitle(mode)}
             </Text>
@@ -634,7 +634,7 @@ export function BrandCalendarModal({
               <Text
                 className={`text-center font-atkinson-bold text-[18px] ${
                   currentView === "year"
-                    ? "text-brand-yellow"
+                    ? "text-brand-cream"
                     : "text-brand-white"
                 }`}
               >
@@ -656,7 +656,7 @@ export function BrandCalendarModal({
             </Pressable>
           </View>
 
-          <View className="p-4">
+          <View className="bg-brand-white p-4">
             {currentView === "calendar" ? (
               <>
                 <View className="flex-row items-center justify-between">
@@ -673,13 +673,13 @@ export function BrandCalendarModal({
                     }}
                     accessibilityRole="button"
                     accessibilityLabel="Buka pilihan bulan"
-                    className="mx-2 min-h-11 flex-1 items-center justify-center rounded-xl px-3 py-2"
+                    className="mx-2 min-h-11 flex-1 items-center justify-center rounded-xl border border-brand-black bg-brand-white px-3 py-2"
                   >
-                    <Text className="text-center font-atkinson-bold text-[17px] text-brand-brown">
+                    <Text className="text-center font-atkinson-bold text-[17px] text-brand-black">
                       {MONTH_NAMES[visibleMonth]} {visibleYear}
                     </Text>
 
-                    <Text className="mt-0.5 text-center font-atkinson text-[11px] text-brand-orange">
+                    <Text className="mt-0.5 text-center font-atkinson text-[11px] text-brand-black">
                       Tekan untuk memilih bulan
                     </Text>
                   </Pressable>
@@ -692,7 +692,7 @@ export function BrandCalendarModal({
                   />
                 </View>
 
-                <View className="mt-3 flex-row">
+                <View className="mt-3 flex-row border-b border-brand-black pb-1">
                   {WEEKDAY_NAMES.map((weekday) => (
                     <View
                       key={weekday}
@@ -701,14 +701,14 @@ export function BrandCalendarModal({
                       }}
                       className="items-center py-2"
                     >
-                      <Text className="font-atkinson-bold text-[12px] text-brand-brown">
+                      <Text className="font-atkinson-bold text-[12px] text-brand-black">
                         {weekday}
                       </Text>
                     </View>
                   ))}
                 </View>
 
-                <View className="flex-row flex-wrap">
+                <View className="mt-1 flex-row flex-wrap">
                   {calendarGrid.map((cell) => {
                     if (cell.date === null) {
                       return (
@@ -755,9 +755,9 @@ export function BrandCalendarModal({
                           }}
                           className={`h-10 w-10 items-center justify-center rounded-full ${
                             isSelected
-                              ? "bg-brand-orange"
+                              ? "bg-brand-black"
                               : isToday
-                                ? "border-2 border-brand-yellow bg-brand-cream"
+                                ? "border border-brand-black bg-brand-cream"
                                 : "bg-brand-white"
                           } ${isDisabled ? "opacity-25" : ""}`}
                         >
@@ -765,7 +765,7 @@ export function BrandCalendarModal({
                             className={`font-atkinson-bold text-[14px] ${
                               isSelected
                                 ? "text-brand-white"
-                                : "text-brand-brown"
+                                : "text-brand-black"
                             }`}
                           >
                             {cell.date.getDate()}
@@ -794,13 +794,13 @@ export function BrandCalendarModal({
                     }}
                     accessibilityRole="button"
                     accessibilityLabel="Buka pilihan tahun"
-                    className="mx-2 min-h-11 flex-1 items-center justify-center rounded-xl px-3 py-2"
+                    className="mx-2 min-h-11 flex-1 items-center justify-center rounded-xl border border-brand-black bg-brand-cream px-3 py-2"
                   >
-                    <Text className="font-atkinson-bold text-[20px] text-brand-brown">
+                    <Text className="font-atkinson-bold text-[20px] text-brand-black">
                       {visibleYear}
                     </Text>
 
-                    <Text className="mt-0.5 text-center font-atkinson text-[11px] text-brand-orange">
+                    <Text className="mt-0.5 text-center font-atkinson text-[11px] text-brand-black">
                       Tekan untuk memilih tahun
                     </Text>
                   </Pressable>
@@ -844,15 +844,13 @@ export function BrandCalendarModal({
                         style={{
                           width: "31.5%",
                         }}
-                        className={`mb-3 min-h-14 items-center justify-center rounded-2xl border-2 px-2 py-3 ${
-                          isSelected
-                            ? "border-brand-orange bg-brand-orange"
-                            : "border-brand-yellow bg-brand-white"
+                        className={`mb-3 min-h-14 items-center justify-center rounded-xl border border-brand-black px-2 py-3 ${
+                          isSelected ? "bg-brand-black" : "bg-brand-white"
                         } ${isDisabled ? "opacity-25" : ""}`}
                       >
                         <Text
                           className={`font-atkinson-bold text-[15px] ${
-                            isSelected ? "text-brand-white" : "text-brand-brown"
+                            isSelected ? "text-brand-white" : "text-brand-black"
                           }`}
                         >
                           {monthName}
@@ -876,8 +874,8 @@ export function BrandCalendarModal({
                     }}
                   />
 
-                  <View className="mx-2 flex-1 items-center">
-                    <Text className="font-atkinson-bold text-[17px] text-brand-brown">
+                  <View className="mx-2 flex-1 items-center rounded-xl border border-brand-black bg-brand-cream px-3 py-2">
+                    <Text className="font-atkinson-bold text-[17px] text-brand-black">
                       Pilih Tahun
                     </Text>
 
@@ -922,15 +920,13 @@ export function BrandCalendarModal({
                         style={{
                           width: "31.5%",
                         }}
-                        className={`mb-3 min-h-14 items-center justify-center rounded-2xl border-2 px-2 py-3 ${
-                          isSelected
-                            ? "border-brand-orange bg-brand-orange"
-                            : "border-brand-yellow bg-brand-white"
+                        className={`mb-3 min-h-14 items-center justify-center rounded-xl border border-brand-black px-2 py-3 ${
+                          isSelected ? "bg-brand-black" : "bg-brand-white"
                         } ${isDisabled ? "opacity-25" : ""}`}
                       >
                         <Text
                           className={`font-atkinson-bold text-[15px] ${
-                            isSelected ? "text-brand-white" : "text-brand-brown"
+                            isSelected ? "text-brand-white" : "text-brand-black"
                           }`}
                         >
                           {year}
@@ -942,12 +938,12 @@ export function BrandCalendarModal({
               </>
             ) : null}
 
-            <View className="mt-5 items-center">
+            <View className="mt-5 items-center border-t border-brand-black pt-4">
               <Pressable
                 onPress={handleConfirm}
                 accessibilityRole="button"
                 accessibilityLabel={getConfirmButtonLabel(mode)}
-                className="min-h-12 w-full max-w-[260px] items-center justify-center rounded-2xl bg-brand-orange px-5 py-3"
+                className="min-h-12 w-full max-w-[260px] items-center justify-center rounded-xl bg-brand-black px-5 py-3"
               >
                 <Text className="text-center font-atkinson-bold text-[16px] text-brand-white">
                   {getConfirmButtonLabel(mode)}
@@ -958,9 +954,9 @@ export function BrandCalendarModal({
                 onPress={onCancel}
                 accessibilityRole="button"
                 accessibilityLabel="Batalkan pemilihan periode"
-                className="mt-3 min-h-11 w-full max-w-[260px] items-center justify-center rounded-2xl border-2 border-brand-orange bg-brand-white px-5 py-2"
+                className="mt-3 min-h-11 w-full max-w-[260px] items-center justify-center rounded-xl border border-brand-black bg-brand-white px-5 py-2"
               >
-                <Text className="text-center font-atkinson-bold text-[15px] text-brand-orange">
+                <Text className="text-center font-atkinson-bold text-[15px] text-brand-black">
                   Batal
                 </Text>
               </Pressable>

@@ -155,7 +155,7 @@ export function AddOfficerScreen({
           contentContainerStyle={{
             paddingHorizontal: 18,
             paddingTop: 32,
-            paddingBottom: 64,
+            paddingBottom: 100,
           }}
         >
           <View className="w-full max-w-md self-center">
@@ -166,12 +166,12 @@ export function AddOfficerScreen({
               disabled={isSubmitting}
             />
 
-            <View className="mt-5 rounded-3xl bg-brand-white p-5">
-              <Text className="font-atkinson-bold text-[21px] text-brand-brown">
+            <View className="mt-5 rounded-xl border border-brand-black bg-brand-white p-5">
+              <Text className="font-atkinson-bold text-[21px] text-brand-black">
                 Identitas Officer
               </Text>
 
-              <Text className="mt-5 font-atkinson-bold text-[16px] text-brand-brown">
+              <Text className="mt-5 font-atkinson-bold text-[16px] text-brand-black">
                 Nama lengkap
               </Text>
 
@@ -181,12 +181,14 @@ export function AddOfficerScreen({
                 editable={!isSubmitting}
                 maxLength={100}
                 placeholder="Masukkan nama lengkap"
-                placeholderTextColor="#777777"
+                placeholderTextColor="#666666"
                 autoCapitalize="words"
                 autoCorrect={false}
                 returnKeyType="next"
-                selectionColor="#EC6426"
-                className="mt-2 min-h-14 rounded-2xl border-2 border-brand-yellow px-4 py-3 font-atkinson text-[17px] text-brand-black"
+                selectionColor="#F4E7D3"
+                cursorColor="#111111"
+                accessibilityLabel="Nama lengkap Officer"
+                className="mt-2 min-h-14 rounded-xl border border-brand-black bg-brand-white px-4 py-3 font-atkinson text-[17px] text-brand-black"
               />
 
               <Text className="mt-2 font-atkinson text-[14px] leading-5 text-brand-black">
@@ -194,7 +196,7 @@ export function AddOfficerScreen({
                 yang mencatatnya.
               </Text>
 
-              <Text className="mt-5 font-atkinson-bold text-[16px] text-brand-brown">
+              <Text className="mt-5 font-atkinson-bold text-[16px] text-brand-black">
                 Username
               </Text>
 
@@ -204,12 +206,14 @@ export function AddOfficerScreen({
                 editable={!isSubmitting}
                 maxLength={30}
                 placeholder="Contoh: aida"
-                placeholderTextColor="#777777"
+                placeholderTextColor="#666666"
                 autoCapitalize="none"
                 autoCorrect={false}
                 returnKeyType="next"
-                selectionColor="#EC6426"
-                className="mt-2 min-h-14 rounded-2xl border-2 border-brand-yellow px-4 py-3 font-atkinson text-[17px] text-brand-black"
+                selectionColor="#F4E7D3"
+                cursorColor="#111111"
+                accessibilityLabel="Username Officer"
+                className="mt-2 min-h-14 rounded-xl border border-brand-black bg-brand-white px-4 py-3 font-atkinson text-[17px] text-brand-black"
               />
 
               <Text className="mt-2 font-atkinson text-[14px] leading-5 text-brand-black">
@@ -218,12 +222,12 @@ export function AddOfficerScreen({
               </Text>
             </View>
 
-            <View className="mt-4 rounded-3xl bg-brand-white p-5">
-              <Text className="font-atkinson-bold text-[21px] text-brand-brown">
+            <View className="mt-4 rounded-xl border border-brand-black bg-brand-white p-5">
+              <Text className="font-atkinson-bold text-[21px] text-brand-black">
                 Keamanan Akun
               </Text>
 
-              <Text className="mt-5 font-atkinson-bold text-[16px] text-brand-brown">
+              <Text className="mt-5 font-atkinson-bold text-[16px] text-brand-black">
                 PIN
               </Text>
 
@@ -235,19 +239,21 @@ export function AddOfficerScreen({
                 editable={!isSubmitting}
                 maxLength={6}
                 placeholder="Masukkan PIN"
-                placeholderTextColor="#777777"
+                placeholderTextColor="#666666"
                 keyboardType="number-pad"
                 secureTextEntry
-                selectionColor="#EC6426"
+                selectionColor="#F4E7D3"
+                cursorColor="#111111"
                 returnKeyType="next"
-                className="mt-2 min-h-14 rounded-2xl border-2 border-brand-yellow px-4 py-3 font-atkinson text-[17px] text-brand-black"
+                accessibilityLabel="PIN Officer"
+                className="mt-2 min-h-14 rounded-xl border border-brand-black bg-brand-white px-4 py-3 font-atkinson text-[17px] text-brand-black"
               />
 
               <Text className="mt-2 font-atkinson text-[14px] leading-5 text-brand-black">
                 PIN harus terdiri dari tepat 6 angka.
               </Text>
 
-              <Text className="mt-5 font-atkinson-bold text-[16px] text-brand-brown">
+              <Text className="mt-5 font-atkinson-bold text-[16px] text-brand-black">
                 Konfirmasi PIN
               </Text>
 
@@ -259,22 +265,24 @@ export function AddOfficerScreen({
                 editable={!isSubmitting}
                 maxLength={6}
                 placeholder="Masukkan kembali PIN"
-                placeholderTextColor="#777777"
+                placeholderTextColor="#666666"
                 keyboardType="number-pad"
                 secureTextEntry
-                selectionColor="#EC6426"
+                selectionColor="#F4E7D3"
+                cursorColor="#111111"
                 returnKeyType="done"
+                accessibilityLabel="Konfirmasi PIN Officer"
                 onSubmitEditing={() => {
                   void handleSubmit();
                 }}
-                className="mt-2 min-h-14 rounded-2xl border-2 border-brand-yellow px-4 py-3 font-atkinson text-[17px] text-brand-black"
+                className="mt-2 min-h-14 rounded-xl border border-brand-black bg-brand-white px-4 py-3 font-atkinson text-[17px] text-brand-black"
               />
 
               <Text className="mt-2 font-atkinson text-[14px] leading-5 text-brand-black">
                 Masukkan PIN yang sama untuk memastikan tidak terjadi kesalahan.
               </Text>
 
-              <View className="mt-4 rounded-2xl bg-brand-cream p-4">
+              <View className="mt-4 rounded-xl border border-brand-black bg-brand-cream p-4">
                 <Text className="font-atkinson text-[14px] leading-6 text-brand-black">
                   PIN digunakan oleh Officer untuk masuk ke aplikasi. PIN tidak
                   disimpan sebagai teks biasa dan hanya dapat diganti oleh
@@ -284,8 +292,8 @@ export function AddOfficerScreen({
             </View>
 
             {errorMessage ? (
-              <View className="mt-4 rounded-2xl border-2 border-brand-orange bg-brand-white p-4">
-                <Text className="font-atkinson-bold text-[16px] text-brand-brown">
+              <View className="mt-4 rounded-xl border border-brand-black bg-brand-white p-4">
+                <Text className="font-atkinson-bold text-[16px] text-brand-black">
                   Officer belum dapat ditambahkan
                 </Text>
 
@@ -301,11 +309,14 @@ export function AddOfficerScreen({
                 disabled={isSubmitting}
                 accessibilityRole="button"
                 accessibilityLabel="Batal menambah Officer"
-                className={`min-h-14 flex-1 items-center justify-center rounded-2xl border-2 border-brand-orange bg-brand-white px-4 py-3 ${
-                  isSubmitting ? "opacity-50" : ""
+                accessibilityState={{
+                  disabled: isSubmitting,
+                }}
+                className={`min-h-14 flex-1 items-center justify-center rounded-xl border border-brand-black bg-brand-white px-4 py-3 ${
+                  isSubmitting ? "opacity-40" : ""
                 }`}
               >
-                <Text className="font-atkinson-bold text-[17px] text-brand-orange">
+                <Text className="font-atkinson-bold text-[17px] text-brand-black">
                   Batal
                 </Text>
               </Pressable>
@@ -317,8 +328,11 @@ export function AddOfficerScreen({
                 disabled={submitIsDisabled}
                 accessibilityRole="button"
                 accessibilityLabel="Simpan akun Officer"
-                className={`min-h-14 flex-1 items-center justify-center rounded-2xl bg-brand-orange px-4 py-3 ${
-                  submitIsDisabled ? "opacity-50" : ""
+                accessibilityState={{
+                  disabled: submitIsDisabled,
+                }}
+                className={`min-h-14 flex-1 items-center justify-center rounded-xl bg-brand-black px-4 py-3 ${
+                  submitIsDisabled ? "opacity-40" : ""
                 }`}
               >
                 {isSubmitting ? (
@@ -355,8 +369,8 @@ export function AddOfficerScreen({
             accessibilityLabel="Tutup peringatan konfirmasi PIN"
           />
 
-          <View className="w-full max-w-sm rounded-3xl border-2 border-brand-orange bg-brand-white p-6">
-            <Text className="text-center font-atkinson-bold text-[22px] leading-7 text-brand-brown">
+          <View className="w-full max-w-sm rounded-xl border border-brand-black bg-brand-white p-6">
+            <Text className="text-center font-atkinson-bold text-[22px] leading-7 text-brand-black">
               Konfirmasi PIN Tidak Sesuai
             </Text>
 
@@ -369,7 +383,7 @@ export function AddOfficerScreen({
               onPress={closePinMismatchAlert}
               accessibilityRole="button"
               accessibilityLabel="Masukkan kembali konfirmasi PIN"
-              className="mt-6 min-h-12 items-center justify-center rounded-2xl bg-brand-orange px-5 py-3"
+              className="mt-6 min-h-12 items-center justify-center rounded-xl bg-brand-black px-5 py-3"
             >
               <Text className="font-atkinson-bold text-[17px] text-brand-white">
                 Coba Lagi

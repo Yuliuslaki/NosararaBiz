@@ -136,19 +136,12 @@ function createEditForm(product: ProductListItem): EditProductForm {
   if (product.category === "eggs") {
     return {
       pricePerBaseUnit: String(product.pricePerBaseUnit),
-
       pricePerRack: String(product.pricePerRack ?? 0),
-
       rackSize: String(rackSize),
-
       stockRacks: String(Math.floor(product.currentStock / rackSize)),
-
       stockPieces: String(product.currentStock % rackSize),
-
       minimumRacks: String(Math.floor(product.minStockThreshold / rackSize)),
-
       minimumPieces: String(product.minStockThreshold % rackSize),
-
       currentStock: "0",
       minimumStock: "0",
     };
@@ -156,26 +149,23 @@ function createEditForm(product: ProductListItem): EditProductForm {
 
   return {
     ...EMPTY_EDIT_FORM,
-
     pricePerBaseUnit: String(product.pricePerBaseUnit),
-
     currentStock: String(product.currentStock),
-
     minimumStock: String(product.minStockThreshold),
   };
 }
 
 function SummaryCard({ label, value }: SummaryCardProps) {
   return (
-    <View className="h-[108px] flex-1 justify-between rounded-2xl bg-brand-cream px-3 py-3">
+    <View className="min-h-[108px] flex-1 justify-between rounded-xl border border-brand-black bg-brand-white p-4">
       <Text
         numberOfLines={2}
-        className="min-h-[32px] font-atkinson text-[12px] leading-4 text-brand-black"
+        className="font-atkinson text-[14px] leading-5 text-brand-black"
       >
         {label}
       </Text>
 
-      <Text className="font-atkinson-bold text-[18px] leading-5 text-brand-brown">
+      <Text className="mt-3 font-atkinson-bold text-[22px] leading-7 text-brand-black">
         {value}
       </Text>
     </View>
@@ -184,10 +174,10 @@ function SummaryCard({ label, value }: SummaryCardProps) {
 
 function ProductCard({ product, onEdit, onDelete }: ProductCardProps) {
   return (
-    <View className="mb-4 rounded-3xl border-2 border-brand-yellow bg-brand-white p-4">
+    <View className="mb-4 rounded-xl border border-brand-black bg-brand-white p-5">
       <View className="flex-row items-start justify-between">
         <View className="mr-3 flex-1">
-          <Text className="font-atkinson-bold text-[18px] leading-6 text-brand-brown">
+          <Text className="font-atkinson-bold text-[18px] leading-6 text-brand-black">
             {product.name}
           </Text>
 
@@ -196,28 +186,24 @@ function ProductCard({ product, onEdit, onDelete }: ProductCardProps) {
           </Text>
         </View>
 
-        <View
-          className={`rounded-full px-3 py-1.5 ${
-            product.isActive ? "bg-brand-cream" : "bg-gray-200"
-          }`}
-        >
-          <Text className="font-atkinson-bold text-[12px] text-brand-brown">
+        <View className="rounded-full bg-brand-cream px-3 py-1.5">
+          <Text className="font-atkinson-bold text-[12px] text-brand-black">
             {product.isActive ? "Aktif" : "Nonaktif"}
           </Text>
         </View>
       </View>
 
-      <View className="mt-3 rounded-2xl bg-brand-cream p-3">
+      <View className="mt-3 rounded-xl bg-brand-cream p-3">
         <Text className="font-atkinson text-[13px] text-brand-black">
           Stok tersedia
         </Text>
 
-        <Text className="mt-1 font-atkinson-bold text-[19px] text-brand-brown">
+        <Text className="mt-1 font-atkinson-bold text-[19px] text-brand-black">
           {formatProductStock(product)}
         </Text>
 
         {product.isLowStock ? (
-          <Text className="mt-2 font-atkinson-bold text-[13px] leading-5 text-brand-orange">
+          <Text className="mt-2 font-atkinson-bold text-[13px] leading-5 text-brand-black">
             Stok sudah mencapai batas minimum
           </Text>
         ) : null}
@@ -253,9 +239,9 @@ function ProductCard({ product, onEdit, onDelete }: ProductCardProps) {
             }}
             accessibilityRole="button"
             accessibilityLabel={`Edit ${product.name}`}
-            className="min-h-12 flex-1 items-center justify-center rounded-2xl border-2 border-brand-orange bg-brand-white px-3 py-3"
+            className="min-h-14 flex-1 items-center justify-center rounded-xl border border-brand-black bg-brand-white px-3 py-3"
           >
-            <Text className="font-atkinson-bold text-[16px] text-brand-orange">
+            <Text className="font-atkinson-bold text-[16px] text-brand-black">
               Edit
             </Text>
           </Pressable>
@@ -265,11 +251,11 @@ function ProductCard({ product, onEdit, onDelete }: ProductCardProps) {
               onDelete(product);
             }}
             accessibilityRole="button"
-            accessibilityLabel={`Hapus ${product.name}`}
-            className="min-h-12 flex-1 items-center justify-center rounded-2xl bg-brand-brown px-3 py-3"
+            accessibilityLabel={`Nonaktifkan ${product.name}`}
+            className="min-h-14 flex-1 items-center justify-center rounded-xl bg-brand-black px-3 py-3"
           >
             <Text className="font-atkinson-bold text-[16px] text-brand-white">
-              Hapus
+              Nonaktifkan
             </Text>
           </Pressable>
         </View>
@@ -300,8 +286,9 @@ function EditNumericInput({
       keyboardType="number-pad"
       placeholder={placeholder}
       placeholderTextColor="#9A9A9A"
-      selectionColor="#EC6426"
-      className="mt-2 min-h-12 rounded-2xl border-2 border-brand-yellow px-4 py-3 font-atkinson text-[16px] text-brand-black"
+      selectionColor="#F4E7D3"
+      cursorColor="#111111"
+      className="mt-2 min-h-14 rounded-xl border border-brand-black bg-brand-white px-4 py-3 font-atkinson text-[17px] text-brand-black"
     />
   );
 }
@@ -320,7 +307,6 @@ function EditProductModal({
   useEffect(() => {
     if (product !== null) {
       setForm(createEditForm(product));
-
       setErrorMessage(null);
     }
   }, [product]);
@@ -393,23 +379,18 @@ function EditProductModal({
 
         onRequestSave({
           productId: selectedProduct.id,
-
           pricePerBaseUnit,
-
           pricePerRack: parseInteger(form.pricePerRack, "Harga per rak"),
-
           currentStock: convertEggStockToPieces(
             stockRacks,
             stockPieces,
             rackSize,
           ),
-
           minStockThreshold: convertEggStockToPieces(
             minimumRacks,
             minimumPieces,
             rackSize,
           ),
-
           rackSize,
           performedBy: user,
         });
@@ -419,18 +400,13 @@ function EditProductModal({
 
       onRequestSave({
         productId: selectedProduct.id,
-
         pricePerBaseUnit,
-
         pricePerRack: null,
-
         currentStock: parseInteger(form.currentStock, "Stok produk"),
-
         minStockThreshold: parseInteger(
           form.minimumStock,
           "Batas minimum stok",
         ),
-
         rackSize: null,
         performedBy: user,
       });
@@ -467,8 +443,8 @@ function EditProductModal({
               disabled={disabled}
             />
 
-            <View className="mt-5 rounded-3xl bg-brand-white p-5">
-              <Text className="font-atkinson-bold text-[18px] text-brand-brown">
+            <View className="mt-5 rounded-xl border border-brand-black bg-brand-white p-5">
+              <Text className="font-atkinson-bold text-[18px] text-brand-black">
                 {product.name}
               </Text>
 
@@ -477,12 +453,12 @@ function EditProductModal({
               </Text>
             </View>
 
-            <View className="mt-4 rounded-3xl bg-brand-white p-5">
-              <Text className="font-atkinson-bold text-[18px] text-brand-brown">
+            <View className="mt-4 rounded-xl border border-brand-black bg-brand-white p-5">
+              <Text className="font-atkinson-bold text-[18px] text-brand-black">
                 Harga
               </Text>
 
-              <Text className="mt-5 font-atkinson-bold text-[15px] text-brand-brown">
+              <Text className="mt-5 font-atkinson-bold text-[15px] text-brand-black">
                 {isEggProduct ? "Harga per butir" : `Harga per ${unitLabel}`}
               </Text>
 
@@ -497,7 +473,7 @@ function EditProductModal({
 
               {isEggProduct ? (
                 <>
-                  <Text className="mt-5 font-atkinson-bold text-[15px] text-brand-brown">
+                  <Text className="mt-5 font-atkinson-bold text-[15px] text-brand-black">
                     Harga per rak
                   </Text>
 
@@ -510,7 +486,7 @@ function EditProductModal({
                     editable={!disabled}
                   />
 
-                  <Text className="mt-5 font-atkinson-bold text-[15px] text-brand-brown">
+                  <Text className="mt-5 font-atkinson-bold text-[15px] text-brand-black">
                     Jumlah butir per rak
                   </Text>
 
@@ -526,15 +502,15 @@ function EditProductModal({
               ) : null}
             </View>
 
-            <View className="mt-4 rounded-3xl bg-brand-white p-5">
-              <Text className="font-atkinson-bold text-[18px] text-brand-brown">
+            <View className="mt-4 rounded-xl border border-brand-black bg-brand-white p-5">
+              <Text className="font-atkinson-bold text-[18px] text-brand-black">
                 Stok Sekarang
               </Text>
 
               {isEggProduct ? (
                 <View className="mt-1 flex-row gap-3">
                   <View className="flex-1">
-                    <Text className="mt-5 font-atkinson-bold text-[15px] text-brand-brown">
+                    <Text className="mt-5 font-atkinson-bold text-[15px] text-brand-black">
                       Jumlah rak
                     </Text>
 
@@ -549,7 +525,7 @@ function EditProductModal({
                   </View>
 
                   <View className="flex-1">
-                    <Text className="mt-5 font-atkinson-bold text-[15px] text-brand-brown">
+                    <Text className="mt-5 font-atkinson-bold text-[15px] text-brand-black">
                       Sisa butir
                     </Text>
 
@@ -565,7 +541,7 @@ function EditProductModal({
                 </View>
               ) : (
                 <>
-                  <Text className="mt-5 font-atkinson-bold text-[15px] text-brand-brown">
+                  <Text className="mt-5 font-atkinson-bold text-[15px] text-brand-black">
                     Jumlah {unitLabel}
                   </Text>
 
@@ -581,15 +557,15 @@ function EditProductModal({
               )}
             </View>
 
-            <View className="mt-4 rounded-3xl bg-brand-white p-5">
-              <Text className="font-atkinson-bold text-[18px] text-brand-brown">
+            <View className="mt-4 rounded-xl border border-brand-black bg-brand-white p-5">
+              <Text className="font-atkinson-bold text-[18px] text-brand-black">
                 Batas Minimum Stok
               </Text>
 
               {isEggProduct ? (
                 <View className="mt-1 flex-row gap-3">
                   <View className="flex-1">
-                    <Text className="mt-5 font-atkinson-bold text-[15px] text-brand-brown">
+                    <Text className="mt-5 font-atkinson-bold text-[15px] text-brand-black">
                       Jumlah rak
                     </Text>
 
@@ -604,7 +580,7 @@ function EditProductModal({
                   </View>
 
                   <View className="flex-1">
-                    <Text className="mt-5 font-atkinson-bold text-[15px] text-brand-brown">
+                    <Text className="mt-5 font-atkinson-bold text-[15px] text-brand-black">
                       Sisa butir
                     </Text>
 
@@ -620,7 +596,7 @@ function EditProductModal({
                 </View>
               ) : (
                 <>
-                  <Text className="mt-5 font-atkinson-bold text-[15px] text-brand-brown">
+                  <Text className="mt-5 font-atkinson-bold text-[15px] text-brand-black">
                     Jumlah {unitLabel}
                   </Text>
 
@@ -637,8 +613,8 @@ function EditProductModal({
             </View>
 
             {errorMessage ? (
-              <View className="mt-4 rounded-2xl border-2 border-brand-orange bg-brand-white p-4">
-                <Text className="font-atkinson-bold text-[15px] text-brand-brown">
+              <View className="mt-4 rounded-xl border border-brand-black bg-brand-white p-4">
+                <Text className="font-atkinson-bold text-[15px] text-brand-black">
                   Perubahan belum dapat disimpan
                 </Text>
 
@@ -652,11 +628,11 @@ function EditProductModal({
               <Pressable
                 onPress={onClose}
                 disabled={disabled}
-                className={`min-h-12 flex-1 items-center justify-center rounded-2xl border-2 border-brand-orange bg-brand-white px-4 py-3 ${
+                className={`min-h-14 flex-1 items-center justify-center rounded-xl border border-brand-black bg-brand-white px-4 py-3 ${
                   disabled ? "opacity-50" : ""
                 }`}
               >
-                <Text className="font-atkinson-bold text-[16px] text-brand-orange">
+                <Text className="font-atkinson-bold text-[16px] text-brand-black">
                   Batal
                 </Text>
               </Pressable>
@@ -664,7 +640,7 @@ function EditProductModal({
               <Pressable
                 onPress={handleSave}
                 disabled={disabled}
-                className={`min-h-12 flex-1 items-center justify-center rounded-2xl bg-brand-orange px-4 py-3 ${
+                className={`min-h-14 flex-1 items-center justify-center rounded-xl bg-brand-black px-4 py-3 ${
                   disabled ? "opacity-50" : ""
                 }`}
               >
@@ -708,7 +684,6 @@ export function ProductListScreen({
 
   function refreshProducts(): void {
     setProducts(getProducts());
-
     setSummary(getProductSummary());
   }
 
@@ -785,7 +760,7 @@ export function ProductListScreen({
 
       showAlert({
         tone: "success",
-        title: "Produk berhasil dihapus",
+        title: "Produk berhasil dinonaktifkan",
         message: `${productName} telah dinonaktifkan dari daftar produk. Riwayat transaksi dan stok tetap tersimpan.`,
         confirmText: "OK",
       });
@@ -817,8 +792,8 @@ export function ProductListScreen({
             onBack={onBack}
           />
 
-          <View className="mt-5 rounded-3xl bg-brand-white p-4">
-            <Text className="font-atkinson-bold text-[18px] text-brand-brown">
+          <View className="mt-5 rounded-xl border border-brand-black bg-brand-white p-4">
+            <Text className="font-atkinson-bold text-[18px] text-brand-black">
               Ringkasan Produk
             </Text>
 
@@ -838,7 +813,7 @@ export function ProductListScreen({
             onPress={onAddProduct}
             accessibilityRole="button"
             accessibilityLabel="Tambah produk"
-            className="mt-4 min-h-12 items-center justify-center rounded-2xl bg-brand-orange px-5 py-3"
+            className="mt-4 min-h-14 items-center justify-center rounded-xl bg-brand-black px-5 py-3"
           >
             <Text className="font-atkinson-bold text-[17px] text-brand-white">
               Tambah Produk
@@ -849,16 +824,16 @@ export function ProductListScreen({
             onPress={onOpenStockHistory}
             accessibilityRole="button"
             accessibilityLabel="Buka riwayat stok"
-            className="mt-3 min-h-12 items-center justify-center rounded-2xl border-2 border-brand-orange bg-brand-white px-5 py-3"
+            className="mt-3 min-h-14 items-center justify-center rounded-xl border border-brand-black bg-brand-white px-5 py-3"
           >
-            <Text className="font-atkinson-bold text-[17px] text-brand-orange">
+            <Text className="font-atkinson-bold text-[17px] text-brand-black">
               Riwayat Stok
             </Text>
           </Pressable>
 
           {products.length === 0 ? (
-            <View className="mt-4 rounded-3xl border-2 border-brand-yellow bg-brand-white p-5">
-              <Text className="text-center font-atkinson-bold text-[20px] text-brand-brown">
+            <View className="mt-4 rounded-xl border border-brand-black bg-brand-white p-5">
+              <Text className="text-center font-atkinson-bold text-[20px] text-brand-black">
                 Belum ada produk
               </Text>
 
@@ -869,7 +844,7 @@ export function ProductListScreen({
             </View>
           ) : (
             <View className="mt-6">
-              <Text className="mb-3 font-atkinson-bold text-[20px] text-brand-brown">
+              <Text className="mb-3 font-atkinson-bold text-[20px] text-brand-black">
                 Daftar Produk
               </Text>
 
