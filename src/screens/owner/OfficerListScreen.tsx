@@ -108,7 +108,7 @@ function normalizeUsernameInput(value: string): string {
 
 function SummaryCard({ label, value }: SummaryCardProps) {
   return (
-    <View className="h-[108px] flex-1 justify-between rounded-2xl bg-brand-cream px-3 py-3">
+    <View className="h-[108px] flex-1 justify-between rounded-xl border border-brand-black bg-brand-cream px-3 py-3">
       <Text
         numberOfLines={2}
         className="min-h-[32px] font-atkinson text-[12px] leading-4 text-brand-black"
@@ -116,7 +116,7 @@ function SummaryCard({ label, value }: SummaryCardProps) {
         {label}
       </Text>
 
-      <Text className="font-atkinson-bold text-[18px] leading-5 text-brand-brown">
+      <Text className="font-atkinson-bold text-[18px] leading-5 text-brand-black">
         {value}
       </Text>
     </View>
@@ -134,10 +134,10 @@ function OfficerCard({
   onDelete,
 }: OfficerCardProps) {
   return (
-    <View className="mb-4 rounded-3xl border-2 border-brand-yellow bg-brand-white p-4">
+    <View className="mb-4 rounded-xl border border-brand-black bg-brand-white p-4">
       <View className="flex-row items-start justify-between">
         <View className="mr-3 flex-1">
-          <Text className="font-atkinson-bold text-[18px] leading-6 text-brand-brown">
+          <Text className="font-atkinson-bold text-[18px] leading-6 text-brand-black">
             {officer.fullName}
           </Text>
 
@@ -147,22 +147,22 @@ function OfficerCard({
         </View>
 
         <View
-          className={`rounded-full px-3 py-1.5 ${
+          className={`rounded-full border border-brand-black px-3 py-1.5 ${
             officer.isActive ? "bg-brand-cream" : "bg-gray-200"
           }`}
         >
-          <Text className="font-atkinson-bold text-[12px] text-brand-brown">
+          <Text className="font-atkinson-bold text-[12px] text-brand-black">
             {officer.isActive ? "Aktif" : "Nonaktif"}
           </Text>
         </View>
       </View>
 
-      <View className="mt-4 rounded-2xl bg-brand-cream p-3">
+      <View className="mt-4 rounded-xl border border-brand-black bg-brand-cream p-3">
         <Text className="font-atkinson text-[13px] text-brand-black">
           Peran akun
         </Text>
 
-        <Text className="mt-1 font-atkinson-bold text-[17px] text-brand-brown">
+        <Text className="mt-1 font-atkinson-bold text-[17px] text-brand-black">
           Officer
         </Text>
       </View>
@@ -187,21 +187,30 @@ function OfficerCard({
         accessibilityState={{
           expanded: menuIsOpen,
         }}
-        className={`mt-4 min-h-12 flex-row items-center justify-between rounded-2xl border-2 border-brand-orange bg-brand-white px-4 py-3 ${
-          disabled ? "opacity-50" : ""
-        }`}
+        className={`mt-4 min-h-12 flex-row items-center justify-between rounded-xl border border-brand-black px-4 py-3 ${
+          menuIsOpen ? "bg-brand-cream" : "bg-brand-white"
+        } ${disabled ? "opacity-50" : ""}`}
       >
-        <Text className="font-atkinson-bold text-[16px] text-brand-orange">
+        <Text className="font-atkinson-bold text-[16px] text-brand-black">
           Kelola Akun
         </Text>
 
-        <Text className="font-atkinson-bold text-[22px] leading-6 text-brand-orange">
-          {menuIsOpen ? "⌃" : "⌄"}
+        <Text
+          style={{
+            transform: [
+              {
+                rotate: menuIsOpen ? "-90deg" : "90deg",
+              },
+            ],
+          }}
+          className="font-atkinson-bold text-[28px] leading-7 text-brand-black"
+        >
+          ›
         </Text>
       </Pressable>
 
       {menuIsOpen ? (
-        <View className="mt-2 rounded-2xl border-2 border-brand-yellow bg-brand-white p-2">
+        <View className="mt-2 rounded-xl border border-brand-black bg-brand-white p-2">
           <Pressable
             onPress={() => {
               onEdit(officer);
@@ -209,11 +218,11 @@ function OfficerCard({
             disabled={disabled}
             accessibilityRole="button"
             accessibilityLabel={`Edit identitas ${officer.fullName}`}
-            className={`min-h-12 justify-center rounded-xl border border-brand-yellow bg-brand-white px-4 py-3 ${
+            className={`min-h-12 justify-center rounded-xl border border-brand-black bg-brand-white px-4 py-3 ${
               disabled ? "opacity-50" : ""
             }`}
           >
-            <Text className="font-atkinson-bold text-[15px] text-brand-brown">
+            <Text className="font-atkinson-bold text-[15px] text-brand-black">
               Edit Identitas
             </Text>
 
@@ -229,11 +238,11 @@ function OfficerCard({
             disabled={disabled}
             accessibilityRole="button"
             accessibilityLabel={`Ganti PIN ${officer.fullName}`}
-            className={`mt-2 min-h-12 justify-center rounded-xl border border-brand-yellow bg-brand-white px-4 py-3 ${
+            className={`mt-2 min-h-12 justify-center rounded-xl border border-brand-black bg-brand-white px-4 py-3 ${
               disabled ? "opacity-50" : ""
             }`}
           >
-            <Text className="font-atkinson-bold text-[15px] text-brand-brown">
+            <Text className="font-atkinson-bold text-[15px] text-brand-black">
               Ganti PIN
             </Text>
 
@@ -253,11 +262,11 @@ function OfficerCard({
                 ? `Nonaktifkan ${officer.fullName}`
                 : `Aktifkan ${officer.fullName}`
             }
-            className={`mt-2 min-h-12 justify-center rounded-xl border border-brand-yellow bg-brand-white px-4 py-3 ${
+            className={`mt-2 min-h-12 justify-center rounded-xl border border-brand-black bg-brand-white px-4 py-3 ${
               disabled ? "opacity-50" : ""
             }`}
           >
-            <Text className="font-atkinson-bold text-[15px] text-brand-brown">
+            <Text className="font-atkinson-bold text-[15px] text-brand-black">
               {officer.isActive ? "Nonaktifkan Akun" : "Aktifkan Akun"}
             </Text>
 
@@ -275,11 +284,11 @@ function OfficerCard({
             disabled={disabled}
             accessibilityRole="button"
             accessibilityLabel={`Hapus ${officer.fullName}`}
-            className={`mt-2 min-h-12 justify-center rounded-xl border border-brand-yellow bg-brand-white px-4 py-3 ${
+            className={`mt-2 min-h-12 justify-center rounded-xl border border-brand-black bg-brand-white px-4 py-3 ${
               disabled ? "opacity-50" : ""
             }`}
           >
-            <Text className="font-atkinson-bold text-[15px] text-brand-brown">
+            <Text className="font-atkinson-bold text-[15px] text-brand-black">
               Hapus Officer
             </Text>
 
@@ -689,8 +698,8 @@ export function OfficerListScreen({
             disabled={isSubmitting}
           />
 
-          <View className="mt-5 rounded-3xl bg-brand-white p-4">
-            <Text className="font-atkinson-bold text-[18px] text-brand-brown">
+          <View className="mt-5 rounded-xl border border-brand-black bg-brand-white p-4">
+            <Text className="font-atkinson-bold text-[18px] text-brand-black">
               Ringkasan Officer
             </Text>
 
@@ -708,7 +717,7 @@ export function OfficerListScreen({
             disabled={isSubmitting}
             accessibilityRole="button"
             accessibilityLabel="Tambah Officer"
-            className={`mt-4 min-h-12 items-center justify-center rounded-2xl bg-brand-orange px-5 py-3 ${
+            className={`mt-4 min-h-12 items-center justify-center rounded-xl bg-brand-black px-5 py-3 ${
               isSubmitting ? "opacity-50" : ""
             }`}
           >
@@ -718,8 +727,8 @@ export function OfficerListScreen({
           </Pressable>
 
           {errorMessage ? (
-            <View className="mt-4 rounded-3xl border-2 border-brand-orange bg-brand-white p-5">
-              <Text className="font-atkinson-bold text-[18px] text-brand-brown">
+            <View className="mt-4 rounded-xl border border-brand-black bg-brand-white p-5">
+              <Text className="font-atkinson-bold text-[18px] text-brand-black">
                 Daftar Officer belum dapat dimuat
               </Text>
 
@@ -731,16 +740,16 @@ export function OfficerListScreen({
                 onPress={loadOfficers}
                 accessibilityRole="button"
                 accessibilityLabel="Muat ulang daftar Officer"
-                className="mt-4 min-h-12 items-center justify-center rounded-2xl border-2 border-brand-orange bg-brand-white px-4 py-3"
+                className="mt-4 min-h-12 items-center justify-center rounded-xl bg-brand-black px-4 py-3"
               >
-                <Text className="font-atkinson-bold text-[16px] text-brand-orange">
+                <Text className="font-atkinson-bold text-[16px] text-brand-white">
                   Muat Ulang
                 </Text>
               </Pressable>
             </View>
           ) : officers.length === 0 ? (
-            <View className="mt-4 rounded-3xl border-2 border-brand-yellow bg-brand-white p-5">
-              <Text className="text-center font-atkinson-bold text-[20px] text-brand-brown">
+            <View className="mt-4 rounded-xl border border-brand-black bg-brand-white p-5">
+              <Text className="text-center font-atkinson-bold text-[20px] text-brand-black">
                 Belum ada Officer
               </Text>
 
@@ -751,7 +760,7 @@ export function OfficerListScreen({
             </View>
           ) : (
             <View className="mt-6">
-              <Text className="mb-3 font-atkinson-bold text-[20px] text-brand-brown">
+              <Text className="mb-3 font-atkinson-bold text-[20px] text-brand-black">
                 Daftar Officer
               </Text>
 
@@ -793,12 +802,12 @@ export function OfficerListScreen({
               accessibilityLabel="Tutup edit identitas Officer"
             />
 
-            <View className="w-full max-w-sm rounded-3xl border-2 border-brand-orange bg-brand-white p-6">
-              <Text className="text-center font-atkinson-bold text-[22px] text-brand-brown">
+            <View className="w-full max-w-sm rounded-xl border border-brand-black bg-brand-white p-6">
+              <Text className="text-center font-atkinson-bold text-[22px] text-brand-black">
                 Edit Identitas Officer
               </Text>
 
-              <Text className="mt-5 font-atkinson-bold text-[16px] text-brand-brown">
+              <Text className="mt-5 font-atkinson-bold text-[16px] text-brand-black">
                 Nama lengkap
               </Text>
 
@@ -814,11 +823,12 @@ export function OfficerListScreen({
                 placeholderTextColor="#777777"
                 autoCapitalize="words"
                 autoCorrect={false}
-                selectionColor="#EC6426"
-                className="mt-2 min-h-14 rounded-2xl border-2 border-brand-yellow px-4 py-3 font-atkinson text-[17px] text-brand-black"
+                selectionColor="#F4E7D3"
+                cursorColor="#111111"
+                className="mt-2 min-h-14 rounded-xl border border-brand-black bg-brand-white px-4 py-3 font-atkinson text-[17px] text-brand-black"
               />
 
-              <Text className="mt-5 font-atkinson-bold text-[16px] text-brand-brown">
+              <Text className="mt-5 font-atkinson-bold text-[16px] text-brand-black">
                 Username
               </Text>
 
@@ -834,13 +844,14 @@ export function OfficerListScreen({
                 placeholderTextColor="#777777"
                 autoCapitalize="none"
                 autoCorrect={false}
-                selectionColor="#EC6426"
-                className="mt-2 min-h-14 rounded-2xl border-2 border-brand-yellow px-4 py-3 font-atkinson text-[17px] text-brand-black"
+                selectionColor="#F4E7D3"
+                cursorColor="#111111"
+                className="mt-2 min-h-14 rounded-xl border border-brand-black bg-brand-white px-4 py-3 font-atkinson text-[17px] text-brand-black"
               />
 
               {identityError ? (
-                <View className="mt-4 rounded-2xl border-2 border-brand-orange bg-brand-cream p-4">
-                  <Text className="text-center font-atkinson-bold text-[14px] leading-5 text-brand-brown">
+                <View className="mt-4 rounded-xl border border-brand-black bg-brand-cream p-4">
+                  <Text className="text-center font-atkinson-bold text-[14px] leading-5 text-brand-black">
                     {identityError}
                   </Text>
                 </View>
@@ -850,11 +861,11 @@ export function OfficerListScreen({
                 <Pressable
                   onPress={closeIdentityModal}
                   disabled={isSubmitting}
-                  className={`min-h-12 flex-1 items-center justify-center rounded-2xl border-2 border-brand-orange bg-brand-white px-3 py-3 ${
+                  className={`min-h-12 flex-1 items-center justify-center rounded-xl border border-brand-black bg-brand-white px-3 py-3 ${
                     isSubmitting ? "opacity-50" : ""
                   }`}
                 >
-                  <Text className="font-atkinson-bold text-[16px] text-brand-orange">
+                  <Text className="font-atkinson-bold text-[16px] text-brand-black">
                     Batal
                   </Text>
                 </Pressable>
@@ -864,7 +875,7 @@ export function OfficerListScreen({
                     void handleSaveIdentity();
                   }}
                   disabled={identitySubmitIsDisabled}
-                  className={`min-h-12 flex-1 items-center justify-center rounded-2xl bg-brand-orange px-3 py-3 ${
+                  className={`min-h-12 flex-1 items-center justify-center rounded-xl bg-brand-black px-3 py-3 ${
                     identitySubmitIsDisabled ? "opacity-50" : ""
                   }`}
                 >
@@ -902,8 +913,8 @@ export function OfficerListScreen({
               accessibilityLabel="Tutup perubahan PIN Officer"
             />
 
-            <View className="w-full max-w-sm rounded-3xl border-2 border-brand-orange bg-brand-white p-6">
-              <Text className="text-center font-atkinson-bold text-[22px] text-brand-brown">
+            <View className="w-full max-w-sm rounded-xl border border-brand-black bg-brand-white p-6">
+              <Text className="text-center font-atkinson-bold text-[22px] text-brand-black">
                 Ganti PIN Officer
               </Text>
 
@@ -912,7 +923,7 @@ export function OfficerListScreen({
                 {selectedOfficer?.fullName ?? "Officer"}.
               </Text>
 
-              <Text className="mt-5 font-atkinson-bold text-[16px] text-brand-brown">
+              <Text className="mt-5 font-atkinson-bold text-[16px] text-brand-black">
                 PIN baru
               </Text>
 
@@ -928,11 +939,12 @@ export function OfficerListScreen({
                 placeholderTextColor="#777777"
                 keyboardType="number-pad"
                 secureTextEntry
-                selectionColor="#EC6426"
-                className="mt-2 min-h-14 rounded-2xl border-2 border-brand-yellow px-4 py-3 font-atkinson text-[17px] text-brand-black"
+                selectionColor="#F4E7D3"
+                cursorColor="#111111"
+                className="mt-2 min-h-14 rounded-xl border border-brand-black bg-brand-white px-4 py-3 font-atkinson text-[17px] text-brand-black"
               />
 
-              <Text className="mt-5 font-atkinson-bold text-[16px] text-brand-brown">
+              <Text className="mt-5 font-atkinson-bold text-[16px] text-brand-black">
                 Konfirmasi PIN baru
               </Text>
 
@@ -948,10 +960,11 @@ export function OfficerListScreen({
                 placeholderTextColor="#777777"
                 keyboardType="number-pad"
                 secureTextEntry
-                selectionColor="#EC6426"
+                selectionColor="#F4E7D3"
+                cursorColor="#111111"
                 returnKeyType="done"
                 onSubmitEditing={continueToPinConfirmation}
-                className="mt-2 min-h-14 rounded-2xl border-2 border-brand-yellow px-4 py-3 font-atkinson text-[17px] text-brand-black"
+                className="mt-2 min-h-14 rounded-xl border border-brand-black bg-brand-white px-4 py-3 font-atkinson text-[17px] text-brand-black"
               />
 
               <Text className="mt-2 font-atkinson text-[13px] leading-5 text-brand-black">
@@ -959,8 +972,8 @@ export function OfficerListScreen({
               </Text>
 
               {pinEditorError ? (
-                <View className="mt-4 rounded-2xl border-2 border-brand-orange bg-brand-cream p-4">
-                  <Text className="text-center font-atkinson-bold text-[14px] leading-5 text-brand-brown">
+                <View className="mt-4 rounded-xl border border-brand-black bg-brand-cream p-4">
+                  <Text className="text-center font-atkinson-bold text-[14px] leading-5 text-brand-black">
                     {pinEditorError}
                   </Text>
                 </View>
@@ -970,11 +983,11 @@ export function OfficerListScreen({
                 <Pressable
                   onPress={closePinEditor}
                   disabled={isSubmitting}
-                  className={`min-h-12 flex-1 items-center justify-center rounded-2xl border-2 border-brand-orange bg-brand-white px-3 py-3 ${
+                  className={`min-h-12 flex-1 items-center justify-center rounded-xl border border-brand-black bg-brand-white px-3 py-3 ${
                     isSubmitting ? "opacity-50" : ""
                   }`}
                 >
-                  <Text className="font-atkinson-bold text-[16px] text-brand-orange">
+                  <Text className="font-atkinson-bold text-[16px] text-brand-black">
                     Batal
                   </Text>
                 </Pressable>
@@ -982,7 +995,7 @@ export function OfficerListScreen({
                 <Pressable
                   onPress={continueToPinConfirmation}
                   disabled={pinContinueIsDisabled}
-                  className={`min-h-12 flex-1 items-center justify-center rounded-2xl bg-brand-orange px-3 py-3 ${
+                  className={`min-h-12 flex-1 items-center justify-center rounded-xl bg-brand-black px-3 py-3 ${
                     pinContinueIsDisabled ? "opacity-50" : ""
                   }`}
                 >

@@ -181,10 +181,10 @@ function ProductSaleCard({
   const stockIsEmpty = remainingStock <= 0;
 
   return (
-    <View className="mb-4 rounded-3xl border-2 border-brand-yellow bg-brand-white p-4">
+    <View className="mb-4 rounded-xl border border-brand-black bg-brand-white p-4">
       <View className="flex-row items-start justify-between">
         <View className="mr-3 flex-1">
-          <Text className="font-atkinson-bold text-[18px] leading-6 text-brand-brown">
+          <Text className="font-atkinson-bold text-[18px] leading-6 text-brand-black">
             {product.name}
           </Text>
 
@@ -194,11 +194,11 @@ function ProductSaleCard({
         </View>
 
         <View
-          className={`rounded-full px-3 py-1.5 ${
+          className={`rounded-full border border-brand-black px-3 py-1.5 ${
             stockIsEmpty ? "bg-gray-200" : "bg-brand-cream"
           }`}
         >
-          <Text className="font-atkinson-bold text-[12px] text-brand-brown">
+          <Text className="font-atkinson-bold text-[12px] text-brand-black">
             {stockIsEmpty ? "Habis" : "Tersedia"}
           </Text>
         </View>
@@ -219,15 +219,15 @@ function ProductSaleCard({
               disabled={disabled || !canAdd}
               accessibilityRole="button"
               accessibilityLabel={`Tambah satu ${unitLabel.toLowerCase()} ${product.name}`}
-              className={`min-h-12 flex-row items-center justify-between rounded-2xl border-2 border-brand-orange bg-brand-white px-4 py-3 ${
+              className={`min-h-12 flex-row items-center justify-between rounded-xl bg-brand-black px-4 py-3 ${
                 disabled || !canAdd ? "opacity-40" : ""
               }`}
             >
-              <Text className="font-atkinson-bold text-[15px] text-brand-orange">
+              <Text className="font-atkinson-bold text-[15px] text-brand-white">
                 + 1 {unitLabel}
               </Text>
 
-              <Text className="font-atkinson-bold text-[15px] text-brand-brown">
+              <Text className="font-atkinson-bold text-[15px] text-brand-white">
                 {formatCurrency(option.unitPrice)}
               </Text>
             </Pressable>
@@ -320,10 +320,10 @@ function CartItemCard({
   }
 
   return (
-    <View className="mb-3 rounded-2xl border-2 border-brand-yellow bg-brand-white p-4">
+    <View className="mb-3 rounded-xl border border-brand-black bg-brand-white p-4">
       <View className="flex-row items-start justify-between">
         <View className="mr-3 flex-1">
-          <Text className="font-atkinson-bold text-[17px] leading-6 text-brand-brown">
+          <Text className="font-atkinson-bold text-[17px] leading-6 text-brand-black">
             {item.productName}
           </Text>
 
@@ -337,18 +337,18 @@ function CartItemCard({
           disabled={disabled}
           accessibilityRole="button"
           accessibilityLabel={`Hapus ${item.productName} dari keranjang`}
-          className={`rounded-xl border-2 border-brand-brown px-3 py-2 ${
+          className={`rounded-xl border border-brand-black bg-brand-white px-3 py-2 ${
             disabled ? "opacity-40" : ""
           }`}
         >
-          <Text className="font-atkinson-bold text-[13px] text-brand-brown">
+          <Text className="font-atkinson-bold text-[13px] text-brand-black">
             Hapus
           </Text>
         </Pressable>
       </View>
 
-      <View className="mt-4 rounded-2xl bg-brand-cream p-4">
-        <Text className="font-atkinson-bold text-[14px] text-brand-brown">
+      <View className="mt-4 rounded-xl border border-brand-black bg-brand-cream p-4">
+        <Text className="font-atkinson-bold text-[14px] text-brand-black">
           Jumlah pembelian
         </Text>
 
@@ -365,24 +365,23 @@ function CartItemCard({
             maxLength={9}
             placeholder="1"
             placeholderTextColor="#9A9A9A"
-            selectionColor="#EC6426"
+            selectionColor="#F4E7D3"
+            cursorColor="#111111"
             accessibilityLabel={`Jumlah pembelian ${item.productName}`}
-            className={`min-h-12 flex-1 rounded-2xl border-2 bg-brand-white px-4 py-3 font-atkinson-bold text-[18px] text-brand-brown ${
-              quantityIsAboveMaximum
-                ? "border-brand-brown"
-                : "border-brand-orange"
+            className={`min-h-12 flex-1 rounded-xl border border-brand-black px-4 py-3 font-atkinson-bold text-[18px] text-brand-black ${
+              quantityIsAboveMaximum ? "bg-brand-cream" : "bg-brand-white"
             }`}
           />
 
           <View className="ml-3 min-w-[72px]">
-            <Text className="font-atkinson-bold text-[16px] text-brand-brown">
+            <Text className="font-atkinson-bold text-[16px] text-brand-black">
               {unitLabel}
             </Text>
           </View>
         </View>
 
         {quantityIsAboveMaximum ? (
-          <Text className="mt-2 font-atkinson-bold text-[13px] leading-5 text-brand-brown">
+          <Text className="mt-2 font-atkinson-bold text-[13px] leading-5 text-brand-black">
             Jumlah maksimal adalah {maximumQuantity} {unitLabel.toLowerCase()}.
           </Text>
         ) : (
@@ -393,12 +392,12 @@ function CartItemCard({
         )}
       </View>
 
-      <View className="mt-3 flex-row items-center justify-between rounded-2xl border border-brand-yellow bg-brand-white px-4 py-3">
-        <Text className="font-atkinson-bold text-[14px] text-brand-brown">
+      <View className="mt-3 flex-row items-center justify-between rounded-xl border border-brand-black bg-brand-white px-4 py-3">
+        <Text className="font-atkinson-bold text-[14px] text-brand-black">
           Subtotal
         </Text>
 
-        <Text className="font-atkinson-bold text-[18px] text-brand-orange">
+        <Text className="font-atkinson-bold text-[18px] text-brand-black">
           {formatCurrency(getCartItemSubtotal(item))}
         </Text>
       </View>
@@ -890,8 +889,8 @@ export function SaleScreen({ user, onBack }: SaleScreenProps) {
             disabled={isSubmitting}
           />
 
-          <View className="mt-5 rounded-3xl bg-brand-white p-4">
-            <Text className="font-atkinson-bold text-[19px] text-brand-brown">
+          <View className="mt-5 rounded-xl border border-brand-black bg-brand-white p-4">
+            <Text className="font-atkinson-bold text-[19px] text-brand-black">
               Pilih Produk
             </Text>
 
@@ -902,8 +901,8 @@ export function SaleScreen({ user, onBack }: SaleScreenProps) {
 
           <View className="mt-4">
             {activeProducts.length === 0 ? (
-              <View className="rounded-3xl border-2 border-brand-yellow bg-brand-white p-5">
-                <Text className="text-center font-atkinson-bold text-[19px] text-brand-brown">
+              <View className="rounded-xl border border-brand-black bg-brand-white p-5">
+                <Text className="text-center font-atkinson-bold text-[19px] text-brand-black">
                   Belum ada produk aktif
                 </Text>
 
@@ -927,13 +926,13 @@ export function SaleScreen({ user, onBack }: SaleScreenProps) {
             )}
           </View>
 
-          <View className="mt-2 rounded-3xl bg-brand-white p-4">
-            <Text className="font-atkinson-bold text-[19px] text-brand-brown">
+          <View className="mt-2 rounded-xl border border-brand-black bg-brand-white p-4">
+            <Text className="font-atkinson-bold text-[19px] text-brand-black">
               Keranjang
             </Text>
 
             {cartItems.length === 0 ? (
-              <View className="mt-3 rounded-2xl bg-brand-cream p-4">
+              <View className="mt-3 rounded-xl border border-brand-black bg-brand-cream p-4">
                 <Text className="text-center font-atkinson text-[14px] leading-6 text-brand-black">
                   Belum ada produk yang dipilih.
                 </Text>
@@ -969,19 +968,19 @@ export function SaleScreen({ user, onBack }: SaleScreenProps) {
               </View>
             )}
 
-            <View className="mt-3 flex-row items-center justify-between rounded-2xl bg-brand-cream p-4">
-              <Text className="font-atkinson-bold text-[17px] text-brand-brown">
+            <View className="mt-3 flex-row items-center justify-between rounded-xl border border-brand-black bg-brand-cream p-4">
+              <Text className="font-atkinson-bold text-[17px] text-brand-black">
                 Total
               </Text>
 
-              <Text className="font-atkinson-bold text-[21px] text-brand-orange">
+              <Text className="font-atkinson-bold text-[21px] text-brand-black">
                 {formatCurrency(totalAmount)}
               </Text>
             </View>
           </View>
 
-          <View className="mt-4 rounded-3xl bg-brand-white p-4">
-            <Text className="font-atkinson-bold text-[19px] text-brand-brown">
+          <View className="mt-4 rounded-xl border border-brand-black bg-brand-white p-4">
+            <Text className="font-atkinson-bold text-[19px] text-brand-black">
               Metode Pembayaran
             </Text>
 
@@ -996,17 +995,15 @@ export function SaleScreen({ user, onBack }: SaleScreenProps) {
                   selected: paymentMethod === "cash",
                   disabled: isSubmitting,
                 }}
-                className={`min-h-12 flex-1 items-center justify-center rounded-2xl border-2 px-4 py-3 ${
-                  paymentMethod === "cash"
-                    ? "border-brand-orange bg-brand-cream"
-                    : "border-brand-yellow bg-brand-white"
+                className={`min-h-12 flex-1 items-center justify-center rounded-xl border border-brand-black px-4 py-3 ${
+                  paymentMethod === "cash" ? "bg-brand-black" : "bg-brand-white"
                 } ${isSubmitting ? "opacity-40" : ""}`}
               >
                 <Text
                   className={`font-atkinson-bold text-[16px] ${
                     paymentMethod === "cash"
-                      ? "text-brand-orange"
-                      : "text-brand-brown"
+                      ? "text-brand-white"
+                      : "text-brand-black"
                   }`}
                 >
                   Tunai
@@ -1023,17 +1020,15 @@ export function SaleScreen({ user, onBack }: SaleScreenProps) {
                   selected: paymentMethod === "qris",
                   disabled: isSubmitting,
                 }}
-                className={`min-h-12 flex-1 items-center justify-center rounded-2xl border-2 px-4 py-3 ${
-                  paymentMethod === "qris"
-                    ? "border-brand-orange bg-brand-cream"
-                    : "border-brand-yellow bg-brand-white"
+                className={`min-h-12 flex-1 items-center justify-center rounded-xl border border-brand-black px-4 py-3 ${
+                  paymentMethod === "qris" ? "bg-brand-black" : "bg-brand-white"
                 } ${isSubmitting ? "opacity-40" : ""}`}
               >
                 <Text
                   className={`font-atkinson-bold text-[16px] ${
                     paymentMethod === "qris"
-                      ? "text-brand-orange"
-                      : "text-brand-brown"
+                      ? "text-brand-white"
+                      : "text-brand-black"
                   }`}
                 >
                   QRIS
@@ -1043,7 +1038,7 @@ export function SaleScreen({ user, onBack }: SaleScreenProps) {
 
             {paymentMethod === "cash" ? (
               <>
-                <Text className="mt-5 font-atkinson-bold text-[15px] text-brand-brown">
+                <Text className="mt-5 font-atkinson-bold text-[15px] text-brand-black">
                   Uang diterima
                 </Text>
 
@@ -1062,27 +1057,28 @@ export function SaleScreen({ user, onBack }: SaleScreenProps) {
                   maxLength={12}
                   placeholder="Contoh: 100000"
                   placeholderTextColor="#9A9A9A"
-                  selectionColor="#EC6426"
-                  className="mt-2 min-h-12 rounded-2xl border-2 border-brand-yellow px-4 py-3 font-atkinson text-[16px] text-brand-black"
+                  selectionColor="#F4E7D3"
+                  cursorColor="#111111"
+                  className="mt-2 min-h-12 rounded-xl border border-brand-black bg-brand-white px-4 py-3 font-atkinson text-[16px] text-brand-black"
                 />
 
-                <View className="mt-3 flex-row items-center justify-between rounded-2xl bg-brand-cream p-4">
-                  <Text className="font-atkinson-bold text-[15px] text-brand-brown">
+                <View className="mt-3 flex-row items-center justify-between rounded-xl border border-brand-black bg-brand-cream p-4">
+                  <Text className="font-atkinson-bold text-[15px] text-brand-black">
                     Kembalian
                   </Text>
 
-                  <Text className="font-atkinson-bold text-[18px] text-brand-orange">
+                  <Text className="font-atkinson-bold text-[18px] text-brand-black">
                     {formatCurrency(changePreview)}
                   </Text>
                 </View>
               </>
             ) : (
-              <View className="mt-4 rounded-2xl bg-brand-cream p-4">
+              <View className="mt-4 rounded-xl border border-brand-black bg-brand-cream p-4">
                 <Text className="font-atkinson text-[14px] leading-6 text-brand-black">
                   Pembayaran QRIS harus sama dengan total transaksi.
                 </Text>
 
-                <Text className="mt-2 font-atkinson-bold text-[18px] text-brand-orange">
+                <Text className="mt-2 font-atkinson-bold text-[18px] text-brand-black">
                   {formatCurrency(totalAmount)}
                 </Text>
               </View>
@@ -1090,8 +1086,8 @@ export function SaleScreen({ user, onBack }: SaleScreenProps) {
           </View>
 
           {errorMessage ? (
-            <View className="mt-4 rounded-2xl border-2 border-brand-orange bg-brand-white p-4">
-              <Text className="font-atkinson-bold text-[15px] text-brand-brown">
+            <View className="mt-4 rounded-xl border border-brand-black bg-brand-white p-4">
+              <Text className="font-atkinson-bold text-[15px] text-brand-black">
                 Transaksi belum dapat disimpan
               </Text>
 
@@ -1110,7 +1106,7 @@ export function SaleScreen({ user, onBack }: SaleScreenProps) {
                 ? "Lanjut ke pembayaran QRIS simulasi"
                 : "Simpan transaksi penjualan"
             }
-            className={`mt-5 min-h-14 items-center justify-center rounded-2xl bg-brand-orange px-5 py-4 ${
+            className={`mt-5 min-h-14 items-center justify-center rounded-xl bg-brand-black px-5 py-4 ${
               isSubmitting || cartItems.length === 0 ? "opacity-50" : ""
             }`}
           >

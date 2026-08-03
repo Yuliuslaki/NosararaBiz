@@ -4,7 +4,7 @@ import { BackButton } from "./BackButton";
 
 type ScreenHeaderProps = {
   title: string;
-  description: string;
+  description?: string;
   onBack: () => void;
   disabled?: boolean;
 };
@@ -16,19 +16,19 @@ export function ScreenHeader({
   disabled = false,
 }: ScreenHeaderProps) {
   return (
-    <View className="flex-row items-start">
-      <View className="mt-2">
-        <BackButton onPress={onBack} disabled={disabled} />
-      </View>
+    <View>
+      <BackButton onPress={onBack} disabled={disabled} />
 
-      <View className="ml-3 flex-1 pt-2">
-        <Text className="font-atkinson-bold text-[25px] leading-[30px] text-brand-brown">
+      <View className="mt-5 border-b border-brand-black pb-4">
+        <Text className="font-atkinson-bold text-[28px] leading-[34px] text-brand-black">
           {title}
         </Text>
 
-        <Text className="mt-1 font-atkinson text-[14px] leading-5 text-brand-black">
-          {description}
-        </Text>
+        {description ? (
+          <Text className="mt-2 font-atkinson text-[16px] leading-6 text-brand-black">
+            {description}
+          </Text>
+        ) : null}
       </View>
     </View>
   );

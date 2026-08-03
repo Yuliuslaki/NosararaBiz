@@ -304,29 +304,43 @@ export function QrisPaymentScreen({
         ) : null}
 
         {isPending ? (
-          <Pressable
-            onPress={onSimulatePayment}
-            disabled={isSubmitting}
-            accessibilityRole="button"
-            accessibilityLabel="Konfirmasi pembayaran QRIS berhasil"
-            className={`mt-5 min-h-14 items-center justify-center rounded-2xl bg-brand-orange px-5 py-4 ${
-              isSubmitting ? "opacity-50" : ""
-            }`}
-          >
-            {isSubmitting ? (
-              <View className="flex-row items-center">
-                <ActivityIndicator color="#FFFFFF" />
+          <View className="mt-5 rounded-xl border border-brand-black bg-brand-white p-4">
+            <Text className="font-atkinson-bold text-[18px] text-brand-black">
+              Simulasi Pembayaran QRIS
+            </Text>
 
-                <Text className="ml-3 font-atkinson-bold text-[17px] text-brand-white">
-                  Memproses pembayaran...
+            <Text className="mt-2 font-atkinson text-[14px] leading-5 text-brand-black">
+              Gunakan tombol berikut untuk menyimulasikan pembayaran QRIS
+              berhasil.
+            </Text>
+
+            <Pressable
+              onPress={onSimulatePayment}
+              disabled={isSubmitting}
+              accessibilityRole="button"
+              accessibilityLabel="Konfirmasi pembayaran QRIS berhasil"
+              accessibilityState={{
+                disabled: isSubmitting,
+              }}
+              className={`mt-4 min-h-14 items-center justify-center rounded-xl bg-brand-black px-5 py-4 ${
+                isSubmitting ? "opacity-40" : ""
+              }`}
+            >
+              {isSubmitting ? (
+                <View className="flex-row items-center">
+                  <ActivityIndicator color="#FFFFFF" />
+
+                  <Text className="ml-3 font-atkinson-bold text-[17px] text-brand-white">
+                    Memproses pembayaran...
+                  </Text>
+                </View>
+              ) : (
+                <Text className="text-center font-atkinson-bold text-[18px] text-brand-white">
+                  Simulasikan Pembayaran Berhasil
                 </Text>
-              </View>
-            ) : (
-              <Text className="text-center font-atkinson-bold text-[18px] text-brand-white">
-                Simulasikan Pembayaran Berhasil
-              </Text>
-            )}
-          </Pressable>
+              )}
+            </Pressable>
+          </View>
         ) : null}
 
         <Pressable

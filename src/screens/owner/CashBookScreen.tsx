@@ -188,7 +188,7 @@ function getTypeFilterLabel(filter: CashBookTypeFilter): string {
 
 function SummaryCard({ label, value }: SummaryCardProps) {
   return (
-    <View className="h-[104px] flex-1 justify-between rounded-2xl bg-brand-cream px-4 py-3">
+    <View className="h-[108px] flex-1 justify-between rounded-xl border border-brand-black bg-brand-cream px-4 py-3">
       <Text
         numberOfLines={2}
         className="min-h-[34px] font-atkinson text-[13px] leading-5 text-brand-black"
@@ -200,7 +200,7 @@ function SummaryCard({ label, value }: SummaryCardProps) {
         numberOfLines={1}
         adjustsFontSizeToFit
         minimumFontScale={0.68}
-        className="font-atkinson-bold text-[20px] leading-7 text-brand-brown"
+        className="font-atkinson-bold text-[20px] leading-7 text-brand-black"
       >
         {value}
       </Text>
@@ -217,15 +217,13 @@ function PeriodButton({ label, selected, onPress }: PeriodButtonProps) {
       accessibilityState={{
         selected,
       }}
-      className={`min-h-12 flex-1 items-center justify-center rounded-xl border-2 px-2 py-3 ${
-        selected
-          ? "border-brand-orange bg-brand-cream"
-          : "border-brand-yellow bg-brand-white"
+      className={`min-h-12 flex-1 items-center justify-center rounded-xl border border-brand-black px-2 py-3 ${
+        selected ? "bg-brand-black" : "bg-brand-white"
       }`}
     >
       <Text
         className={`text-center font-atkinson-bold text-[13px] ${
-          selected ? "text-brand-orange" : "text-brand-brown"
+          selected ? "text-brand-white" : "text-brand-black"
         }`}
       >
         {label}
@@ -240,10 +238,10 @@ function CashBookEntryCard({ entry }: CashBookEntryCardProps) {
   const amountPrefix = isIncome ? "+" : "-";
 
   return (
-    <View className="mb-4 rounded-3xl border-2 border-brand-yellow bg-brand-white p-4">
+    <View className="mb-4 rounded-xl border border-brand-black bg-brand-white p-4">
       <View className="flex-row items-start justify-between">
         <View className="mr-3 flex-1">
-          <Text className="font-atkinson-bold text-[17px] leading-6 text-brand-brown">
+          <Text className="font-atkinson-bold text-[17px] leading-6 text-brand-black">
             {entry.categoryLabel}
           </Text>
 
@@ -253,13 +251,13 @@ function CashBookEntryCard({ entry }: CashBookEntryCardProps) {
         </View>
 
         <View
-          className={`rounded-full px-3 py-1.5 ${
-            isIncome ? "bg-brand-cream" : "bg-brand-brown"
+          className={`rounded-full border border-brand-black px-3 py-1.5 ${
+            isIncome ? "bg-brand-cream" : "bg-brand-black"
           }`}
         >
           <Text
             className={`font-atkinson-bold text-[12px] ${
-              isIncome ? "text-brand-orange" : "text-brand-white"
+              isIncome ? "text-brand-black" : "text-brand-white"
             }`}
           >
             {entry.typeLabel}
@@ -267,7 +265,7 @@ function CashBookEntryCard({ entry }: CashBookEntryCardProps) {
         </View>
       </View>
 
-      <View className="mt-4 rounded-2xl bg-brand-cream p-4">
+      <View className="mt-4 rounded-xl border border-brand-black bg-brand-cream p-4">
         <Text className="font-atkinson text-[13px] text-brand-black">
           Nominal
         </Text>
@@ -276,7 +274,7 @@ function CashBookEntryCard({ entry }: CashBookEntryCardProps) {
           numberOfLines={1}
           adjustsFontSizeToFit
           minimumFontScale={0.7}
-          className="mt-1 font-atkinson-bold text-[21px] leading-7 text-brand-orange"
+          className="mt-1 font-atkinson-bold text-[21px] leading-7 text-brand-black"
         >
           {amountPrefix}
           {formatCurrency(entry.amount)}
@@ -288,13 +286,13 @@ function CashBookEntryCard({ entry }: CashBookEntryCardProps) {
           Keterangan
         </Text>
 
-        <Text className="mt-1 font-atkinson-bold text-[14px] leading-6 text-brand-brown">
+        <Text className="mt-1 font-atkinson-bold text-[14px] leading-6 text-brand-black">
           {entry.description}
         </Text>
       </View>
 
       {entry.relatedTransactionId !== null ? (
-        <View className="mt-4 rounded-2xl border border-brand-yellow bg-brand-white p-3">
+        <View className="mt-4 rounded-xl border border-brand-black bg-brand-cream p-3">
           <Text className="font-atkinson text-[12px] leading-5 text-brand-black">
             Catatan ini dibuat otomatis dari transaksi penjualan.
           </Text>
@@ -306,7 +304,7 @@ function CashBookEntryCard({ entry }: CashBookEntryCardProps) {
           Dicatat oleh
         </Text>
 
-        <Text className="mt-1 font-atkinson-bold text-[14px] leading-5 text-brand-brown">
+        <Text className="mt-1 font-atkinson-bold text-[14px] leading-5 text-brand-black">
           {entry.createdByName} · {formatUserRole(entry.createdByRole)}
         </Text>
       </View>
@@ -472,8 +470,8 @@ export function CashBookScreen({ onBack, onAddExpense }: CashBookScreenProps) {
             onBack={onBack}
           />
 
-          <View className="mt-5 rounded-3xl bg-brand-white p-4">
-            <Text className="font-atkinson-bold text-[18px] text-brand-brown">
+          <View className="mt-5 rounded-xl border border-brand-black bg-brand-white p-4">
+            <Text className="font-atkinson-bold text-[18px] text-brand-black">
               Pilih Periode
             </Text>
 
@@ -507,12 +505,12 @@ export function CashBookScreen({ onBack, onAddExpense }: CashBookScreenProps) {
               />
             </View>
 
-            <View className="mt-4 rounded-2xl bg-brand-cream p-4">
+            <View className="mt-4 rounded-xl border border-brand-black bg-brand-cream p-4">
               <Text className="font-atkinson text-[13px] text-brand-black">
                 Periode yang ditampilkan
               </Text>
 
-              <Text className="mt-1 font-atkinson-bold text-[17px] leading-6 text-brand-brown">
+              <Text className="mt-1 font-atkinson-bold text-[17px] leading-6 text-brand-black">
                 {selectedPeriodDescription}
               </Text>
             </View>
@@ -521,16 +519,16 @@ export function CashBookScreen({ onBack, onAddExpense }: CashBookScreenProps) {
               onPress={handleOpenCalendar}
               accessibilityRole="button"
               accessibilityLabel={getCalendarButtonLabel(selectedPeriod)}
-              className="mt-3 min-h-12 items-center justify-center rounded-2xl border-2 border-brand-orange bg-brand-white px-4 py-3"
+              className="mt-3 min-h-12 items-center justify-center rounded-xl border border-brand-black bg-brand-white px-4 py-3"
             >
-              <Text className="font-atkinson-bold text-[16px] text-brand-orange">
+              <Text className="font-atkinson-bold text-[16px] text-brand-black">
                 {getCalendarButtonLabel(selectedPeriod)}
               </Text>
             </Pressable>
           </View>
 
-          <View className="mt-4 rounded-3xl bg-brand-white p-4">
-            <Text className="font-atkinson-bold text-[18px] text-brand-brown">
+          <View className="mt-4 rounded-xl border border-brand-black bg-brand-white p-4">
+            <Text className="font-atkinson-bold text-[18px] text-brand-black">
               Ringkasan Kas
             </Text>
 
@@ -567,15 +565,15 @@ export function CashBookScreen({ onBack, onAddExpense }: CashBookScreenProps) {
             onPress={handleOpenAddExpense}
             accessibilityRole="button"
             accessibilityLabel="Catat pengeluaran usaha"
-            className="mt-4 min-h-14 items-center justify-center rounded-2xl bg-brand-orange px-5 py-4"
+            className="mt-4 min-h-14 items-center justify-center rounded-xl bg-brand-black px-5 py-4"
           >
             <Text className="font-atkinson-bold text-[18px] text-brand-white">
               Catat Pengeluaran
             </Text>
           </Pressable>
 
-          <View className="mt-4 rounded-3xl bg-brand-white p-4">
-            <Text className="font-atkinson-bold text-[18px] text-brand-brown">
+          <View className="mt-4 rounded-xl border border-brand-black bg-brand-white p-4">
+            <Text className="font-atkinson-bold text-[18px] text-brand-black">
               Tampilkan Catatan
             </Text>
 
@@ -590,10 +588,8 @@ export function CashBookScreen({ onBack, onAddExpense }: CashBookScreenProps) {
               accessibilityState={{
                 expanded: filterDropdownIsOpen,
               }}
-              className={`mt-4 min-h-14 flex-row items-center justify-between rounded-2xl border-2 px-4 py-3 ${
-                filterDropdownIsOpen
-                  ? "border-brand-orange bg-brand-cream"
-                  : "border-brand-yellow bg-brand-white"
+              className={`mt-4 min-h-14 flex-row items-center justify-between rounded-xl border border-brand-black px-4 py-3 ${
+                filterDropdownIsOpen ? "bg-brand-cream" : "bg-brand-white"
               }`}
             >
               <View className="mr-3 flex-1">
@@ -601,7 +597,7 @@ export function CashBookScreen({ onBack, onAddExpense }: CashBookScreenProps) {
                   Jenis catatan
                 </Text>
 
-                <Text className="mt-1 font-atkinson-bold text-[16px] text-brand-brown">
+                <Text className="mt-1 font-atkinson-bold text-[16px] text-brand-black">
                   {selectedTypeLabel}
                 </Text>
               </View>
@@ -615,7 +611,7 @@ export function CashBookScreen({ onBack, onAddExpense }: CashBookScreenProps) {
                       },
                     ],
                   }}
-                  className="font-atkinson-bold text-[30px] leading-8 text-brand-orange"
+                  className="font-atkinson-bold text-[30px] leading-8 text-brand-black"
                 >
                   ›
                 </Text>
@@ -623,7 +619,7 @@ export function CashBookScreen({ onBack, onAddExpense }: CashBookScreenProps) {
             </Pressable>
 
             {filterDropdownIsOpen ? (
-              <View className="mt-2 overflow-hidden rounded-2xl border-2 border-brand-yellow bg-brand-white">
+              <View className="mt-2 overflow-hidden rounded-xl border border-brand-black bg-brand-white">
                 {CASH_BOOK_FILTER_OPTIONS.map((option, optionIndex) => {
                   const isSelected = option.value === selectedType;
 
@@ -643,20 +639,16 @@ export function CashBookScreen({ onBack, onAddExpense }: CashBookScreenProps) {
                       }}
                       className={`min-h-13 flex-row items-center justify-between px-4 py-3 ${
                         isSelected ? "bg-brand-cream" : "bg-brand-white"
-                      } ${isLastOption ? "" : "border-b border-brand-yellow"}`}
+                      } ${isLastOption ? "" : "border-b border-brand-black"}`}
                     >
-                      <Text
-                        className={`font-atkinson-bold text-[15px] ${
-                          isSelected ? "text-brand-orange" : "text-brand-brown"
-                        }`}
-                      >
+                      <Text className="font-atkinson-bold text-[15px] text-brand-black">
                         {option.label}
                       </Text>
 
                       {isSelected ? (
-                        <View className="h-4 w-4 rounded-full bg-brand-orange" />
+                        <View className="h-4 w-4 rounded-full bg-brand-black" />
                       ) : (
-                        <View className="h-4 w-4 rounded-full border-2 border-brand-yellow bg-brand-white" />
+                        <View className="h-4 w-4 rounded-full border border-brand-black bg-brand-white" />
                       )}
                     </Pressable>
                   );
@@ -666,8 +658,8 @@ export function CashBookScreen({ onBack, onAddExpense }: CashBookScreenProps) {
           </View>
 
           {errorMessage ? (
-            <View className="mt-4 rounded-2xl border-2 border-brand-orange bg-brand-white p-4">
-              <Text className="font-atkinson-bold text-[15px] text-brand-brown">
+            <View className="mt-4 rounded-xl border border-brand-black bg-brand-white p-4">
+              <Text className="font-atkinson-bold text-[15px] text-brand-black">
                 Buku kas belum dapat dimuat
               </Text>
 
@@ -678,8 +670,8 @@ export function CashBookScreen({ onBack, onAddExpense }: CashBookScreenProps) {
           ) : null}
 
           {entries.length === 0 && errorMessage === null ? (
-            <View className="mt-4 rounded-3xl border-2 border-brand-yellow bg-brand-white p-5">
-              <Text className="text-center font-atkinson-bold text-[20px] text-brand-brown">
+            <View className="mt-4 rounded-xl border border-brand-black bg-brand-white p-5">
+              <Text className="text-center font-atkinson-bold text-[20px] text-brand-black">
                 Belum ada catatan kas
               </Text>
 
@@ -690,7 +682,7 @@ export function CashBookScreen({ onBack, onAddExpense }: CashBookScreenProps) {
             </View>
           ) : (
             <View className="mt-6">
-              <Text className="mb-3 font-atkinson-bold text-[20px] text-brand-brown">
+              <Text className="mb-3 font-atkinson-bold text-[20px] text-brand-black">
                 Riwayat Kas
               </Text>
 

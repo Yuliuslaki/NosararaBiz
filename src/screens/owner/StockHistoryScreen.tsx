@@ -25,6 +25,10 @@ type StockHistoryCardProps = {
   item: StockHistoryItem;
 };
 
+type DirectionSymbolProps = {
+  direction: StockHistoryItem["direction"];
+};
+
 const EMPTY_SUMMARY: StockHistorySummary = {
   totalRecords: 0,
   stockInRecords: 0,
@@ -103,57 +107,59 @@ function formatResultingStock(item: StockHistoryItem): string {
 function getDirectionLabel(direction: StockHistoryItem["direction"]): string {
   switch (direction) {
     case "in":
-      return "Stok bertambah";
+      return "Stok Bertambah";
 
     case "out":
-      return "Stok berkurang";
+      return "Stok Berkurang";
 
     default:
-      return "Tidak berubah";
+      return "Tidak Berubah";
   }
 }
 
-function getDirectionBadgeClassName(
-  direction: StockHistoryItem["direction"],
-): string {
-  switch (direction) {
-    case "in":
-      return "bg-brand-cream";
+function DirectionSymbol({ direction }: DirectionSymbolProps) {
+  if (direction === "in") {
+    return (
+      <View className="h-6 w-6 items-center justify-center">
+        <View className="absolute h-[3px] w-6 rounded-full bg-brand-white" />
 
-    case "out":
-      return "bg-brand-brown";
-
-    default:
-      return "bg-gray-200";
+        <View className="absolute h-6 w-[3px] rounded-full bg-brand-white" />
+      </View>
+    );
   }
-}
 
-function getDirectionTextClassName(
-  direction: StockHistoryItem["direction"],
-): string {
-  switch (direction) {
-    case "in":
-      return "text-brand-orange";
-
-    case "out":
-      return "text-brand-white";
-
-    default:
-      return "text-brand-brown";
+  if (direction === "out") {
+    return (
+      <View className="h-6 w-6 items-center justify-center">
+        <View className="h-[3px] w-6 rounded-full bg-brand-white" />
+      </View>
+    );
   }
+
+  return (
+    <View className="h-6 w-6 items-center justify-center">
+      <View className="absolute -translate-y-[4px]">
+        <View className="h-[3px] w-6 rounded-full bg-brand-white" />
+      </View>
+
+      <View className="absolute translate-y-[4px]">
+        <View className="h-[3px] w-6 rounded-full bg-brand-white" />
+      </View>
+    </View>
+  );
 }
 
 function SummaryCard({ label, value }: SummaryCardProps) {
   return (
-    <View className="h-[102px] flex-1 justify-between rounded-2xl bg-brand-cream px-3 py-3">
+    <View className="min-h-[108px] flex-1 justify-between rounded-xl border border-brand-black bg-brand-white p-4">
       <Text
         numberOfLines={2}
-        className="min-h-[32px] font-atkinson text-[12px] leading-4 text-brand-black"
+        className="font-atkinson text-[14px] leading-5 text-brand-black"
       >
         {label}
       </Text>
 
-      <Text className="font-atkinson-bold text-[19px] leading-6 text-brand-brown">
+      <Text className="mt-3 font-atkinson-bold text-[22px] leading-7 text-brand-black">
         {value}
       </Text>
     </View>
@@ -164,79 +170,69 @@ function StockHistoryCard({ item }: StockHistoryCardProps) {
   const roleLabel = item.performedByRole === "owner" ? "Owner" : "Kasir";
 
   return (
-    <View className="mb-4 rounded-3xl border-2 border-brand-yellow bg-brand-white p-4">
+    <View className="mb-4 rounded-xl border border-brand-black bg-brand-white p-5">
       <View className="flex-row items-start justify-between">
         <View className="mr-3 flex-1">
-          <Text className="font-atkinson-bold text-[18px] leading-6 text-brand-brown">
+          <Text className="font-atkinson-bold text-[20px] leading-6 text-brand-black">
             {item.productName}
           </Text>
 
-          <Text className="mt-1 font-atkinson text-[14px] leading-5 text-brand-black">
+          <Text className="mt-1 font-atkinson text-[15px] leading-5 text-brand-black">
             {item.changeTypeLabel}
           </Text>
         </View>
 
-        <View
-          className={`rounded-full px-3 py-1.5 ${getDirectionBadgeClassName(
-            item.direction,
-          )}`}
-        >
-          <Text
-            className={`font-atkinson-bold text-[12px] ${getDirectionTextClassName(
-              item.direction,
-            )}`}
-          >
-            {getDirectionLabel(item.direction)}
-          </Text>
+        <View className="h-12 w-12 items-center justify-center rounded-full bg-brand-black">
+          <DirectionSymbol direction={item.direction} />
         </View>
       </View>
 
-      <View className="mt-4 rounded-2xl bg-brand-cream p-4">
-        <Text className="font-atkinson text-[13px] leading-5 text-brand-black">
+      <View className="mt-4 rounded-xl border border-brand-black bg-brand-cream p-4">
+        <Text className="font-atkinson-bold text-[15px] text-brand-black">
+          {getDirectionLabel(item.direction)}
+        </Text>
+
+        <Text className="mt-2 font-atkinson text-[14px] text-brand-black">
           Perubahan stok
         </Text>
 
-        <Text
-          className={`mt-1 font-atkinson-bold text-[20px] leading-6 ${
-            item.direction === "out" ? "text-brand-brown" : "text-brand-orange"
-          }`}
-        >
+        <Text className="mt-1 font-atkinson-bold text-[23px] leading-7 text-brand-black">
           {formatQuantityChange(item)}
         </Text>
 
-        <View className="my-3 h-px bg-brand-yellow" />
+        <View className="my-4 h-px bg-brand-black" />
 
-        <Text className="font-atkinson text-[13px] leading-5 text-brand-black">
+        <Text className="font-atkinson text-[14px] text-brand-black">
           Stok setelah perubahan
         </Text>
 
-        <Text className="mt-1 font-atkinson-bold text-[17px] leading-6 text-brand-brown">
+        <Text className="mt-1 font-atkinson-bold text-[19px] leading-6 text-brand-black">
           {formatResultingStock(item)}
         </Text>
       </View>
 
       {item.note ? (
-        <View className="mt-3 rounded-2xl border border-brand-yellow bg-brand-white p-3">
-          <Text className="font-atkinson-bold text-[13px] text-brand-brown">
+        <View className="mt-4 rounded-xl border border-brand-black bg-brand-white p-4">
+          <Text className="font-atkinson-bold text-[15px] text-brand-black">
             Catatan
           </Text>
 
-          <Text className="mt-1 font-atkinson text-[14px] leading-5 text-brand-black">
+          <Text className="mt-2 font-atkinson text-[15px] leading-6 text-brand-black">
             {item.note}
           </Text>
         </View>
       ) : null}
 
-      <View className="mt-4">
-        <Text className="font-atkinson text-[13px] leading-5 text-brand-black">
+      <View className="mt-4 border-t border-brand-black pt-4">
+        <Text className="font-atkinson text-[14px] leading-5 text-brand-black">
           Dilakukan oleh
         </Text>
 
-        <Text className="mt-1 font-atkinson-bold text-[14px] leading-5 text-brand-brown">
+        <Text className="mt-1 font-atkinson-bold text-[16px] leading-5 text-brand-black">
           {item.performedByName} · {roleLabel}
         </Text>
 
-        <Text className="mt-2 font-atkinson text-[13px] leading-5 text-brand-black">
+        <Text className="mt-2 font-atkinson text-[14px] leading-5 text-brand-black">
           {formatDateTime(item.createdAt)}
         </Text>
       </View>
@@ -288,8 +284,8 @@ export function StockHistoryScreen({ onBack }: StockHistoryScreenProps) {
           onBack={onBack}
         />
 
-        <View className="mt-5 rounded-3xl bg-brand-white p-4">
-          <Text className="font-atkinson-bold text-[18px] text-brand-brown">
+        <View className="mt-5 rounded-xl border border-brand-black bg-brand-white p-4">
+          <Text className="font-atkinson-bold text-[21px] text-brand-black">
             Ringkasan Riwayat
           </Text>
 
@@ -309,21 +305,21 @@ export function StockHistoryScreen({ onBack }: StockHistoryScreenProps) {
         </View>
 
         {errorMessage ? (
-          <View className="mt-4 rounded-2xl border-2 border-brand-orange bg-brand-white p-4">
-            <Text className="font-atkinson-bold text-[15px] text-brand-brown">
-              Riwayat belum dapat dimuat
+          <View className="mt-4 rounded-xl border border-brand-black bg-brand-cream p-4">
+            <Text className="font-atkinson-bold text-[17px] text-brand-black">
+              Riwayat Belum Dapat Dimuat
             </Text>
 
-            <Text className="mt-2 font-atkinson text-[14px] leading-6 text-brand-black">
+            <Text className="mt-2 font-atkinson text-[15px] leading-6 text-brand-black">
               {errorMessage}
             </Text>
           </View>
         ) : null}
 
         {historyItems.length === 0 && errorMessage === null ? (
-          <View className="mt-4 rounded-3xl border-2 border-brand-yellow bg-brand-white p-5">
-            <Text className="text-center font-atkinson-bold text-[20px] text-brand-brown">
-              Belum ada riwayat stok
+          <View className="mt-4 rounded-xl border border-brand-black bg-brand-white p-5">
+            <Text className="text-center font-atkinson-bold text-[21px] text-brand-black">
+              Belum Ada Riwayat Stok
             </Text>
 
             <Text className="mt-2 text-center font-atkinson text-[15px] leading-6 text-brand-black">
@@ -333,7 +329,7 @@ export function StockHistoryScreen({ onBack }: StockHistoryScreenProps) {
           </View>
         ) : (
           <View className="mt-6">
-            <Text className="mb-3 font-atkinson-bold text-[20px] text-brand-brown">
+            <Text className="mb-3 font-atkinson-bold text-[21px] text-brand-black">
               Daftar Perubahan
             </Text>
 

@@ -22,7 +22,6 @@ export type AppAlertOptions = {
 
 type AppAlertContextValue = {
   showAlert: (options: AppAlertOptions) => void;
-
   hideAlert: () => void;
 };
 
@@ -32,8 +31,7 @@ type AppAlertProviderProps = {
 
 type AlertToneAppearance = {
   symbol: string;
-  accentColor: string;
-  backgroundColor: string;
+  label: string;
 };
 
 const AppAlertContext = createContext<AppAlertContextValue | null>(null);
@@ -41,26 +39,22 @@ const AppAlertContext = createContext<AppAlertContextValue | null>(null);
 const ALERT_TONE_APPEARANCE: Record<AppAlertTone, AlertToneAppearance> = {
   success: {
     symbol: "✓",
-    accentColor: "#EC6426",
-    backgroundColor: "#FDE3CF",
+    label: "Berhasil",
   },
 
   error: {
     symbol: "!",
-    accentColor: "#632713",
-    backgroundColor: "#FDE3CF",
+    label: "Kesalahan",
   },
 
   warning: {
     symbol: "!",
-    accentColor: "#F8A91F",
-    backgroundColor: "#FFF4D6",
+    label: "Perhatian",
   },
 
   info: {
     symbol: "i",
-    accentColor: "#EC6426",
-    backgroundColor: "#FDE3CF",
+    label: "Informasi",
   },
 };
 
@@ -138,69 +132,63 @@ export function AppAlertProvider({ children }: AppAlertProviderProps) {
             <Pressable
               onPress={handleBackdropPress}
               className="absolute inset-0"
-              accessibilityLabel="Tutup notifikasi"
+              accessibilityRole="button"
+              accessibilityLabel="Tutup pemberitahuan"
             />
 
-            <View
-              className="w-full max-w-sm overflow-hidden rounded-[28px] border-2 bg-brand-white"
-              style={{
-                borderColor: toneAppearance.accentColor,
-              }}
-            >
-              <View
-                className="items-center px-6 pb-5 pt-7"
-                style={{
-                  backgroundColor: toneAppearance.backgroundColor,
-                }}
-              >
-                <View
-                  className="h-16 w-16 items-center justify-center rounded-full"
-                  style={{
-                    backgroundColor: toneAppearance.accentColor,
-                  }}
-                >
+            <View className="w-full max-w-sm rounded-xl border border-brand-black bg-brand-white p-6">
+              <View className="items-center">
+                <View className="h-16 w-16 items-center justify-center rounded-full bg-brand-black">
                   <Text className="font-atkinson-bold text-[32px] leading-10 text-brand-white">
                     {toneAppearance.symbol}
                   </Text>
                 </View>
 
-                <Text className="mt-4 text-center font-atkinson-bold text-[22px] leading-7 text-brand-brown">
+                <Text className="mt-3 font-atkinson-bold text-[14px] uppercase tracking-wide text-brand-black">
+                  {toneAppearance.label}
+                </Text>
+
+                <Text className="mt-2 text-center font-atkinson-bold text-[23px] leading-7 text-brand-black">
                   {activeAlert.title}
                 </Text>
               </View>
 
-              <View className="px-6 pb-6 pt-5">
+              <View className="mt-5 rounded-xl border border-brand-black bg-brand-cream p-4">
                 <Text className="text-center font-atkinson text-[16px] leading-6 text-brand-black">
                   {activeAlert.message}
                 </Text>
+              </View>
 
-                <View
-                  className={`mt-6 ${
-                    activeAlert.cancelText ? "flex-row gap-3" : ""
-                  }`}
-                >
-                  {activeAlert.cancelText ? (
-                    <Pressable
-                      onPress={handleCancel}
-                      className="min-h-12 flex-1 items-center justify-center rounded-2xl border-2 border-brand-orange bg-brand-white px-4 py-3"
-                    >
-                      <Text className="text-center font-atkinson-bold text-[16px] text-brand-orange">
-                        {activeAlert.cancelText}
-                      </Text>
-                    </Pressable>
-                  ) : null}
-
+              <View
+                className={`mt-6 ${
+                  activeAlert.cancelText ? "flex-row gap-3" : ""
+                }`}
+              >
+                {activeAlert.cancelText ? (
                   <Pressable
-                    onPress={handleConfirm}
-                    className={`min-h-12 items-center justify-center rounded-2xl bg-brand-orange px-4 py-3 ${
-                      activeAlert.cancelText ? "flex-1" : "w-full"
-                    }`}
+                    onPress={handleCancel}
+                    accessibilityRole="button"
+                    accessibilityLabel={activeAlert.cancelText}
+                    className="min-h-14 flex-1 items-center justify-center rounded-xl border border-brand-black bg-brand-white px-4 py-3"
                   >
-                    <Text className="text-center font-atkinson-bold text-[16px] text-brand-white">
-                      {confirmText}
+                    <Text className="text-center font-atkinson-bold text-[17px] text-brand-black">
+                      {activeAlert.cancelText}
                     </Text>
                   </Pressable>
-                </View>
+                ) : null}
+
+                <Pressable
+                  onPress={handleConfirm}
+                  accessibilityRole="button"
+                  accessibilityLabel={confirmText}
+                  className={`min-h-14 items-center justify-center rounded-xl bg-brand-black px-4 py-3 ${
+                    activeAlert.cancelText ? "flex-1" : "w-full"
+                  }`}
+                >
+                  <Text className="text-center font-atkinson-bold text-[17px] text-brand-white">
+                    {confirmText}
+                  </Text>
+                </Pressable>
               </View>
             </View>
           </View>

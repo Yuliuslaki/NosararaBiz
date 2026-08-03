@@ -57,15 +57,13 @@ function ExpenseCategoryButton({
         selected,
         disabled,
       }}
-      className={`mb-3 min-h-14 w-[48%] items-center justify-center rounded-2xl border-2 px-3 py-3 ${
-        selected
-          ? "border-brand-orange bg-brand-cream"
-          : "border-brand-yellow bg-brand-white"
+      className={`mb-3 min-h-14 w-[48%] items-center justify-center rounded-xl border border-brand-black px-3 py-3 ${
+        selected ? "bg-brand-black" : "bg-brand-white"
       } ${disabled ? "opacity-40" : ""}`}
     >
       <Text
         className={`text-center font-atkinson-bold text-[14px] leading-5 ${
-          selected ? "text-brand-orange" : "text-brand-brown"
+          selected ? "text-brand-white" : "text-brand-black"
         }`}
       >
         {EXPENSE_CATEGORY_LABELS[category]}
@@ -298,8 +296,8 @@ export function AddExpenseScreen({
             disabled={isSubmitting}
           />
 
-          <View className="mt-5 rounded-3xl bg-brand-white p-4">
-            <Text className="font-atkinson-bold text-[19px] text-brand-brown">
+          <View className="mt-5 rounded-xl border border-brand-black bg-brand-white p-4">
+            <Text className="font-atkinson-bold text-[19px] text-brand-black">
               Kategori Pengeluaran
             </Text>
 
@@ -320,8 +318,8 @@ export function AddExpenseScreen({
             </View>
           </View>
 
-          <View className="mt-4 rounded-3xl bg-brand-white p-4">
-            <Text className="font-atkinson-bold text-[19px] text-brand-brown">
+          <View className="mt-4 rounded-xl border border-brand-black bg-brand-white p-4">
+            <Text className="font-atkinson-bold text-[19px] text-brand-black">
               Nominal Pengeluaran
             </Text>
 
@@ -344,13 +342,14 @@ export function AddExpenseScreen({
               keyboardType="number-pad"
               maxLength={12}
               placeholder="Contoh: 250000"
-              placeholderTextColor="#9A9A9A"
-              selectionColor="#EC6426"
+              placeholderTextColor="#666666"
+              selectionColor="#F4E7D3"
+              cursorColor="#111111"
               accessibilityLabel="Nominal pengeluaran"
-              className="mt-4 min-h-14 rounded-2xl border-2 border-brand-yellow bg-brand-white px-4 py-3 font-atkinson-bold text-[18px] text-brand-brown"
+              className="mt-4 min-h-14 rounded-xl border border-brand-black bg-brand-white px-4 py-3 font-atkinson-bold text-[18px] text-brand-black"
             />
 
-            <View className="mt-3 rounded-2xl bg-brand-cream p-4">
+            <View className="mt-3 rounded-xl border border-brand-black bg-brand-cream p-4">
               <Text className="font-atkinson text-[13px] text-brand-black">
                 Nominal
               </Text>
@@ -359,15 +358,15 @@ export function AddExpenseScreen({
                 numberOfLines={1}
                 adjustsFontSizeToFit
                 minimumFontScale={0.7}
-                className="mt-1 font-atkinson-bold text-[22px] text-brand-orange"
+                className="mt-1 font-atkinson-bold text-[22px] text-brand-black"
               >
                 {formatCurrency(amountIsValid ? parsedAmount : 0)}
               </Text>
             </View>
           </View>
 
-          <View className="mt-4 rounded-3xl bg-brand-white p-4">
-            <Text className="font-atkinson-bold text-[19px] text-brand-brown">
+          <View className="mt-4 rounded-xl border border-brand-black bg-brand-white p-4">
+            <Text className="font-atkinson-bold text-[19px] text-brand-black">
               Keterangan
             </Text>
 
@@ -387,10 +386,11 @@ export function AddExpenseScreen({
               maxLength={250}
               textAlignVertical="top"
               placeholder="Contoh: Membeli 5 karung pakan ayam"
-              placeholderTextColor="#9A9A9A"
-              selectionColor="#EC6426"
+              placeholderTextColor="#666666"
+              selectionColor="#F4E7D3"
+              cursorColor="#111111"
               accessibilityLabel="Keterangan pengeluaran"
-              className="mt-4 min-h-[130px] rounded-2xl border-2 border-brand-yellow bg-brand-white px-4 py-4 font-atkinson text-[16px] leading-6 text-brand-black"
+              className="mt-4 min-h-[130px] rounded-xl border border-brand-black bg-brand-white px-4 py-4 font-atkinson text-[16px] leading-6 text-brand-black"
             />
 
             <Text className="mt-2 text-right font-atkinson text-[12px] text-brand-black">
@@ -398,8 +398,8 @@ export function AddExpenseScreen({
             </Text>
           </View>
 
-          <View className="mt-4 rounded-2xl border-2 border-brand-yellow bg-brand-white p-4">
-            <Text className="font-atkinson-bold text-[14px] text-brand-brown">
+          <View className="mt-4 rounded-xl border border-brand-black bg-brand-cream p-4">
+            <Text className="font-atkinson-bold text-[14px] text-brand-black">
               Informasi Pencatatan
             </Text>
 
@@ -410,8 +410,8 @@ export function AddExpenseScreen({
           </View>
 
           {errorMessage ? (
-            <View className="mt-4 rounded-2xl border-2 border-brand-orange bg-brand-white p-4">
-              <Text className="font-atkinson-bold text-[15px] text-brand-brown">
+            <View className="mt-4 rounded-xl border border-brand-black bg-brand-white p-4">
+              <Text className="font-atkinson-bold text-[15px] text-brand-black">
                 Pengeluaran belum dapat disimpan
               </Text>
 
@@ -429,7 +429,7 @@ export function AddExpenseScreen({
             accessibilityState={{
               disabled: isSubmitting || !formIsComplete,
             }}
-            className={`mt-5 min-h-14 items-center justify-center rounded-2xl bg-brand-orange px-5 py-4 ${
+            className={`mt-5 min-h-14 items-center justify-center rounded-xl bg-brand-black px-5 py-4 ${
               isSubmitting || !formIsComplete ? "opacity-50" : ""
             }`}
           >

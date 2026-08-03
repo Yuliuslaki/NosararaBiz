@@ -104,7 +104,7 @@ function getDeliveryStatusLabel(status: ReportDeliveryStatus): string {
 
 function SummaryCard({ label, value }: SummaryCardProps) {
   return (
-    <View className="h-[104px] flex-1 justify-between rounded-2xl bg-brand-cream px-4 py-3">
+    <View className="h-[104px] flex-1 justify-between rounded-xl border border-brand-black bg-brand-cream px-4 py-3">
       <Text
         numberOfLines={2}
         className="min-h-[34px] font-atkinson text-[13px] leading-5 text-brand-black"
@@ -116,7 +116,7 @@ function SummaryCard({ label, value }: SummaryCardProps) {
         numberOfLines={1}
         adjustsFontSizeToFit
         minimumFontScale={0.68}
-        className="font-atkinson-bold text-[19px] leading-7 text-brand-brown"
+        className="font-atkinson-bold text-[19px] leading-7 text-brand-black"
       >
         {value}
       </Text>
@@ -126,10 +126,10 @@ function SummaryCard({ label, value }: SummaryCardProps) {
 
 function DeliveryHistoryCard({ item }: { item: ReportDeliveryHistoryItem }) {
   return (
-    <View className="mb-3 rounded-2xl border-2 border-brand-yellow bg-brand-white p-4">
+    <View className="mb-3 rounded-xl border border-brand-black bg-brand-white p-4">
       <View className="flex-row items-start justify-between">
         <View className="mr-3 flex-1">
-          <Text className="font-atkinson-bold text-[16px] text-brand-brown">
+          <Text className="font-atkinson-bold text-[16px] text-brand-black">
             {getReportTypeLabel(item.reportType)}
           </Text>
 
@@ -138,26 +138,28 @@ function DeliveryHistoryCard({ item }: { item: ReportDeliveryHistoryItem }) {
           </Text>
         </View>
 
-        <View className="rounded-full bg-brand-cream px-3 py-1.5">
-          <Text className="font-atkinson-bold text-[12px] text-brand-orange">
+        <View className="rounded-full border border-brand-black bg-brand-cream px-3 py-1.5">
+          <Text className="font-atkinson-bold text-[12px] text-brand-black">
             {getDeliveryStatusLabel(item.status)}
           </Text>
         </View>
       </View>
 
-      <Text className="mt-3 font-atkinson text-[13px] leading-5 text-brand-black">
-        Dibuat: {formatDateTime(item.createdAt)}
-      </Text>
-
-      {item.fileName ? (
-        <Text className="mt-1 font-atkinson text-[13px] leading-5 text-brand-black">
-          File: {item.fileName}
+      <View className="mt-3 border-t border-brand-black pt-3">
+        <Text className="font-atkinson text-[13px] leading-5 text-brand-black">
+          Dibuat: {formatDateTime(item.createdAt)}
         </Text>
-      ) : null}
+
+        {item.fileName ? (
+          <Text className="mt-1 font-atkinson text-[13px] leading-5 text-brand-black">
+            File: {item.fileName}
+          </Text>
+        ) : null}
+      </View>
 
       {item.errorMessage ? (
-        <View className="mt-3 rounded-xl border border-brand-orange bg-brand-cream p-3">
-          <Text className="font-atkinson-bold text-[13px] leading-5 text-brand-brown">
+        <View className="mt-3 rounded-xl border border-brand-black bg-brand-cream p-3">
+          <Text className="font-atkinson-bold text-[13px] leading-5 text-brand-black">
             {item.errorMessage}
           </Text>
         </View>
@@ -318,11 +320,13 @@ export function ReportScreen({ onBack }: ReportScreenProps) {
   if (isLoading) {
     return (
       <View className="flex-1 items-center justify-center bg-brand-cream px-6">
-        <ActivityIndicator size="large" color="#EC6426" />
+        <View className="w-full max-w-sm items-center rounded-xl border border-brand-black bg-brand-white px-6 py-8">
+          <ActivityIndicator size="large" color="#111111" />
 
-        <Text className="mt-4 text-center font-atkinson text-[16px] text-brand-brown">
-          Memuat data laporan...
-        </Text>
+          <Text className="mt-4 text-center font-atkinson-bold text-[16px] text-brand-black">
+            Memuat data laporan...
+          </Text>
+        </View>
       </View>
     );
   }
@@ -337,8 +341,8 @@ export function ReportScreen({ onBack }: ReportScreenProps) {
             onBack={handleBack}
           />
 
-          <View className="mt-5 rounded-3xl border-2 border-brand-orange bg-brand-white p-5">
-            <Text className="font-atkinson-bold text-[19px] text-brand-brown">
+          <View className="mt-5 rounded-xl border border-brand-black bg-brand-white p-5">
+            <Text className="font-atkinson-bold text-[19px] text-brand-black">
               Data laporan belum dapat dimuat
             </Text>
 
@@ -350,7 +354,7 @@ export function ReportScreen({ onBack }: ReportScreenProps) {
               onPress={handleReload}
               accessibilityRole="button"
               accessibilityLabel="Muat ulang laporan"
-              className="mt-5 min-h-12 items-center justify-center rounded-2xl bg-brand-orange px-4 py-3"
+              className="mt-5 min-h-12 items-center justify-center rounded-xl bg-brand-black px-4 py-3"
             >
               <Text className="font-atkinson-bold text-[16px] text-brand-white">
                 Muat Ulang
@@ -368,10 +372,11 @@ export function ReportScreen({ onBack }: ReportScreenProps) {
     <ScrollView
       className="flex-1 bg-brand-cream"
       keyboardShouldPersistTaps="handled"
+      keyboardDismissMode="on-drag"
       contentContainerStyle={{
         paddingHorizontal: 18,
         paddingTop: 32,
-        paddingBottom: 56,
+        paddingBottom: 80,
       }}
     >
       <View className="w-full max-w-md self-center">
@@ -383,8 +388,8 @@ export function ReportScreen({ onBack }: ReportScreenProps) {
         />
 
         {errorMessage ? (
-          <View className="mt-4 rounded-2xl border-2 border-brand-orange bg-brand-white p-4">
-            <Text className="font-atkinson-bold text-[15px] text-brand-brown">
+          <View className="mt-4 rounded-xl border border-brand-black bg-brand-white p-4">
+            <Text className="font-atkinson-bold text-[15px] text-brand-black">
               Tindakan belum dapat diselesaikan
             </Text>
 
@@ -394,8 +399,8 @@ export function ReportScreen({ onBack }: ReportScreenProps) {
           </View>
         ) : null}
 
-        <View className="mt-5 rounded-3xl bg-brand-white p-5">
-          <Text className="font-atkinson-bold text-[20px] text-brand-brown">
+        <View className="mt-5 rounded-xl border border-brand-black bg-brand-white p-5">
+          <Text className="font-atkinson-bold text-[20px] text-brand-black">
             Laporan Harian WhatsApp
           </Text>
 
@@ -403,10 +408,10 @@ export function ReportScreen({ onBack }: ReportScreenProps) {
             Ringkasan hari sebelumnya dijadwalkan setiap pukul 00.00.
           </Text>
 
-          <View className="mt-4 rounded-2xl bg-brand-cream p-4">
+          <View className="mt-4 rounded-xl border border-brand-black bg-brand-cream p-4">
             <View className="flex-row items-center justify-between">
               <View className="mr-4 flex-1">
-                <Text className="font-atkinson-bold text-[16px] text-brand-brown">
+                <Text className="font-atkinson-bold text-[16px] text-brand-black">
                   Status laporan harian
                 </Text>
 
@@ -426,17 +431,17 @@ export function ReportScreen({ onBack }: ReportScreenProps) {
                   disabled: isSubmitting,
                 }}
                 accessibilityLabel="Aktifkan atau nonaktifkan laporan harian"
-                className={`min-w-[86px] rounded-full px-4 py-3 ${
+                className={`min-w-[90px] rounded-xl border border-brand-black px-4 py-3 ${
                   settings.dailyWhatsappEnabled
-                    ? "bg-brand-orange"
-                    : "bg-gray-300"
+                    ? "bg-brand-black"
+                    : "bg-brand-white"
                 } ${isSubmitting ? "opacity-50" : ""}`}
               >
                 <Text
                   className={`text-center font-atkinson-bold text-[14px] ${
                     settings.dailyWhatsappEnabled
                       ? "text-brand-white"
-                      : "text-brand-brown"
+                      : "text-brand-black"
                   }`}
                 >
                   {settings.dailyWhatsappEnabled ? "Aktif" : "Nonaktif"}
@@ -444,28 +449,28 @@ export function ReportScreen({ onBack }: ReportScreenProps) {
               </Pressable>
             </View>
 
-            <View className="mt-4 border-t border-brand-yellow pt-4">
+            <View className="mt-4 border-t border-brand-black pt-4">
               <Text className="font-atkinson text-[13px] text-brand-black">
                 Waktu pengiriman
               </Text>
 
-              <Text className="mt-1 font-atkinson-bold text-[19px] text-brand-brown">
+              <Text className="mt-1 font-atkinson-bold text-[19px] text-brand-black">
                 00.00
               </Text>
             </View>
 
-            <View className="mt-4 border-t border-brand-yellow pt-4">
+            <View className="mt-4 border-t border-brand-black pt-4">
               <Text className="font-atkinson text-[13px] text-brand-black">
                 Ketika perangkat offline
               </Text>
 
-              <Text className="mt-1 font-atkinson-bold text-[15px] leading-6 text-brand-brown">
+              <Text className="mt-1 font-atkinson-bold text-[15px] leading-6 text-brand-black">
                 Menunggu sampai koneksi internet tersedia
               </Text>
             </View>
           </View>
 
-          <Text className="mt-5 font-atkinson-bold text-[16px] text-brand-brown">
+          <Text className="mt-5 font-atkinson-bold text-[16px] text-brand-black">
             Nomor WhatsApp Owner
           </Text>
 
@@ -480,9 +485,11 @@ export function ReportScreen({ onBack }: ReportScreenProps) {
             autoCorrect={false}
             maxLength={20}
             placeholder="Contoh: +6281234567890"
-            placeholderTextColor="#777777"
-            selectionColor="#EC6426"
-            className="mt-2 min-h-14 rounded-2xl border-2 border-brand-yellow bg-brand-white px-4 py-3 font-atkinson text-[17px] text-brand-black"
+            placeholderTextColor="#666666"
+            selectionColor="#F4E7D3"
+            cursorColor="#111111"
+            accessibilityLabel="Nomor WhatsApp Owner"
+            className="mt-2 min-h-14 rounded-xl border border-brand-black bg-brand-white px-4 py-3 font-atkinson text-[17px] text-brand-black"
           />
 
           <Text className="mt-2 font-atkinson text-[13px] leading-5 text-brand-black">
@@ -494,7 +501,10 @@ export function ReportScreen({ onBack }: ReportScreenProps) {
             disabled={isSubmitting}
             accessibilityRole="button"
             accessibilityLabel="Simpan nomor WhatsApp Owner"
-            className={`mt-4 min-h-12 items-center justify-center rounded-2xl bg-brand-orange px-4 py-3 ${
+            accessibilityState={{
+              disabled: isSubmitting,
+            }}
+            className={`mt-4 min-h-12 items-center justify-center rounded-xl bg-brand-black px-4 py-3 ${
               isSubmitting ? "opacity-50" : ""
             }`}
           >
@@ -508,8 +518,8 @@ export function ReportScreen({ onBack }: ReportScreenProps) {
           </Pressable>
         </View>
 
-        <View className="mt-5 rounded-3xl bg-brand-white p-4">
-          <Text className="font-atkinson-bold text-[19px] text-brand-brown">
+        <View className="mt-5 rounded-xl border border-brand-black bg-brand-white p-4">
+          <Text className="font-atkinson-bold text-[19px] text-brand-black">
             Ringkasan Hari Sebelumnya
           </Text>
 
@@ -554,8 +564,8 @@ export function ReportScreen({ onBack }: ReportScreenProps) {
           </View>
         </View>
 
-        <View className="mt-5 rounded-3xl bg-brand-white p-5">
-          <Text className="font-atkinson-bold text-[20px] text-brand-brown">
+        <View className="mt-5 rounded-xl border border-brand-black bg-brand-white p-5">
+          <Text className="font-atkinson-bold text-[20px] text-brand-black">
             Laporan PDF dan Excel
           </Text>
 
@@ -572,7 +582,7 @@ export function ReportScreen({ onBack }: ReportScreenProps) {
             accessibilityState={{
               disabled: true,
             }}
-            className="mt-4 min-h-12 items-center justify-center rounded-2xl bg-brand-orange px-4 py-3 opacity-50"
+            className="mt-4 min-h-12 items-center justify-center rounded-xl bg-brand-black px-4 py-3 opacity-40"
           >
             <Text className="font-atkinson-bold text-[16px] text-brand-white">
               Buat Laporan PDF
@@ -586,26 +596,28 @@ export function ReportScreen({ onBack }: ReportScreenProps) {
             accessibilityState={{
               disabled: true,
             }}
-            className="mt-3 min-h-12 items-center justify-center rounded-2xl bg-brand-orange px-4 py-3 opacity-50"
+            className="mt-3 min-h-12 items-center justify-center rounded-xl bg-brand-black px-4 py-3 opacity-40"
           >
             <Text className="font-atkinson-bold text-[16px] text-brand-white">
               Buat Laporan Excel
             </Text>
           </Pressable>
 
-          <Text className="mt-3 text-center font-atkinson-bold text-[13px] text-brand-orange">
-            Ekspor file akan dibuat pada tahap berikutnya.
-          </Text>
+          <View className="mt-4 rounded-xl border border-brand-black bg-brand-cream p-3">
+            <Text className="text-center font-atkinson-bold text-[13px] leading-5 text-brand-black">
+              Ekspor file akan dibuat pada tahap berikutnya.
+            </Text>
+          </View>
         </View>
 
         <View className="mt-5">
-          <Text className="mb-3 font-atkinson-bold text-[20px] text-brand-brown">
+          <Text className="mb-3 font-atkinson-bold text-[20px] text-brand-black">
             Riwayat Laporan
           </Text>
 
           {snapshot.recentDeliveryHistory.length === 0 ? (
-            <View className="rounded-3xl border-2 border-brand-yellow bg-brand-white p-5">
-              <Text className="text-center font-atkinson-bold text-[18px] text-brand-brown">
+            <View className="rounded-xl border border-brand-black bg-brand-white p-5">
+              <Text className="text-center font-atkinson-bold text-[18px] text-brand-black">
                 Belum ada riwayat laporan
               </Text>
 
